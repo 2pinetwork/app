@@ -1,0 +1,29 @@
+{
+  "src/components/*.js": {
+    "type": "component",
+    "alternate": "src/components/{}.test.js"
+  },
+
+  "src/helpers/*.js": {
+    "type": "helper",
+    "alternate": "src/helpers/{}.test.js"
+  },
+
+  "src/components/*.test.js": {
+    "type": "tcomponent",
+    "alternate": "src/components/{}.js"
+  },
+
+  "src/helpers/*.test.js": {
+    "type": "thelpers",
+    "alternate": "src/components/{}.js"
+  },
+
+  "src/index.js": {
+    "type": "index"
+  },
+
+  "src/index.scss": {
+    "type": "stylesheet"
+  }
+}
