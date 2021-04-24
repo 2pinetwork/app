@@ -47,7 +47,7 @@ class Wallet extends React.Component {
     return (
       <React.Fragment>
         <button type="button"
-                className="btn btn-outline-primary btn-sm bg-white shadow-primary font-weight-semi-bold"
+                className="btn btn-outline-primary btn-sm bg-white shadow-primary fw-semi-bold"
                 disabled={this.props.isConnecting}
                 onClick={this.handleClick}>
           <span className="me-2">

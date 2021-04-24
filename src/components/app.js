@@ -2,6 +2,7 @@ import React from 'react'
 import Web3 from 'web3'
 import Header from './header'
 import Tvl from './tvl'
+import Vaults from './vaults'
 
 class App extends React.Component {
   state = {
@@ -42,6 +43,7 @@ class App extends React.Component {
                 account={this.state.account}
                 isConnecting={this.state.isConnecting} />
         <Tvl />
+        <Vaults />
       </div>
     )
   }
