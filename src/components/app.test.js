@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import App from './app'
 
-test('renders 2pi finance link', () => {
+test('renders Wallet and Tvl components', () => {
   render(<App />)
 
-  const linkElement = screen.getByText(/2pi finance/i)
+  const headerElement = screen.getByText(/TVL/i)
+  const linkElement   = screen.getByText(/Wallet/i)
 
+  expect(headerElement).toBeInTheDocument()
   expect(linkElement).toBeInTheDocument()
 })

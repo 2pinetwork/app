@@ -1,6 +1,7 @@
 import React from 'react'
 import Web3 from 'web3'
 import Header from './header'
+import Tvl from './tvl'
 
 class App extends React.Component {
   state = {
@@ -40,9 +41,7 @@ class App extends React.Component {
                 setAccount={this.setAccount}
                 account={this.state.account}
                 isConnecting={this.state.isConnecting} />
-        <p>
-          <button type="button" className="btn btn-link">2pi Finance</button>
-        </p>
+        <Tvl />
       </div>
     )
   }
