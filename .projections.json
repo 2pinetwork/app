@@ -1,6 +1,7 @@
 {
   "src/components/*.js": {
     "type": "component",
+    "dispatch": "yarn run test --silent=true --watchAll=false src/components/{}.test.js",
     "alternate": "src/components/{}.test.js"
   },
 
@@ -16,6 +17,7 @@
 
   "src/helpers/*.test.js": {
     "type": "thelpers",
+    "dispatch": "yarn run test --silent=true --watchAll=false src/components/{}.test.js",
     "alternate": "src/components/{}.js"
   },
 
@@ -23,7 +25,11 @@
     "type": "index"
   },
 
-  "src/index.scss": {
+  "src/css/app.scss": {
+    "type": "stylesheet"
+  },
+
+  "src/css/*.scss": {
     "type": "stylesheet"
   }
 }

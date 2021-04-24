@@ -12,7 +12,7 @@ test('renders 2pi finance link', () => {
 
   render(<Header {...props}/>)
 
-  const linkElement = screen.getByText(/2pi/i)
+  const linkElement = screen.getByAltText(/2pi/i)
 
   expect(linkElement).toBeInTheDocument()
 })

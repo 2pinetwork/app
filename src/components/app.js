@@ -19,17 +19,17 @@ class App extends React.Component {
   }
 
   subscribe = provider => {
-		provider.on('accountsChanged', _accounts => {
+    provider.on('accountsChanged', _accounts => {
       if (provider.selectedAddress) {
         this.setAccount(provider)
       } else {
         this.setState({ account: undefined, web3: undefined })
       }
-		})
+    })
 
-		provider.on('chainChanged', chainId => {
+    provider.on('chainChanged', chainId => {
       this.setState({ chain: chainId })
-		})
+    })
   }
 
   render () {

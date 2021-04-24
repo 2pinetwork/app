@@ -1,0 +1,13 @@
+body {
+  background-image: url(../assets/images/background.svg)
+}
+
+.font-weight-semi-bold {
+  font-weight: 600 !important;
+}
+
+@each $color, $value in $theme-colors {
+  .shadow-#{$color} {
+		box-shadow: 0 0 .3rem $value;
+  }
+}
