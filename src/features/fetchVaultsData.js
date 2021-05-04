@@ -1,0 +1,75 @@
+import BigNumber from 'bignumber.js'
+import { ethers } from 'ethers'
+import { Contract, Provider } from 'ethers-multicall'
+import vaults from '../data/vaults'
+import { vaultsLoaded } from './vaultsSlice'
+
+const helpers = {
+  byDecimals (number, tokenDecimals = 18) {
+    const decimals = new BigNumber(10).exponentiatedBy(tokenDecimals)
+
+    return new BigNumber(number).dividedBy(decimals)
+  },
+
+  chunk (array, size) {
+    return Array.from({ length: Math.ceil(array.length / size) }, (v, i) =>
+      array.slice(i * size, i * size + size)
+    )
+  }
+}
+
+export async function fetchVaultsData (address, provider, web3, dispatch) {
+  const ethersProvider  = new ethers.providers.Web3Provider(provider)
+  const ethcallProvider = new Provider(ethersProvider)
+
+  await ethcallProvider.init()
+
+  const tokenCalls = vaults.flatMap(v => {
+    const vault         = require(`../abis/vaults/${v.token}`).default
+    const token         = require(`../abis/tokens/${v.token}`).default
+    const tokenContract = new Contract(token.address, token.abi)
+
+    return [
+      tokenContract.decimals(),
+      tokenContract.balanceOf(address),
+      tokenContract.allowance(address, vault.address)
+    ]
+  })
+
+  const vaultCalls = vaults.flatMap(v => {
+    const vault         = require(`../abis/vaults/${v.token}`).default
+    const vaultContract = new Contract(vault.address, vault.abi)
+
+    return [
+      vaultContract.balanceOf(address),
+      vaultContract.balance()
+    ]
+  })
+
+  Promise.all([
+    vaults,
+    ethcallProvider.all(tokenCalls),
+    ethcallProvider.all(vaultCalls),
+  ]).then(data => {
+    const vaults    = data.shift()
+    const keys      = ['decimals', 'balance', 'allowance', 'deposited', 'tvl']
+    const extraData = []
+
+    helpers.chunk(data.flat(), vaults.length).forEach((chunkedData, i) => {
+      chunkedData.forEach((valueData, j) => {
+        extraData[j] = extraData[j] || {}
+
+        extraData[j][keys[i]] = new BigNumber(valueData.toString())
+      })
+    })
+
+    const vaultsData = vaults.map((vault, i) => {
+      return {
+        ...vault,
+        ...extraData[i]
+      }
+    })
+
+    dispatch(vaultsLoaded(vaultsData))
+  })
+}

@@ -3,7 +3,8 @@ import Vaults from './vaults'
 
 test('renders vaults', () => {
   const props = {
-    web3: undefined
+    account: undefined,
+    web3:    undefined
   }
 
   render(<Vaults {...props}/>)

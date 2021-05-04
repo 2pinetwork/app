@@ -3,8 +3,9 @@ import VaultActions from './vault_actions'
 
 test('renders vault actions', () => {
   const props = {
-    token: 'test-token',
-    web3:  undefined
+    token:   'test-token',
+    account: undefined,
+    web3:    undefined
   }
 
   render(<VaultActions {...props}/>)

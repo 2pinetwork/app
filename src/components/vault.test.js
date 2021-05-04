@@ -3,10 +3,11 @@ import Vault from './vault'
 
 test('renders vault', () => {
   const props = {
-    token: 'test-token',
-    uses:  'test-pool',
-    color: 'warning',
-    web3:  undefined
+    account: undefined,
+    token:   'test-token',
+    uses:    'test-pool',
+    color:   'warning',
+    web3:    undefined
   }
 
   render(<Vault {...props}/>)

@@ -4,9 +4,12 @@ import App from './app'
 test('renders Wallet and Tvl components', () => {
   render(<App />)
 
-  const headerElement = screen.getByText(/TVL/i)
-  const linkElement   = screen.getByText(/Wallet/i)
+  const tvlElements = screen.getAllByText(/TVL/i)
+  const linkElement = screen.getByText(/Wallet/i)
 
-  expect(headerElement).toBeInTheDocument()
+  tvlElements.forEach(tvlElement => {
+    expect(tvlElement).toBeInTheDocument()
+  })
+
   expect(linkElement).toBeInTheDocument()
 })

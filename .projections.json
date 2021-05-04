@@ -1,4 +1,12 @@
 {
+  "src/app/store.js": {
+    "type": "store"
+  },
+
+  "src/app/*.js": {
+    "type": "app"
+  },
+
   "src/components/*.js": {
     "type": "component",
     "dispatch": "yarn run test --silent=true --watchAll=false src/components/{}.test.js",
@@ -8,6 +16,19 @@
   "src/helpers/*.js": {
     "type": "helper",
     "alternate": "src/helpers/{}.test.js"
+  },
+
+  "src/features/*.js": {
+    "type": "feature",
+    "alternate": "src/features/{}.test.js"
+  },
+
+  "src/abis/tokens/*.js": {
+    "type": "token"
+  },
+
+  "src/abis/vaults/*.js": {
+    "type": "vault"
   },
 
   "src/components/*.test.js": {
