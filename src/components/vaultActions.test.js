@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import VaultActions from './vault_actions'
+import VaultActions from './vaultActions'
 
 test('renders vault actions', () => {
   const props = {

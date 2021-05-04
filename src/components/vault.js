@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
-import VaultActions from './vault_actions'
+import VaultActions from './vaultActions'
 
 const Vault = props => {
   const ref                     = React.createRef()
