@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import Wallet from './wallet'
 import logo from '../assets/images/logo.svg'
 
