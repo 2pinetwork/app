@@ -5,11 +5,18 @@ import VaultActions from './vaultActions'
 
 const Vault = props => {
   const ref                     = React.createRef()
+  const token                   = require(`../abis/tokens/${props.token}`).default
   const vault                   = require(`../abis/vaults/${props.token}`).default
   const [expanded, setExpanded] = useState(false)
 
   const handleClick = () => {
     setExpanded(! expanded)
+  }
+
+  const tokenContract = (token, web3) => {
+    return () => {
+      return new web3.eth.Contract(token.abi, token.address)
+    }
   }
 
   const vaultContract = (vault, web3) => {
@@ -20,11 +27,12 @@ const Vault = props => {
 
   const renderVaultActions = () => {
     if (expanded) {
-      const { account, token, web3 } = props
+      const { account, web3 } = props
 
       return (
         <VaultActions account={account}
-                      token={token}
+                      token={props.token}
+                      tokenContract={tokenContract(token, props.web3)}
                       vault={vault}
                       vaultContract={vaultContract(vault, props.web3)}
                       web3={web3} />

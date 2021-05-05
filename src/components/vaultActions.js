@@ -4,10 +4,12 @@ import BigNumber from 'bignumber.js'
 
 class VaultActions extends React.Component {
   static propTypes = {
-    account: PropTypes.string,
-    token:   PropTypes.string.isRequired,
-    vault:   PropTypes.object,
-    web3:    PropTypes.object
+    account:       PropTypes.string,
+    token:         PropTypes.string.isRequired,
+    tokenContract: PropTypes.func,
+    vault:         PropTypes.object,
+    vaultContract: PropTypes.func,
+    web3:          PropTypes.object
   }
 
   state = {
@@ -24,13 +26,13 @@ class VaultActions extends React.Component {
       const account       = this.props.account
       const vaultAddress  = this.props.vault.address
       const amount        = +this.depositInput.current.value
-      const vaultContract = this.props.vaultContract()
+      const tokenContract = this.props.tokenContract()
       const allowance     = this.props.web3.utils.toWei('8000000000', 'ether')
 
       if (amount > 0) {
         this.setState({ depositText: 'Approving...', enableDeposit: false })
 
-        vaultContract.methods.approve(vaultAddress, allowance).send({ from: account }).then(() => {
+        tokenContract.methods.approve(vaultAddress, allowance).send({ from: account }).then(() => {
           this.setState({ depositText: 'Deposit', enableDeposit: true, approved: true })
         })
       }
