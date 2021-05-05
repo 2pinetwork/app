@@ -38,7 +38,7 @@ const call = (promises, keys, dispatch) => {
 
 export async function fetchVaultsData (address, provider, web3, dispatch) {
   // Mumbai address
-  setMulticallAddress(80001, "0x5a0439824F4c0275faa88F2a7C5037F9833E29f1")
+  setMulticallAddress(80001, '0x5a0439824F4c0275faa88F2a7C5037F9833E29f1')
 
   const ethersProvider  = new ethers.providers.Web3Provider(provider)
   const ethcallProvider = new Provider(ethersProvider)
