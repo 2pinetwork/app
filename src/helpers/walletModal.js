@@ -3,10 +3,8 @@ import Web3Modal from 'web3modal'
 import { WalletLink } from 'walletlink'
 import { addressChanged, chainChanged } from '../features/walletSlice'
 
-const infuraProjectId = '5c86b242025449ee96c9120c215bd029'
-const network         = 'ropsten'
-const chainId         = 0x3
-const networkUrl      = `https://${network}.infura.io/v3/${infuraProjectId}`
+const chainId         = 80001 // mumbai
+const networkUrl      = 'https://rpc-mumbai.maticvigil.com/'
 const providerOptions = {
   'custom-walletlink': {
     display: {
