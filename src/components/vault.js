@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
+import BigNumber from 'bignumber.js'
 import VaultActions from './vaultActions'
+import { formatAmount } from '../helpers/format'
 
 const Vault = props => {
   const ref                     = React.createRef()
@@ -25,14 +27,39 @@ const Vault = props => {
     }
   }
 
+  const toWeiBigNumber = amount => {
+    return amount.times(new BigNumber(10).pow(props.decimals))
+  }
+
+  const toWei = amount => {
+    return toWeiBigNumber(amount).toFixed(0)
+  }
+
+  const fromWeiBigNumber = amount => {
+    const decimals = props.decimals.toNumber()
+
+    return amount.div(new BigNumber(10).pow(decimals))
+  }
+
+  const fromWei = amount => {
+    return formatAmount(fromWeiBigNumber(amount))
+  }
+
   const renderVaultActions = () => {
     if (expanded) {
-      const { account, web3 } = props
+      const { address, web3 } = props
 
       return (
-        <VaultActions account={account}
+        <VaultActions address={address}
+                      allowance={props.allowance}
+                      balance={props.balance}
+                      deposited={props.deposited}
+                      fromWei={fromWei}
+                      fromWeiBigNumber={fromWeiBigNumber}
                       token={props.token}
                       tokenContract={tokenContract(token, props.web3)}
+                      toWei={toWei}
+                      toWeiBigNumber={toWeiBigNumber}
                       vault={vault}
                       vaultContract={vaultContract(vault, props.web3)}
                       web3={web3} />
@@ -62,7 +89,7 @@ const Vault = props => {
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-primary mb-0">
-                  π {props.balance?.toString() || '-'}
+                  π {props.balance ? fromWei(props.balance) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Balance
@@ -70,7 +97,7 @@ const Vault = props => {
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-primary mb-0">
-                  π {props.deposited?.toString() || '-'}
+                  π {props.deposited ? fromWei(props.deposited) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Deposited
@@ -94,7 +121,7 @@ const Vault = props => {
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-nowrap mb-0">
-                  {props.tvl?.toString() || '-'}
+                  {props.tvl ? fromWei(props.tvl) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   TVL
@@ -111,7 +138,7 @@ const Vault = props => {
 }
 
 Vault.propTypes = {
-  account:   PropTypes.string,
+  address:   PropTypes.string,
   allowance: PropTypes.object,
   balance:   PropTypes.object,
   color:     PropTypes.string.isRequired,

@@ -29,7 +29,8 @@ export const vaultsSlice = createSlice({
 
   reducers: {
     vaultsLoaded: (state, action) => {
-      state.value = action.payload
+      state.status = 'loaded'
+      state.value  = action.payload
     }
   },
 
@@ -49,6 +50,7 @@ export const vaultsSlice = createSlice({
 })
 
 export const selectVaults = state => state.vaults.value
+export const selectStatus = state => state.vaults.status
 
 export const { vaultsLoaded } = vaultsSlice.actions
 

@@ -68,11 +68,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     ]
   })
 
-  const promises = [
-    vaults,
-    ethcallProvider.all(tokenCalls),
-    ethcallProvider.all(vaultCalls)
-  ]
+  const promises = [vaults, ethcallProvider.all(tokenCalls.concat(vaultCalls))]
 
   call(promises, keys, dispatch)
 }

@@ -8,7 +8,7 @@ const renderVaults = (vaults, address, web3) => {
   return vaults.map(vaultData => {
     return (
       <Vault key={vaultData.key}
-             account={address}
+             address={address}
              allowance={vaultData.allowance}
              balance={vaultData.balance}
              color={vaultData.color}
