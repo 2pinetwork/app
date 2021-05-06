@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
+import { fromWei, toWei } from '../helpers/wei'
+import { toWeiFormatted, decimalPlaces } from '../helpers/format'
 
 const Deposit = props => {
   const dispatch                      = useDispatch()
@@ -11,18 +13,21 @@ const Deposit = props => {
   const [enabled, setEnabled]         = useState(true)
 
   const onChange = e => {
-    const amount = props.toWeiBigNumber(new BigNumber(+e.target.value || 0))
+    const amount = toWei(new BigNumber(+e.target.value || 0), props.decimals)
+    const places = decimalPlaces(props.decimals)
 
-    if (props.balance.comparedTo(amount) >= 0) {
-      setDeposit(props.fromWeiBigNumber(amount))
+    if (props.balance.comparedTo(amount) > 0) {
+      setDeposit(fromWei(amount, props.decimals))
+    } else if (props.balance.comparedTo(amount) === 0) {
+      setDeposit(fromWei(amount, props.decimals).toFixed(places))
     } else {
-      setDeposit(props.fromWeiBigNumber(props.balance).toFixed(8))
+      setDeposit(fromWei(props.balance, props.decimals).toFixed(places))
     }
   }
 
   const handleClick = () => {
     const vaultContract = props.vaultContract()
-    const amount        = props.toWei(new BigNumber(deposit))
+    const amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
 
     setButtonLabel('Depositing...')
     setEnabled(false)
@@ -63,9 +68,8 @@ const Deposit = props => {
 Deposit.propTypes = {
   address:        PropTypes.string.isRequired,
   balance:        PropTypes.object.isRequired,
+  decimals:       PropTypes.object.isRequired,
   token:          PropTypes.string.isRequired,
-  toWei:          PropTypes.func.isRequired,
-  toWeiBigNumber: PropTypes.func.isRequired,
   vaultContract:  PropTypes.func.isRequired
 }
 

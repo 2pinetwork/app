@@ -8,7 +8,7 @@ import Withdraw from './withdraw'
 import { selectStatus } from '../features/vaultsSlice'
 
 const VaultActions = props => {
-  const status        = useSelector(selectStatus)
+  const status = useSelector(selectStatus)
 
   const canDeposit = () => {
     return props.balance.comparedTo(0) > 0 &&
@@ -19,11 +19,9 @@ const VaultActions = props => {
     const {
       address,
       balance,
-      fromWeiBigNumber,
+      decimals,
       token,
       tokenContract,
-      toWei,
-      toWeiBigNumber,
       vault,
       vaultContract,
       web3
@@ -32,14 +30,13 @@ const VaultActions = props => {
     if (canDeposit()) {
       return <Deposit address={address}
                       balance={balance}
-                      fromWeiBigNumber={fromWeiBigNumber}
+                      decimals={decimals}
                       token={token}
-                      toWei={toWei}
-                      toWeiBigNumber={toWeiBigNumber}
                       vaultContract={vaultContract} />
     } else {
       return <Approve address={address}
                       balance={balance}
+                      decimals={decimals}
                       token={token}
                       tokenContract={tokenContract}
                       vault={vault}
@@ -57,11 +54,9 @@ const VaultActions = props => {
 
           <div className="col-lg-6">
             <Withdraw address={props.address}
+                      decimals={props.decimals}
                       deposited={props.deposited}
-                      fromWeiBigNumber={props.fromWeiBigNumber}
                       token={props.token}
-                      toWei={props.toWei}
-                      toWeiBigNumber={props.toWeiBigNumber}
                       vaultContract={props.vaultContract} />
           </div>
         </div>
@@ -84,13 +79,10 @@ VaultActions.propTypes = {
   address:          PropTypes.string,
   allowance:        PropTypes.object,
   balance:          PropTypes.object,
+  decimals:         PropTypes.object,
   deposited:        PropTypes.object,
-  fromWei:          PropTypes.func.isRequired,
-  fromWeiBigNumber: PropTypes.func.isRequired,
   token:            PropTypes.string.isRequired,
   tokenContract:    PropTypes.func,
-  toWei:            PropTypes.func.isRequired,
-  toWeiBigNumber:   PropTypes.func.isRequired,
   vault:            PropTypes.object,
   vaultContract:    PropTypes.func,
   web3:             PropTypes.object

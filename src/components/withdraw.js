@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
+import { fromWei, toWei } from '../helpers/wei'
+import { toWeiFormatted, decimalPlaces } from '../helpers/format'
 
 const Withdraw = props => {
   const dispatch                      = useDispatch()
@@ -11,18 +13,19 @@ const Withdraw = props => {
   const [enabled, setEnabled]         = useState(true)
 
   const onChange = e => {
-    const amount = props.toWeiBigNumber(new BigNumber(+e.target.value || 0))
+    const amount = toWei(new BigNumber(+e.target.value || 0), props.decimals)
+    const places = decimalPlaces(props.decimals)
 
     if (props.deposited.comparedTo(amount) >= 0) {
-      setWithdraw(props.fromWeiBigNumber(amount))
+      setWithdraw(fromWei(amount, props.decimals))
     } else {
-      setWithdraw(props.fromWeiBigNumber(props.deposited).toFixed(8))
+      setWithdraw(fromWei(props.deposited, props.decimals).toFixed(places))
     }
   }
 
   const handleClick = () => {
     const vaultContract = props.vaultContract()
-    const amount        = props.toWei(new BigNumber(withdraw))
+    const amount        = toWeiFormatted(new BigNumber(withdraw), props.decimals)
 
     setButtonLabel('Withdrawing...')
     setEnabled(false)
@@ -62,10 +65,9 @@ const Withdraw = props => {
 
 Withdraw.propTypes = {
   address:        PropTypes.string.isRequired,
+  decimals:       PropTypes.object.isRequired,
   deposited:      PropTypes.object.isRequired,
   token:          PropTypes.string.isRequired,
-  toWei:          PropTypes.func.isRequired,
-  toWeiBigNumber: PropTypes.func.isRequired,
   vaultContract:  PropTypes.func.isRequired
 }
 
