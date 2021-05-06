@@ -21,9 +21,12 @@ const VaultActions = props => {
       balance,
       fromWeiBigNumber,
       token,
+      tokenContract,
       toWei,
       toWeiBigNumber,
-      vaultContract
+      vault,
+      vaultContract,
+      web3
     } = props
 
     if (canDeposit()) {
@@ -38,8 +41,9 @@ const VaultActions = props => {
       return <Approve address={address}
                       balance={balance}
                       token={token}
-                      toWei={toWei}
-                      vaultContract={vaultContract} />
+                      tokenContract={tokenContract}
+                      vault={vault}
+                      web3={web3} />
     }
   }
 

@@ -1,19 +1,18 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 
 const Approve = props => {
-  const [amount, setAmount]   = useState('0')
+  const dispatch                      = useDispatch()
   const [buttonLabel, setButtonLabel] = useState('Approve')
-  const [enabled, setEnabled] = useState(true)
-  const input = React.createRef()
-
-  const onChange = e => setAmount(toString(+e.target.value))
+  const [enabled, setEnabled]         = useState(true)
 
   const handleClick = () => {
     const address       = props.address
     const vaultAddress  = props.vault.address
-    const tokenContract = this.props.tokenContract()
-    const allowance     = this.props.web3.utils.toWei('8000000000', 'ether')
+    const tokenContract = props.tokenContract()
+    const allowance     = props.web3.utils.toWei('8000000000', 'ether')
 
     setButtonLabel('Approving...')
     setEnabled(false)
@@ -21,6 +20,7 @@ const Approve = props => {
     tokenContract.methods.approve(vaultAddress, allowance).send({ from: address }).then(() => {
       setButtonLabel('Approve')
       setEnabled(true)
+      dispatch(fetchVaultsDataAsync())
     })
   }
 
@@ -29,7 +29,11 @@ const Approve = props => {
   return (
     <React.Fragment>
       <div className="form-floating mb-3">
-        <input ref={input} type="number" className="form-control" id={balanceId()} placeholder="0" onChange={onChange} value={amount} />
+        <input type="number"
+               className="form-control"
+               id={balanceId()}
+               disabled="disabled"
+               value="0" />
         <label htmlFor={balanceId()}>Balance</label>
       </div>
 
@@ -49,8 +53,9 @@ Approve.propTypes = {
   address:       PropTypes.string.isRequired,
   balance:       PropTypes.object.isRequired,
   token:         PropTypes.string.isRequired,
-  toWei:         PropTypes.func.isRequired,
-  vaultContract: PropTypes.func.isRequired
+  tokenContract: PropTypes.func.isRequired,
+  vault:         PropTypes.object.isRequired,
+  web3:          PropTypes.object.isRequired
 }
 
 export default Approve

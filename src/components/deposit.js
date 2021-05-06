@@ -5,10 +5,10 @@ import BigNumber from 'bignumber.js'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 
 const Deposit = props => {
-  const dispatch = useDispatch()
-  const [deposit, setDeposit]   = useState('0')
+  const dispatch                      = useDispatch()
+  const [deposit, setDeposit]         = useState('0')
   const [buttonLabel, setButtonLabel] = useState('Deposit')
-  const [enabled, setEnabled] = useState(true)
+  const [enabled, setEnabled]         = useState(true)
 
   const onChange = e => {
     const amount = props.toWeiBigNumber(new BigNumber(+e.target.value || 0))
