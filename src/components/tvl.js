@@ -18,7 +18,7 @@ const Tvl = props => {
         TVL
       </h2>
       <h3 className="h4 text-primary d-inline ms-3">
-        π {tvl.isNaN() ? '-' : formatAmount(tvl.toNumber())}
+        ${tvl.isNaN() ? '-' : formatAmount(tvl.toNumber())}
       </h3>
     </div>
   )

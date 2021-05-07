@@ -50,7 +50,7 @@ const Deposit = props => {
                onKeyDown={e => onChange(e) && e.preventDefault()}
                onChange={onChange}
                value={deposit} />
-        <label htmlFor={balanceId()}>Balance</label>
+        <label htmlFor={balanceId()}>Deposit</label>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">

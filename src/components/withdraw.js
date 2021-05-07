@@ -48,7 +48,7 @@ const Withdraw = props => {
                onKeyDown={e => onChange(e) && e.preventDefault()}
                onChange={onChange}
                value={withdraw} />
-        <label htmlFor={depositedId()}>Deposited</label>
+        <label htmlFor={depositedId()}>Withdraw</label>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">
