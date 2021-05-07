@@ -20,6 +20,7 @@ const VaultActions = props => {
       address,
       balance,
       decimals,
+      symbol,
       token,
       tokenContract,
       vault,
@@ -31,12 +32,14 @@ const VaultActions = props => {
       return <Deposit address={address}
                       balance={balance}
                       decimals={decimals}
+                      symbol={symbol}
                       token={token}
                       vaultContract={vaultContract} />
     } else {
       return <Approve address={address}
                       balance={balance}
                       decimals={decimals}
+                      symbol={symbol}
                       token={token}
                       tokenContract={tokenContract}
                       vault={vault}
@@ -56,6 +59,7 @@ const VaultActions = props => {
             <Withdraw address={props.address}
                       decimals={props.decimals}
                       deposited={props.deposited}
+                      symbol={props.symbol}
                       token={props.token}
                       vaultContract={props.vaultContract} />
           </div>
@@ -81,6 +85,7 @@ VaultActions.propTypes = {
   balance:          PropTypes.object,
   decimals:         PropTypes.object,
   deposited:        PropTypes.object,
+  symbol:           PropTypes.string.isRequired,
   token:            PropTypes.string.isRequired,
   tokenContract:    PropTypes.func,
   vault:            PropTypes.object,

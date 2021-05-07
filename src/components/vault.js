@@ -28,18 +28,28 @@ const Vault = props => {
 
   const renderVaultActions = () => {
     if (expanded) {
-      const { address, web3 } = props
+      const {
+        address,
+        allowance,
+        balance,
+        decimals,
+        deposited,
+        symbol,
+        token,
+        web3
+      } = props
 
       return (
         <VaultActions address={address}
-                      allowance={props.allowance}
-                      balance={props.balance}
-                      decimals={props.decimals}
-                      deposited={props.deposited}
-                      token={props.token}
-                      tokenContract={tokenContract(token, props.web3)}
+                      allowance={allowance}
+                      balance={balance}
+                      decimals={decimals}
+                      deposited={deposited}
+                      symbol={symbol}
+                      token={token}
+                      tokenContract={tokenContract(token, web3)}
                       vault={vault}
-                      vaultContract={vaultContract(vault, props.web3)}
+                      vaultContract={vaultContract(vault, web3)}
                       web3={web3} />
       )
     }
@@ -56,7 +66,7 @@ const Vault = props => {
               </div>
               <div className="col-9 col-md-10 col-lg-3">
                 <h3 className="h4 mb-1">
-                  {props.token}
+                  {props.symbol}
                 </h3>
                 <p className="small text-muted mb-0">
                   Uses:
@@ -67,7 +77,7 @@ const Vault = props => {
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-primary mb-0">
-                  π {props.balance ? fromWeiFormatted(props.balance, props.decimals) : '-'}
+                  ${props.balance ? fromWeiFormatted(props.balance, props.decimals) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Balance
@@ -75,7 +85,7 @@ const Vault = props => {
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-primary mb-0">
-                  π {props.deposited ? fromWeiFormatted(props.deposited, props.decimals) : '-'}
+                  ${props.deposited ? fromWeiFormatted(props.deposited, props.decimals) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Deposited
@@ -99,7 +109,7 @@ const Vault = props => {
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-nowrap mb-0">
-                  {props.tvl ? fromWeiFormatted(props.tvl, props.decimals) : '-'}
+                  ${props.tvl ? fromWeiFormatted(props.tvl, props.decimals) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   TVL
@@ -122,6 +132,7 @@ Vault.propTypes = {
   color:     PropTypes.string.isRequired,
   decimals:  PropTypes.object,
   deposited: PropTypes.object,
+  symbol:    PropTypes.string.isRequired,
   token:     PropTypes.string.isRequired,
   tvl:       PropTypes.object,
   uses:      PropTypes.string.isRequired,

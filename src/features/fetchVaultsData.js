@@ -42,7 +42,13 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
 
   const ethersProvider  = new ethers.providers.Web3Provider(provider)
   const ethcallProvider = new Provider(ethersProvider)
-  const keys            = ['decimals', 'balance', 'allowance', 'deposited', 'tvl']
+  const keys            = [
+    'decimals',
+    'balance',
+    'allowance',
+    'deposited',
+    'tvl'
+  ]
 
   await ethcallProvider.init()
 

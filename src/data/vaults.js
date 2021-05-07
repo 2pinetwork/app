@@ -1,9 +1,10 @@
 const vaults = [
   {
-    key:   '2pi',
-    token: '2pi',
-    uses:  '2pi',
-    color: 'warning'
+    key:    'dai',
+    token:  'dai',
+    uses:   'aave',
+    symbol: 'DAI',
+    color:  'warning'
   }
 ]
 

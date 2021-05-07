@@ -34,7 +34,7 @@ const Approve = props => {
                id={balanceId()}
                disabled="disabled"
                value="0" />
-        <label htmlFor={balanceId()}>Balance</label>
+        <label htmlFor={balanceId()}>Balance ({props.symbol})</label>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">
@@ -52,6 +52,7 @@ const Approve = props => {
 Approve.propTypes = {
   address:       PropTypes.string.isRequired,
   balance:       PropTypes.object.isRequired,
+  symbol:        PropTypes.string.isRequired,
   token:         PropTypes.string.isRequired,
   tokenContract: PropTypes.func.isRequired,
   vault:         PropTypes.object.isRequired,

@@ -48,7 +48,7 @@ const Withdraw = props => {
                onKeyDown={e => onChange(e) && e.preventDefault()}
                onChange={onChange}
                value={withdraw} />
-        <label htmlFor={depositedId()}>Deposited</label>
+        <label htmlFor={depositedId()}>Deposited ({props.symbol})</label>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">
@@ -64,11 +64,12 @@ const Withdraw = props => {
 }
 
 Withdraw.propTypes = {
-  address:        PropTypes.string.isRequired,
-  decimals:       PropTypes.object.isRequired,
-  deposited:      PropTypes.object.isRequired,
-  token:          PropTypes.string.isRequired,
-  vaultContract:  PropTypes.func.isRequired
+  address:       PropTypes.string.isRequired,
+  decimals:      PropTypes.object.isRequired,
+  deposited:     PropTypes.object.isRequired,
+  symbol:        PropTypes.string.isRequired,
+  token:         PropTypes.string.isRequired,
+  vaultContract: PropTypes.func.isRequired
 }
 
 export default Withdraw

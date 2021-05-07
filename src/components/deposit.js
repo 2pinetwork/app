@@ -50,7 +50,7 @@ const Deposit = props => {
                onKeyDown={e => onChange(e) && e.preventDefault()}
                onChange={onChange}
                value={deposit} />
-        <label htmlFor={balanceId()}>Balance</label>
+        <label htmlFor={balanceId()}>Balance ({props.symbol})</label>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">
@@ -66,11 +66,12 @@ const Deposit = props => {
 }
 
 Deposit.propTypes = {
-  address:        PropTypes.string.isRequired,
-  balance:        PropTypes.object.isRequired,
-  decimals:       PropTypes.object.isRequired,
-  token:          PropTypes.string.isRequired,
-  vaultContract:  PropTypes.func.isRequired
+  address:       PropTypes.string.isRequired,
+  balance:       PropTypes.object.isRequired,
+  decimals:      PropTypes.object.isRequired,
+  symbol:        PropTypes.string.isRequired,
+  token:         PropTypes.string.isRequired,
+  vaultContract: PropTypes.func.isRequired
 }
 
 export default Deposit
