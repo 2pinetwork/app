@@ -35,7 +35,6 @@ const Vault = props => {
         decimals,
         deposited,
         symbol,
-        token,
         web3
       } = props
 
@@ -58,8 +57,8 @@ const Vault = props => {
   return (
     <CSSTransition nodeRef={ref} key={props.token} in={expanded} timeout={300} classNames="vault">
       <div ref={ref}>
-        <div className={`card bg-white border border-${props.color} shadow-${props.color}`}>
-          <div className="card-body">
+        <div className={`card border border-${props.color} bg-dark`}>
+          <div className="card-body ms-2">
             <div className="row align-items-center cursor-pointer" onClick={handleClick}>
               <div className="col-3 col-md-2 col-lg-2">
                 <img src={`/images/tokens/${props.token}.svg`} alt={props.token} height="48" width="48" />

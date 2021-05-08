@@ -7,7 +7,7 @@ const Connect = props => {
 
   return (
     <button type="button"
-            className="btn btn-primary text-white fw-bold mt-4 mb-3 mx-auto d-block"
+            className="btn btn-outline-primary bg-dark text-primary fw-bold mt-4 mb-3 mx-auto d-block"
             disabled={status === 'loading'}
             onClick={() => { dispatch(connectAsync()) }}>
       {status === 'loading' ? 'Connecting...' : 'Connect'}

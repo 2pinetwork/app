@@ -1,5 +1,19 @@
 body {
-  background-image: url(../assets/images/background.svg)
+  background-image: url(../assets/images/background.svg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .cursor-pointer {
@@ -8,10 +22,4 @@ body {
 
 .fw-semi-bold {
   font-weight: 600 !important;
-}
-
-@each $color, $value in $theme-colors {
-  .shadow-#{$color} {
-		box-shadow: 0 0 .3rem $value;
-  }
 }

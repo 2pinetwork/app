@@ -53,7 +53,7 @@ const Withdraw = props => {
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">
         <button type="button"
-                className="btn btn-outline-primary bg-white fw-bold"
+                className="btn btn-outline-primary bg-dark fw-bold"
                 disabled={! (enabled && +withdraw > 0)}
                 onClick={handleClick}>
           {buttonLabel}

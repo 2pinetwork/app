@@ -4,7 +4,7 @@ const vaults = [
     token:  'dai',
     uses:   'aave',
     symbol: 'DAI',
-    color:  'warning'
+    color:  'primary'
   }
 ]
 

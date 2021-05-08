@@ -26,7 +26,7 @@ const Wallet = props => {
   return (
     <React.Fragment>
       <button type="button"
-              className="btn btn-outline-primary btn-sm bg-white shadow-primary fw-semi-bold"
+              className="btn btn-outline-primary btn-sm bg-dark text-primary fw-semi-bold"
               disabled={status === 'loading'}
               onClick={() => { dispatch(connectAsync()) }}>
         <span className="me-2">

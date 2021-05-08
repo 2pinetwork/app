@@ -38,7 +38,7 @@ const Vaults = props => {
 
   return (
     <div className="mt-1">
-      <h2 className="h2 fw-bold mt-1">
+      <h2 className="h2 fw-bold mt-1 mb-4">
         Vaults
       </h2>
 
