@@ -39,28 +39,18 @@ const Vault = props => {
 
   const renderVaultActions = () => {
     if (expanded) {
-      const {
-        address,
-        allowance,
-        balance,
-        decimals,
-        deposited,
-        symbol,
-        web3
-      } = props
-
       return (
-        <VaultActions address={address}
-                      allowance={allowance}
-                      balance={balance}
-                      decimals={decimals}
-                      deposited={deposited}
-                      symbol={symbol}
-                      token={token}
-                      tokenContract={tokenContract(token, web3)}
-                      vault={vault}
-                      vaultContract={vaultContract(vault, web3)}
-                      web3={web3} />
+        <VaultActions address={props.address}
+                      allowance={props.allowance}
+                      balance={props.balance}
+                      decimals={props.decimals}
+                      deposited={props.deposited}
+                      symbol={props.symbol}
+                      token={props.token}
+                      tokenContract={tokenContract(token, props.web3)}
+                      vault={props.vault}
+                      vaultContract={vaultContract(vault, props.web3)}
+                      web3={props.web3} />
       )
     }
   }
