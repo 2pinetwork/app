@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import WalletModal from '../helpers/walletModal'
+import Toastr from '../components/toastr'
+
+const expectedChainId = 80001 // Mumbai
 
 export const connectAsync = createAsyncThunk(
   'wallet/connectAsync',
@@ -33,14 +36,20 @@ export const walletSlice = createSlice({
       state.status = 'loading'
     },
     [connectAsync.fulfilled]: (state, action) => {
-      state.address  = action.payload.address
-      state.chainId  = action.payload.chainId
-      state.provider = action.payload.provider
-      state.status   = 'idle'
-      state.web3     = action.payload.web3
+      if (action.payload.chainId === expectedChainId) {
+        state.address  = action.payload.address
+        state.chainId  = action.payload.chainId
+        state.provider = action.payload.provider
+        state.status   = 'idle'
+        state.web3     = action.payload.web3
+      } else {
+        Toastr.error("Please select Mumbai network first")
+        state.status = 'failed'
+      }
     },
     [connectAsync.rejected]: (state, action) => {
       console.error(action.error.name, action.error.message)
+      Toastr.error(action.error.message)
 
       state.status = 'failed'
     }

@@ -19,9 +19,17 @@ const call = (promises, keys, dispatch) => {
 
     helpers.chunk(data.flat(), vaults.length).forEach((chunkedData, i) => {
       chunkedData.forEach((valueData, j) => {
+        let value
         extraData[j] = extraData[j] || {}
 
-        extraData[j][keys[i]] = new BigNumber(valueData.toString())
+        if (keys[i] === 'apy') {
+          // Change that for compound function
+          value = Number(valueData.currentLiquidityRate) / 1e25
+        } else {
+          value = new BigNumber(valueData.toString())
+        }
+
+        extraData[j][keys[i]] = value
       })
     })
 
@@ -47,7 +55,8 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     'balance',
     'allowance',
     'deposited',
-    'tvl'
+    'tvl',
+    'apy'
   ]
 
   await ethcallProvider.init()
@@ -74,7 +83,17 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     ]
   })
 
-  const promises = [vaults, ethcallProvider.all(tokenCalls.concat(vaultCalls))]
+  const poolCalls = vaults.flatMap(v => {
+    const pool         = require(`../abis/pools/${v.token}`).default
+    const poolContract = new Contract(pool.address, pool.abi)
+    const token        = require(`../abis/tokens/${v.token}`).default
+
+    return [
+      poolContract.getReserveData(token.address)
+    ]
+  })
+
+  const promises = [vaults, ethcallProvider.all(tokenCalls.concat(vaultCalls).concat(poolCalls))]
 
   call(promises, keys, dispatch)
 }

@@ -10,6 +10,7 @@ const renderVaults = (vaults, address, web3) => {
       <Vault key={vaultData.key}
              address={address}
              allowance={vaultData.allowance}
+             apy={vaultData.apy}
              balance={vaultData.balance}
              color={vaultData.color}
              decimals={vaultData.decimals}
