@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import PropTypes from 'prop-types'
 import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
@@ -25,6 +26,16 @@ const Vault = props => {
     return (props.apy || 0.0) / 365
   }
 
+  const humanDeposited = () => {
+    const exponent = (10 ** props.decimals)
+    const originalDeposited = (
+      ((props.deposited || 0.0) / exponent) *
+      ((props.pricePerShare || 0.0) / exponent)
+    ) * exponent
+
+    return (new BigNumber(originalDeposited))
+  }
+
   const tokenContract = (token, web3) => {
     return () => {
       return new web3.eth.Contract(token.abi, token.address)
@@ -39,28 +50,30 @@ const Vault = props => {
 
   const renderVaultActions = () => {
     if (expanded) {
-      const {
-        address,
-        allowance,
-        balance,
-        decimals,
-        deposited,
-        symbol,
-        web3
-      } = props
+      // const {
+      //   address,
+      //   allowance,
+      //   balance,
+      //   decimals,
+      //   deposited,
+      //   pricePerShare,
+      //   symbol,
+      //   web3
+      // } = props
 
       return (
-        <VaultActions address={address}
-                      allowance={allowance}
-                      balance={balance}
-                      decimals={decimals}
-                      deposited={deposited}
-                      symbol={symbol}
-                      token={token}
-                      tokenContract={tokenContract(token, web3)}
+        <VaultActions address={props.address}
+                      allowance={props.allowance}
+                      balance={props.balance}
+                      decimals={props.decimals}
+                      deposited={props.deposited}
+                      pricePerShare={props.pricePerShare}
+                      symbol={props.symbol}
+                      token={props.token}
+                      tokenContract={tokenContract(token, props.web3)}
                       vault={vault}
-                      vaultContract={vaultContract(vault, web3)}
-                      web3={web3} />
+                      vaultContract={vaultContract(vault, props.web3)}
+                      web3={props.web3} />
       )
     }
   }
@@ -95,7 +108,7 @@ const Vault = props => {
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-primary mb-0">
-                  ${props.deposited ? fromWeiFormatted(props.deposited, props.decimals) : '-'}
+                  ${props.deposited ? fromWeiFormatted(humanDeposited(), props.decimals) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Deposited
@@ -136,18 +149,19 @@ const Vault = props => {
 }
 
 Vault.propTypes = {
-  address:   PropTypes.string,
-  allowance: PropTypes.object,
-  apy:       PropTypes.number,
-  balance:   PropTypes.object,
-  color:     PropTypes.string.isRequired,
-  decimals:  PropTypes.object,
-  deposited: PropTypes.object,
-  symbol:    PropTypes.string.isRequired,
-  token:     PropTypes.string.isRequired,
-  tvl:       PropTypes.object,
-  uses:      PropTypes.string.isRequired,
-  web3:      PropTypes.object
+  address:       PropTypes.string,
+  allowance:     PropTypes.object,
+  apy:           PropTypes.number,
+  balance:       PropTypes.object,
+  color:         PropTypes.string.isRequired,
+  decimals:      PropTypes.object,
+  deposited:     PropTypes.object,
+  pricePerShare: PropTypes.object,
+  symbol:        PropTypes.string.isRequired,
+  token:         PropTypes.string.isRequired,
+  tvl:           PropTypes.object,
+  uses:          PropTypes.string.isRequired,
+  web3:          PropTypes.object
 }
 
 export default Vault

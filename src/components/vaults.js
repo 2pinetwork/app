@@ -15,6 +15,7 @@ const renderVaults = (vaults, address, web3) => {
              color={vaultData.color}
              decimals={vaultData.decimals}
              deposited={vaultData.deposited}
+             pricePerShare={vaultData.pricePerShare}
              symbol={vaultData.symbol}
              token={vaultData.token}
              tvl={vaultData.tvl}

@@ -85,6 +85,7 @@ VaultActions.propTypes = {
   balance:          PropTypes.object,
   decimals:         PropTypes.object,
   deposited:        PropTypes.object,
+  pricePerShare:    PropTypes.object,
   symbol:           PropTypes.string.isRequired,
   token:            PropTypes.string.isRequired,
   tokenContract:    PropTypes.func,

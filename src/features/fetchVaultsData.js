@@ -56,6 +56,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     'allowance',
     'deposited',
     'tvl',
+    'pricePerShare',
     'apy'
   ]
 
@@ -79,7 +80,8 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
 
     return [
       vaultContract.balanceOf(address),
-      vaultContract.balance()
+      vaultContract.balance(),
+      vaultContract.getPricePerFullShare()
     ]
   })
 
