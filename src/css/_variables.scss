@@ -1,22 +1,29 @@
 // Color system
 
-$body-bg: #242424;
+$body-bg:    #242424;
 $body-color: #ffffff;
 
-$cyan: $body-color;
+$cyan:     $body-color;
 $gray-900: $body-bg;
 
-$primary: #00b2ca;
+$primary:   #00b2ca;
 $secondary: #70d6ff;
-$info: #1d4e89;
-$danger: #ff70a6;
-$warning: #ffd670;
+$info:      #1d4e89;
+$danger:    #ff70a6;
+$warning:   #ffd670;
+
+$component-active-bg: $primary;
 
 // Borders
 
 $border-radius: .5rem !default;
 $border-radius-sm: .4rem !default;
 
+// Buttons
+
+$btn-disabled-opacity: .50;
+
 // Fonts
+
 $font-family-sans-serif: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $web-font-path: 'data:text/css;base64,';

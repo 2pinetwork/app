@@ -42,10 +42,9 @@ const Vaults = props => {
     }
   }, [address, chainId, dispatch])
 
-
   return (
-    <div className="mt-1">
-      <h2 className="h2 fw-bold mt-1 mb-4">
+    <div className="mt-1 pt-3 pt-lg-0">
+      <h2 className="h2 fw-bold my-4">
         Vaults
       </h2>
 

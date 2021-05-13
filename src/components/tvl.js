@@ -13,14 +13,14 @@ const Tvl = props => {
   }, new BigNumber('0'))
 
   return (
-    <div className="row text-end mt-4">
-      <div className="col-6 col-sm-8 col-lg-10 border-end pe-3 border-2">
-        <h2 className="h4 mb-0">
+    <div className="row mt-4">
+      <div className="col-6 col-sm-8 col-lg-10 text-end border-end pe-3 border-2">
+        <h2 className="h5 mb-0">
           TVL
         </h2>
       </div>
       <div className="col-6 col-sm-4 col-lg-2">
-        <h3 className="h4 text-primary ms-3 mb-0">
+        <h3 className="h5 text-primary mb-0">
           ${tvl.isNaN() ? '-' : formatAmount(tvl.toNumber())}
         </h3>
       </div>
