@@ -45,7 +45,7 @@ const Vault = props => {
                       decimals={decimals}
                       deposited={deposited}
                       symbol={symbol}
-                      token={token}
+                      token={props.token}
                       tokenContract={tokenContract(token, web3)}
                       vault={vault}
                       vaultContract={vaultContract(vault, web3)}

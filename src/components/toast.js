@@ -7,7 +7,7 @@ import { toastDestroyed } from '../features/toastsSlice'
 const Toast = props => {
   const ref       = React.useRef()
   const dispatch  = useDispatch()
-  const icon      = `bi-${props.icon} me-3`
+  const icon      = `bi-${props.icon} me-2`
   const className = `toast border border-${props.style} border-3 bg-dark`
 
   useEffect(() => {
