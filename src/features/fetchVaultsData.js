@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall'
 import vaults from '../data/vaults'
 import { vaultsLoaded } from './vaultsSlice'
+import { toastAdded, toastDestroyed } from './toastsSlice'
 
 const helpers = {
   chunk (array, size) {
@@ -38,6 +39,16 @@ const call = (promises, keys, dispatch) => {
     })
 
     dispatch(vaultsLoaded(vaultsData))
+    dispatch(toastDestroyed('Data loading error'))
+  }).catch(error => {
+    dispatch(
+      toastAdded({
+        title: 'Data loading error',
+        body:  error.message,
+        icon:  'exclamation-triangle',
+        style: 'danger'
+      })
+    )
   })
 }
 

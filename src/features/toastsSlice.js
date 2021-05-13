@@ -6,17 +6,20 @@ export const toastsSlice = createSlice({
   initialState: [],
 
   reducers: {
-    clearToast: (state, action) => {
-      const title = action.payload
-
-      state.splice(state.findIndex(toast => toast.title === title), 1)
-    },
-
     toastAdded: (state, action) => {
-      const { title, body, backgroundStyle, textStyle } = action.payload
+      const { title, body, icon, style } = action.payload
 
       if (! state.find(toast => toast.title === title)) {
-        state.push({ title, body, backgroundStyle, textStyle })
+        state.push({ title, body, icon, style })
+      }
+    },
+
+    toastDestroyed: (state, action) => {
+      const title = action.payload
+      const index = state.findIndex(toast => toast.title === title)
+
+      if (index !== -1) {
+        state.splice(index, 1)
       }
     }
   }
@@ -24,6 +27,6 @@ export const toastsSlice = createSlice({
 
 export const selectToasts = state => state.toasts
 
-export const { clearToast, toastAdded } = toastsSlice.actions
+export const { toastAdded, toastDestroyed } = toastsSlice.actions
 
 export default toastsSlice.reducer

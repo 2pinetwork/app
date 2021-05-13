@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Toast from './toast'
-import { clearToast, selectToasts, toastAdded } from '../features/toastsSlice'
+import { selectToasts, toastAdded, toastDestroyed } from '../features/toastsSlice'
 import {
   selectAddress,
   selectChainId,
@@ -13,8 +13,8 @@ const renderToasts = toasts => {
     return <Toast key={`toast-${i}`}
                   title={toast.title}
                   body={toast.body}
-                  backgroundStyle={toast.backgroundStyle}
-                  textStyle={toast.textStyle} />
+                  icon={toast.icon}
+                  style={toast.style} />
   })
 }
 
@@ -28,14 +28,14 @@ const Toasts = props => {
     if (address && ! supportedChains.includes(chainId)) {
       dispatch(
         toastAdded({
-          title:           'Wrong network',
-          body:            'Switch to Mumbai and try again',
-          backgroundStyle: 'danger',
-          textStyle:       'white'
+          title: 'Wrong network',
+          body:  'Switch to Mumbai and try again',
+          icon:  'exclamation-triangle',
+          style: 'danger'
         })
       )
     } else {
-      dispatch(clearToast('Wrong network'))
+      dispatch(toastDestroyed('Wrong network'))
     }
   }, [address, chainId, dispatch])
 
