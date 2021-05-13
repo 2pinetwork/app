@@ -23,6 +23,10 @@
     "alternate": "src/features/{}.test.js"
   },
 
+  "src/abis/pools/*.js": {
+    "type": "pool"
+  },
+
   "src/abis/tokens/*.js": {
     "type": "token"
   },

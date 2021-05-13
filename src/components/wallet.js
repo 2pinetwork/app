@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   connectAsync,
   selectAddress,
-  selectStatus
+  selectChainId,
+  selectStatus,
+  supportedChains
 } from '../features/walletSlice'
 
 const addressLabel = (address, status) => {
@@ -16,21 +18,32 @@ const addressLabel = (address, status) => {
   }
 }
 
-const walletIcon = address => address ? 'bi-wallet-fill' : 'bi-plug-fill'
-
+const walletIcon = (address, supported) => {
+  if (address && supported) {
+    return 'bi-wallet-fill'
+  } else if (address) {
+    return 'bi-exclamation-diamond-fill'
+  } else {
+    return 'bi-plug-fill'
+  }
+}
 const Wallet = props => {
-  const address  = useSelector(selectAddress)
-  const status   = useSelector(selectStatus)
-  const dispatch = useDispatch()
+  const address   = useSelector(selectAddress)
+  const chainId   = useSelector(selectChainId)
+  const status    = useSelector(selectStatus)
+  const dispatch  = useDispatch()
+  const supported = isNaN(chainId) || supportedChains.includes(chainId)
+  const border    = supported ? 'primary' : 'danger'
+  const className = `btn btn-outline-${border} btn-sm bg-dark text-primary fw-semi-bold`
 
   return (
     <React.Fragment>
       <button type="button"
-              className="btn btn-outline-primary btn-sm bg-dark text-primary fw-semi-bold"
+              className={className}
               disabled={status === 'loading'}
               onClick={() => { dispatch(connectAsync()) }}>
         <span className="me-2">
-          <i className={walletIcon(address)}></i>
+          <i className={walletIcon(address, supported)}></i>
         </span>
         {addressLabel(address, status)}
       </button>

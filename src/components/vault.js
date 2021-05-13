@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
 import VaultActions from './vaultActions'
-import { fromWeiFormatted } from '../helpers/format'
+import { fromWeiFormatted, toPercentage } from '../helpers/format'
 
 const Vault = props => {
   const ref                     = React.createRef()
@@ -92,7 +92,7 @@ const Vault = props => {
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-nowrap mb-0">
-                  100%
+                  {toPercentage(props.apy)}
                 </p>
                 <p className="small text-muted mb-0">
                   APY
@@ -100,7 +100,7 @@ const Vault = props => {
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-nowrap mb-0">
-                  100%
+                  {toPercentage((props.apy || 0.0) / 365)}
                 </p>
                 <p className="small text-muted mb-0">
                   Daily
@@ -127,6 +127,7 @@ const Vault = props => {
 Vault.propTypes = {
   address:   PropTypes.string,
   allowance: PropTypes.object,
+  apy:       PropTypes.number,
   balance:   PropTypes.object,
   color:     PropTypes.string.isRequired,
   decimals:  PropTypes.object,

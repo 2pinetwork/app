@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Vault from './vault'
-import { selectAddress, selectWeb3 } from '../features/walletSlice'
 import { selectVaults, fetchVaultsDataAsync } from '../features/vaultsSlice'
+import {
+  selectAddress,
+  selectChainId,
+  selectWeb3,
+  supportedChains
+} from '../features/walletSlice'
 
 const renderVaults = (vaults, address, web3) => {
   return vaults.map(vaultData => {
@@ -10,6 +15,7 @@ const renderVaults = (vaults, address, web3) => {
       <Vault key={vaultData.key}
              address={address}
              allowance={vaultData.allowance}
+             apy={vaultData.apy}
              balance={vaultData.balance}
              color={vaultData.color}
              decimals={vaultData.decimals}
@@ -25,15 +31,16 @@ const renderVaults = (vaults, address, web3) => {
 
 const Vaults = props => {
   const address  = useSelector(selectAddress)
+  const chainId  = useSelector(selectChainId)
   const web3     = useSelector(selectWeb3)
   const vaults   = useSelector(selectVaults)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (address) {
+    if (address && supportedChains.includes(chainId)) {
       dispatch(fetchVaultsDataAsync())
     }
-  }, [address, dispatch])
+  }, [address, chainId, dispatch])
 
 
   return (
