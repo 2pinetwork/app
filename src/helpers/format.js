@@ -17,6 +17,10 @@ export const decimalPlaces = decimals => {
   return decimals.comparedTo(8) > 0 ? 8 : decimals.toNumber()
 }
 
+export const toUsd = (amount, decimals, pricePerFullShare, usdPrice) => {
+  return amount?.div(pricePerFullShare).times(usdPrice)
+}
+
 export const toWeiFormatted = (amount, decimals) => {
   return toWei(amount, decimals).toFixed(0)
 }

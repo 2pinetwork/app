@@ -13,9 +13,31 @@ const helpers = {
   }
 }
 
+const getPrices = dispatch => {
+  const ids = vaults.map(vault => vault.token).join()
+
+  return fetch(
+    `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
+  ).then(response => {
+    dispatch(toastDestroyed('Prices loading error'))
+
+    return response.json()
+  }).catch(error => {
+    dispatch(
+      toastAdded({
+        title: 'Prices loading error',
+        body:  error.message,
+        icon:  'exclamation-triangle',
+        style: 'danger'
+      })
+    )
+  })
+}
+
 const call = (promises, keys, dispatch) => {
   Promise.all(promises).then(data => {
     const vaults    = data.shift()
+    const prices    = data.pop()
     const extraData = []
 
     helpers.chunk(data.flat(), vaults.length).forEach((chunkedData, i) => {
@@ -34,7 +56,8 @@ const call = (promises, keys, dispatch) => {
     const vaultsData = vaults.map((vault, i) => {
       return {
         ...vault,
-        ...extraData[i]
+        ...extraData[i],
+        usdPrice: prices && prices[vault.token]['usd']
       }
     })
 
@@ -63,6 +86,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     'balance',
     'allowance',
     'deposited',
+    'pricePerFullShare',
     'tvl',
     'apy'
   ]
@@ -87,6 +111,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
 
     return [
       vaultContract.balanceOf(address),
+      vaultContract.getPricePerFullShare(),
       vaultContract.balance()
     ]
   })
@@ -102,7 +127,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
   })
 
   const calls    = tokenCalls.concat(vaultCalls, poolCalls)
-  const promises = [vaults, ethcallProvider.all(calls)]
+  const promises = [vaults, ethcallProvider.all(calls), getPrices(dispatch)]
 
   call(promises, keys, dispatch)
 }

@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { selectVaults } from '../features/vaultsSlice'
-import { formatAmount } from '../helpers/format'
-import { fromWei } from '../helpers/wei'
+import { formatAmount, toUsd } from '../helpers/format'
 
 const Deposited = props => {
   const vaults    = useSelector(selectVaults)
   const deposited = vaults.reduce((acc, vault) => {
-    const amount = vault.deposited ? fromWei(vault.deposited, vault.decimals) : NaN
+    const { deposited, decimals, pricePerFullShare, usdPrice } = vault
+    const amount = toUsd(deposited, decimals, pricePerFullShare, usdPrice)
 
     return acc.plus(amount)
   }, new BigNumber('0'))
