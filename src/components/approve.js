@@ -60,4 +60,3 @@ Approve.propTypes = {
 }
 
 export default Approve
-

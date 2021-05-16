@@ -1,32 +1,31 @@
 import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
 import configureStore from 'redux-mock-store'
-import Tvl from './tvl'
+import Toasts from './toasts'
 
 const mockStore = configureStore([])
 
-describe('TVL component render', () => {
+describe('toasts component render', () => {
   let store
 
   beforeEach(() => {
     const initialState = {
-      vaults: {
-        value: []
-      }
+      wallet: {},
+      toasts: []
     }
 
     store = mockStore(initialState)
   })
 
-  test('renders TVL', () => {
+  test('renders toasts', () => {
     render(
       <Provider store={store}>
-        <Tvl />
+        <Toasts />
       </Provider>
     )
 
-    const headerElement = screen.getByText(/TVL/i)
+    const containerElement = document.querySelector('.toast-container')
 
-    expect(headerElement).toBeInTheDocument()
+    expect(containerElement).toBeInTheDocument()
   })
 })

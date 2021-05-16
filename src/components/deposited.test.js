@@ -1,11 +1,12 @@
 import { Provider } from 'react-redux'
+import BigNumber from 'bignumber.js'
 import { render, screen } from '@testing-library/react'
 import configureStore from 'redux-mock-store'
-import Tvl from './tvl'
+import Deposited from './deposited'
 
 const mockStore = configureStore([])
 
-describe('TVL component render', () => {
+describe('deposited component render', () => {
   let store
 
   beforeEach(() => {
@@ -18,14 +19,14 @@ describe('TVL component render', () => {
     store = mockStore(initialState)
   })
 
-  test('renders TVL', () => {
+  test('renders deposited', () => {
     render(
       <Provider store={store}>
-        <Tvl />
+        <Deposited />
       </Provider>
     )
 
-    const headerElement = screen.getByText(/TVL/i)
+    const headerElement = screen.getByText(/Deposited/i)
 
     expect(headerElement).toBeInTheDocument()
   })

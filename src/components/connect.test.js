@@ -1,32 +1,31 @@
 import { Provider } from 'react-redux'
+import BigNumber from 'bignumber.js'
 import { render, screen } from '@testing-library/react'
 import configureStore from 'redux-mock-store'
-import Tvl from './tvl'
+import Connect from './connect'
 
 const mockStore = configureStore([])
 
-describe('TVL component render', () => {
+describe('connect component render', () => {
   let store
 
   beforeEach(() => {
     const initialState = {
-      vaults: {
-        value: []
-      }
+      wallet: {}
     }
 
     store = mockStore(initialState)
   })
 
-  test('renders TVL', () => {
+  test('renders connect', () => {
     render(
       <Provider store={store}>
-        <Tvl />
+        <Connect />
       </Provider>
     )
 
-    const headerElement = screen.getByText(/TVL/i)
+    const buttonElement = screen.getByText(/Connect/i)
 
-    expect(headerElement).toBeInTheDocument()
+    expect(buttonElement).toBeInTheDocument()
   })
 })
