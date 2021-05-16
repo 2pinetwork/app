@@ -56,7 +56,7 @@ const Vault = props => {
 
   return (
     <CSSTransition nodeRef={ref} key={props.token} in={expanded} timeout={300} classNames="vault">
-      <div ref={ref}>
+      <div ref={ref} className="my-4">
         <div className={`card border border-${props.color} bg-dark`}>
           <div className="card-body ms-2">
             <div className="row align-items-center cursor-pointer" onClick={handleClick}>
