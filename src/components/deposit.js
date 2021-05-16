@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { fromWei, toWei } from '../helpers/wei'
-import { toWeiFormatted, decimalPlaces } from '../helpers/format'
+import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 
 const Deposit = props => {
   const dispatch                      = useDispatch()
@@ -50,7 +50,9 @@ const Deposit = props => {
                onKeyDown={e => onChange(e) && e.preventDefault()}
                onChange={onChange}
                value={deposit} />
-        <label htmlFor={balanceId()}>Balance ({props.symbol})</label>
+        <label htmlFor={balanceId()}>
+          Balance ({formatAmount(fromWei(props.balance, props.decimals))} {props.symbol})
+        </label>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">

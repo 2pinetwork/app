@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
 import VaultActions from './vaultActions'
+import { fromWei } from '../helpers/wei'
 import { formatAmount, fromWeiFormatted, toPercentage } from '../helpers/format'
 
 const Vault = props => {
@@ -57,7 +58,7 @@ const Vault = props => {
   return (
     <CSSTransition nodeRef={ref} key={props.token} in={expanded} timeout={300} classNames="vault">
       <div ref={ref} className="my-4">
-        <div className={`card border border-${props.color} bg-dark`}>
+        <div className={`card border border-${props.color} border-2 bg-dark`}>
           <div className="card-body ms-2">
             <div className="row align-items-center cursor-pointer" onClick={handleClick}>
               <div className="col-3 col-md-2 col-lg-2">
@@ -75,16 +76,22 @@ const Vault = props => {
                 </p>
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
+                <p className="small text-muted mb-0">
+                  {props.balanceUsd ? formatAmount(props.balanceUsd, '$') : '-'}
+                </p>
                 <p className="small text-primary mb-0">
-                  ${props.balanceUsd ? formatAmount(props.balanceUsd) : '-'}
+                  {props.balance ? formatAmount(fromWei(props.balance, props.decimals)) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Balance
                 </p>
               </div>
               <div className="col-6 col-lg-2 text-lg-center mt-3 mt-lg-0">
+                <p className="small text-muted mb-0">
+                  {props.depositedUsd ? formatAmount(props.depositedUsd, '$') : '-'}
+                </p>
                 <p className="small text-primary mb-0">
-                  ${props.depositedUsd ? formatAmount(props.depositedUsd) : '-'}
+                  {props.deposited ? formatAmount(fromWei(props.deposited, props.decimals)) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Deposited

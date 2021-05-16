@@ -5,14 +5,34 @@ $body-color: #ffffff;
 
 $cyan:     $body-color;
 $gray-900: $body-bg;
+$green:    #3cf281;
 
 $primary:   #00b2ca;
 $secondary: #70d6ff;
+$success:   $green;
 $info:      #1d4e89;
-$danger:    #ff70a6;
 $warning:   #ffd670;
+$danger:    #ff70a6;
+$light:     #44d9e8;
+$dark:      $gray-900;
 
 $component-active-bg: $primary;
+
+// Custom colors
+
+$primary-dark: #0f80aa;
+
+$theme-colors: (
+  "primary":      $primary,
+  "secondary":    $secondary,
+  "success":      $success,
+  "info":         $info,
+  "warning":      $warning,
+  "danger":       $danger,
+  "light":        $light,
+  "dark":         $dark,
+  "primary-dark": $primary-dark
+);
 
 // Borders
 

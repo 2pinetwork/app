@@ -14,7 +14,7 @@ const helpers = {
 }
 
 const getPrices = dispatch => {
-  const ids = vaults.map(vault => vault.token).join()
+  const ids = vaults.map(vault => vault.priceId).join()
 
   return fetch(
     `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
@@ -40,15 +40,15 @@ const call = (promises, keys, dispatch) => {
     const prices    = data.pop()
     const extraData = []
 
-    helpers.chunk(data.flat(), vaults.length).forEach((chunkedData, i) => {
-      chunkedData.forEach((valueData, j) => {
-        extraData[j] = extraData[j] || {}
+    helpers.chunk(data.flat(), keys.length).forEach((chunkedData, i) => {
+      extraData[i] = {}
 
-        if (keys[i] === 'apy') {
+      chunkedData.forEach((valueData, j) => {
+        if (keys[j] === 'apy') {
           // TODO: Change for compound function
-          extraData[j][keys[i]] = Number(valueData.currentLiquidityRate) / 1e25
+          extraData[i][keys[j]] = Number(valueData.currentLiquidityRate) / 1e25
         } else {
-          extraData[j][keys[i]] = new BigNumber(valueData.toString())
+          extraData[i][keys[j]] = new BigNumber(valueData.toString())
         }
       })
     })
@@ -57,7 +57,7 @@ const call = (promises, keys, dispatch) => {
       return {
         ...vault,
         ...extraData[i],
-        usdPrice: prices && prices[vault.token]['usd']
+        usdPrice: prices && prices[vault.priceId]['usd']
       }
     })
 
@@ -93,40 +93,25 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
 
   await ethcallProvider.init()
 
-  const tokenCalls = vaults.flatMap(v => {
+  const calls = vaults.flatMap(v => {
     const vault         = require(`../abis/vaults/${v.token}`).default
     const token         = require(`../abis/tokens/${v.token}`).default
+    const pool          = require(`../abis/pools/${v.pool}`).default
     const tokenContract = new Contract(token.address, token.abi)
+    const vaultContract = new Contract(vault.address, vault.abi)
+    const poolContract  = new Contract(pool.address, pool.abi)
 
     return [
       tokenContract.decimals(),
       tokenContract.balanceOf(address),
-      tokenContract.allowance(address, vault.address)
-    ]
-  })
-
-  const vaultCalls = vaults.flatMap(v => {
-    const vault         = require(`../abis/vaults/${v.token}`).default
-    const vaultContract = new Contract(vault.address, vault.abi)
-
-    return [
+      tokenContract.allowance(address, vault.address),
       vaultContract.balanceOf(address),
       vaultContract.getPricePerFullShare(),
-      vaultContract.balance()
-    ]
-  })
-
-  const poolCalls = vaults.flatMap(v => {
-    const token        = require(`../abis/tokens/${v.token}`).default
-    const pool         = require(`../abis/pools/${v.pool}`).default
-    const poolContract = new Contract(pool.address, pool.abi)
-
-    return [
+      vaultContract.balance(),
       poolContract.getReserveData(token.address)
     ]
   })
 
-  const calls    = tokenCalls.concat(vaultCalls, poolCalls)
   const promises = [vaults, ethcallProvider.all(calls), getPrices(dispatch)]
 
   call(promises, keys, dispatch)

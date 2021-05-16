@@ -14,7 +14,7 @@ const Approve = props => {
     const tokenContract = props.tokenContract()
     const allowance     = props.web3.utils.toWei('8000000000', 'ether')
 
-    setButtonLabel('Approving...')
+    setButtonLabel('Approve...')
     setEnabled(false)
 
     tokenContract.methods.approve(vaultAddress, allowance).send({ from: address }).then(() => {

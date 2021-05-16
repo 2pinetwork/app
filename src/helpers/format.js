@@ -4,7 +4,7 @@ export const formatAmount = (amount, prefix) => {
   const order = Math.floor(Math.log10(amount) / 3)
 
   if (order < 0) {
-    return '0.00'
+    return `${prefix || ''}${amount.toFixed(2)}`
   }
 
   const units  = ['', 'K', 'M', 'B', 'T']
