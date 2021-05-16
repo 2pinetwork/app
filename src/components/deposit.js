@@ -29,7 +29,7 @@ const Deposit = props => {
     const vaultContract = props.vaultContract()
     const amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
 
-    setButtonLabel('Depositing...')
+    setButtonLabel('Deposit...')
     setEnabled(false)
 
     vaultContract.methods.deposit(amount).send({ from: props.address }).then(() => {

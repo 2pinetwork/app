@@ -27,7 +27,7 @@ const Withdraw = props => {
     const vaultContract = props.vaultContract()
     const amount        = toWeiFormatted(new BigNumber(withdraw), props.decimals)
 
-    setButtonLabel('Withdrawing...')
+    setButtonLabel('Withdra...')
     setEnabled(false)
 
     vaultContract.methods.withdraw(amount).send({ from: props.address }).then(() => {
