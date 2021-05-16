@@ -118,7 +118,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
 
   const poolCalls = vaults.flatMap(v => {
     const token        = require(`../abis/tokens/${v.token}`).default
-    const pool         = require(`../abis/pools/${v.token}`).default
+    const pool         = require(`../abis/pools/${v.pool}`).default
     const poolContract = new Contract(pool.address, pool.abi)
 
     return [
