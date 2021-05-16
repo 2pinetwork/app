@@ -16,7 +16,7 @@ const Tvl = props => {
     <div className="row mt-4">
       <div className="col-6 col-sm-8 col-lg-10 text-end border-end pe-3 border-2">
         <h2 className="h5 mb-0">
-          TVL
+          <abbr title="Total value locked">TVL</abbr>
         </h2>
       </div>
       <div className="col-6 col-sm-4 col-lg-2">

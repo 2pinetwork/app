@@ -95,7 +95,7 @@ const Vault = props => {
                   {toPercentage(props.apy)}
                 </p>
                 <p className="small text-muted mb-0">
-                  APY
+                  <abbr title="Annual percentage yield">APY</abbr>
                 </p>
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
@@ -111,7 +111,7 @@ const Vault = props => {
                   ${props.tvl ? fromWeiFormatted(props.tvl, props.decimals) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
-                  TVL
+                  <abbr title="Total assets">TA</abbr>
                 </p>
               </div>
             </div>
