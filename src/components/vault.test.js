@@ -3,16 +3,25 @@ import Vault from './vault'
 
 test('renders vault', () => {
   const props = {
-    account: undefined,
-    token:   'test-token',
-    uses:    'test-pool',
-    color:   'warning',
-    web3:    undefined
+    address:      undefined,
+    allowance:    undefined,
+    apy:          undefined,
+    balance:      undefined,
+    balanceUsd:   undefined,
+    color:        'info',
+    decimals:     undefined,
+    deposited:    undefined,
+    depositedUsd: undefined,
+    symbol:       'DAI',
+    token:        'dai',
+    tvl:          undefined,
+    uses:         'aave',
+    web3:         undefined
   }
 
   render(<Vault {...props}/>)
 
-  const tokenHeaderElement = screen.getByText(props.token)
+  const tokenHeaderElement = screen.getByText(props.symbol)
   const usesHeaderElement  = screen.getByText(props.uses)
 
   expect(tokenHeaderElement).toBeInTheDocument()

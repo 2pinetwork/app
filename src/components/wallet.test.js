@@ -1,34 +1,60 @@
+import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 import Wallet from './wallet'
 
-test('renders wallet with connected account', () => {
-  const props = {
-    connecting:   () => false,
-    subscribe:    () => {},
-    setAccount:   account => undefined,
-    account:      '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-    isConnecting: false
-  }
+const mockStore = configureStore([])
 
-  render(<Wallet {...props} />)
+describe('connected wallet component render', () => {
+  let store
 
-  const linkElement = screen.getByText(/266d/i)
+  beforeEach(() => {
+    const initialState = {
+      wallet: {
+        address:  '0x06012c8cf97bead5deae237070f9587f8e7a266d',
+        chainId:  80001,
+        provider: undefined,
+        status:   'idle',
+        web3:     undefined
+      }
+    }
 
-  expect(linkElement).toBeInTheDocument()
+    store = mockStore(initialState)
+  })
+
+  test('renders wallet with connected account', () => {
+    render(
+      <Provider store={store}>
+        <Wallet />
+      </Provider>
+    )
+
+    const linkElement = screen.getByText(/266d/i)
+
+    expect(linkElement).toBeInTheDocument()
+  })
 })
 
-test('renders wallet with no connected account', () => {
-  const props = {
-    connecting:   () => false,
-    subscribe:    () => {},
-    setAccount:   account => undefined,
-    account:      undefined,
-    isConnecting: false
-  }
+describe('disconnected wallet component render', () => {
+  let store
 
-  render(<Wallet {...props} />)
+  beforeEach(() => {
+    const initialState = {
+      wallet: {}
+    }
 
-  const linkElement = screen.getByText(/Wallet/i)
+    store = mockStore(initialState)
+  })
 
-  expect(linkElement).toBeInTheDocument()
+  test('renders wallet with no connected account', () => {
+    render(
+      <Provider store={store}>
+        <Wallet />
+      </Provider>
+    )
+
+    const linkElement = screen.getByText(/Wallet/i)
+
+    expect(linkElement).toBeInTheDocument()
+  })
 })

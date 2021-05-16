@@ -1,18 +1,47 @@
+import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 import VaultActions from './vaultActions'
 
-test('renders vault actions', () => {
-  const props = {
-    token:   'test-token',
-    account: undefined,
-    web3:    undefined
-  }
+const mockStore = configureStore([])
 
-  render(<VaultActions {...props}/>)
+describe('vault actions component render', () => {
+  let store
 
-  const depositButtonElement  = screen.getByText('Deposit')
-  const withdrawButtonElement = screen.getByText('Withdraw')
+  beforeEach(() => {
+    const initialState = {
+      vaults: {
+        value: []
+      },
+      wallet: {}
+    }
 
-  expect(depositButtonElement).toBeInTheDocument()
-  expect(withdrawButtonElement).toBeInTheDocument()
+    store = mockStore(initialState)
+  })
+
+  test('renders vault actions', () => {
+    const props = {
+      address:       undefined,
+      allowance:     undefined,
+      balance:       undefined,
+      decimals:      undefined,
+      deposited:     undefined,
+      symbol:        'DAI',
+      token:         'dai',
+      tokenContract: undefined,
+      vault:         undefined,
+      vaultContract: undefined,
+      web3:          undefined
+    }
+
+    render(
+      <Provider store={store}>
+        <VaultActions {...props}/>
+      </Provider>
+    )
+
+    const connectButtonElement = screen.getByText('Connect')
+
+    expect(connectButtonElement).toBeInTheDocument()
+  })
 })

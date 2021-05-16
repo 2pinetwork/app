@@ -1,15 +1,33 @@
+import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 import Vaults from './vaults'
 
-test('renders vaults', () => {
-  const props = {
-    account: undefined,
-    web3:    undefined
-  }
+const mockStore = configureStore([])
 
-  render(<Vaults {...props}/>)
+describe('vaults component render', () => {
+  let store
 
-  const headerElement = screen.getByText(/Vaults/i)
+  beforeEach(() => {
+    const initialState = {
+      vaults: {
+        value: []
+      },
+      wallet: {}
+    }
 
-  expect(headerElement).toBeInTheDocument()
+    store = mockStore(initialState)
+  })
+
+  test('renders vaults', () => {
+    render(
+      <Provider store={store}>
+        <Vaults />
+      </Provider>
+    )
+
+    const headerElement = screen.getByText(/Vaults/i)
+
+    expect(headerElement).toBeInTheDocument()
+  })
 })

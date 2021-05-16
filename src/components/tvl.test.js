@@ -1,14 +1,36 @@
+import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 import Tvl from './tvl'
 
-test('renders TVL', () => {
-  const props = {
-    web3: undefined
-  }
+const mockStore = configureStore([])
 
-  render(<Tvl {...props}/>)
+describe('TVL component render', () => {
+  let store
 
-  const headerElement = screen.getByText(/TVL/i)
+  beforeEach(() => {
+    const initialState = {
+      vaults: {
+        value: []
+      }
+    }
 
-  expect(headerElement).toBeInTheDocument()
+    store = mockStore(initialState)
+  })
+
+  test('renders TVL', () => {
+    const props = {
+      web3: undefined
+    }
+
+    render(
+      <Provider store={store}>
+        <Tvl />
+      </Provider>
+    )
+
+    const headerElement = screen.getByText(/TVL/i)
+
+    expect(headerElement).toBeInTheDocument()
+  })
 })

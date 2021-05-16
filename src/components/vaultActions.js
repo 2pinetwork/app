@@ -80,17 +80,17 @@ const VaultActions = props => {
 }
 
 VaultActions.propTypes = {
-  address:          PropTypes.string,
-  allowance:        PropTypes.object,
-  balance:          PropTypes.object,
-  decimals:         PropTypes.object,
-  deposited:        PropTypes.object,
-  symbol:           PropTypes.string.isRequired,
-  token:            PropTypes.string.isRequired,
-  tokenContract:    PropTypes.func,
-  vault:            PropTypes.object,
-  vaultContract:    PropTypes.func,
-  web3:             PropTypes.object
+  address:       PropTypes.string,
+  allowance:     PropTypes.object,
+  balance:       PropTypes.object,
+  decimals:      PropTypes.object,
+  deposited:     PropTypes.object,
+  symbol:        PropTypes.string.isRequired,
+  token:         PropTypes.string.isRequired,
+  tokenContract: PropTypes.func,
+  vault:         PropTypes.object,
+  vaultContract: PropTypes.func,
+  web3:          PropTypes.object
 }
 
 export default VaultActions

@@ -1,18 +1,30 @@
+import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 import Header from './header'
 
-test('renders 2pi finance link', () => {
-  const props = {
-    connecting:   () => true,
-    subscribe:    () => {},
-    setAccount:   account => undefined,
-    account:      '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-    isConnecting: false
-  }
+const mockStore = configureStore([])
 
-  render(<Header {...props}/>)
+describe('header component render', () => {
+  let store
 
-  const linkElement = screen.getByAltText(/2pi/i)
+  beforeEach(() => {
+    const initialState = {
+      wallet: {}
+    }
 
-  expect(linkElement).toBeInTheDocument()
+    store = mockStore(initialState)
+  })
+
+  test('renders 2pi finance link', () => {
+    render(
+      <Provider store={store}>
+        <Header />
+      </Provider>
+    )
+
+    const linkElement = screen.getByAltText(/2pi/i)
+
+    expect(linkElement).toBeInTheDocument()
+  })
 })

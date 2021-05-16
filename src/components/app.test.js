@@ -1,15 +1,44 @@
+import { Provider } from 'react-redux'
 import { render, screen } from '@testing-library/react'
+import configureStore from 'redux-mock-store'
 import App from './app'
 
-test('renders Wallet and Tvl components', () => {
-  render(<App />)
+const mockStore = configureStore([])
 
-  const tvlElements = screen.getAllByText(/TVL/i)
-  const linkElement = screen.getByText(/Wallet/i)
+describe('app component render', () => {
+  let store
 
-  tvlElements.forEach(tvlElement => {
-    expect(tvlElement).toBeInTheDocument()
+  beforeEach(() => {
+    const initialState = {
+      toasts: [],
+      vaults: {
+        value: []
+      },
+      wallet: {}
+    }
+
+    store = mockStore(initialState)
   })
 
-  expect(linkElement).toBeInTheDocument()
+  test('renders sub-components', () => {
+    render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    )
+
+    const depositedElements = screen.getAllByText(/Deposited/i)
+    const tvlElements = screen.getAllByText(/TVL/i)
+    const linkElement = screen.getByText(/Wallet/i)
+
+    depositedElements.forEach(depositedElement => {
+      expect(depositedElement).toBeInTheDocument()
+    })
+
+    tvlElements.forEach(tvlElement => {
+      expect(tvlElement).toBeInTheDocument()
+    })
+
+    expect(linkElement).toBeInTheDocument()
+  })
 })
