@@ -7,7 +7,7 @@ import Toasts from './toasts'
 
 const App = props => {
   return (
-    <div className="container mt-5 pt-4">
+    <div className="container">
       <Header />
       <Tvl />
       <Deposited />
