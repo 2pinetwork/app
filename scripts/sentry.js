@@ -26,6 +26,7 @@ const createRelease = async () => {
     await cli.releases.finalize(release)
   } catch (e) {
     console.error('Source maps uploading failed:', e)
+    process.exit(1)
   }
 }
 
