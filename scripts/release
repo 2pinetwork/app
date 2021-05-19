@@ -5,7 +5,6 @@ set -eu
 dir=$(cd "$(dirname "$0")" && pwd)
 release=$(git rev-parse --short HEAD)
 
-export REACT_APP_SENTRY_RELEASE=release
+export REACT_APP_SENTRY_RELEASE=$release
 
-react-scripts build
 node ${dir}/sentry.js
