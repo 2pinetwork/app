@@ -5,10 +5,8 @@ import { Toast as BSToast } from 'bootstrap'
 import { toastDestroyed } from '../features/toastsSlice'
 
 const Toast = props => {
-  const ref       = React.useRef()
-  const dispatch  = useDispatch()
-  const icon      = `bi-${props.icon} me-2`
-  const className = `toast border border-${props.style} border-3 bg-dark`
+  const ref      = React.useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const element = ref.current
@@ -22,9 +20,15 @@ const Toast = props => {
   })
 
   return (
-    <div ref={ref} className={className} role="alert" aria-live="assertive" aria-atomic="true">
+    <div ref={ref}
+         className={`toast border border-${props.style} border-3 bg-dark`}
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
       <div className="toast-header bg-dark">
-        <i className={icon}></i>
+        <span className={`text-${props.style}`}>
+          <i className={`bi-${props.icon} me-2`}></i>
+        </span>
         <span className="me-auto fw-bold">{props.title}</span>
         <button type="button" className="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>

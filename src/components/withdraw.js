@@ -87,7 +87,7 @@ const Withdraw = props => {
                onChange={onChange}
                value={withdraw} />
         <button type="button"
-                className="btn btn-primary-dark shadow-none border-0"
+                className="btn btn-link bg-input"
                 disabled={props.deposited?.isZero()}
                 onClick={setMax}>
           Max

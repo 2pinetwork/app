@@ -90,7 +90,7 @@ const Deposit = props => {
                onChange={onChange}
                value={deposit} />
         <button type="button"
-                className="btn btn-primary-dark shadow-none border-0"
+                className="btn btn-link bg-input"
                 disabled={props.balance?.isZero()}
                 onClick={setMax}>
           Max
