@@ -43,6 +43,15 @@ const vaults = [
     pool:    'aave',
     symbol:  'USDC',
     color:   'primary-dark'
+  },
+  {
+    key:     'usdt',
+    token:   'usdt',
+    priceId: 'tether',
+    uses:    'Aave',
+    pool:    'aave',
+    symbol:  'USDT',
+    color:   'primary-dark'
   }
 ]
 
