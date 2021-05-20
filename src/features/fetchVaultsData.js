@@ -85,7 +85,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     'decimals',
     'balance',
     'allowance',
-    'deposited',
+    'shares',
     'pricePerFullShare',
     'tvl',
     'apy'

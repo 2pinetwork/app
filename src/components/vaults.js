@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Vault from './vault'
+import { fromWei } from '../helpers/wei'
 import { toUsd } from '../helpers/format'
 import { selectVaults, fetchVaultsDataAsync } from '../features/vaultsSlice'
 import {
@@ -15,11 +16,12 @@ const renderVaults = (vaults, address, web3) => {
     const {
       balance,
       decimals,
-      deposited,
+      shares,
       pricePerFullShare,
       usdPrice
     } = vaultData
 
+    const deposited    = shares?.times(fromWei(pricePerFullShare, decimals))
     const balanceUsd   = toUsd(balance, decimals, pricePerFullShare, usdPrice)
     const depositedUsd = toUsd(deposited, decimals, pricePerFullShare, usdPrice)
 
