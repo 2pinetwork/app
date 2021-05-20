@@ -7,10 +7,10 @@ export const toastsSlice = createSlice({
 
   reducers: {
     toastAdded: (state, action) => {
-      const { title, body, icon, style } = action.payload
+      const { title, body, icon, style, autohide } = action.payload
 
       if (! state.find(toast => toast.title === title)) {
-        state.push({ title, body, icon, style })
+        state.push({ title, body, icon, style, autohide })
       }
     },
 

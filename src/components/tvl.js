@@ -9,7 +9,7 @@ const Tvl = props => {
     const { tvl, decimals, pricePerFullShare, usdPrice } = vault
     const amount = toUsd(tvl, decimals, pricePerFullShare, usdPrice)
 
-    return acc.plus(amount)
+    return amount?.isFinite() ? acc.plus(amount) : acc
   }, new BigNumber('0'))
 
   return (

@@ -14,7 +14,8 @@ const renderToasts = toasts => {
                   title={toast.title}
                   body={toast.body}
                   icon={toast.icon}
-                  style={toast.style} />
+                  style={toast.style}
+                  autohide={!! toast.autohide} />
   })
 }
 

@@ -16,10 +16,11 @@ describe('toast component render', () => {
 
   test('renders toast', () => {
     const props = {
-      title: 'Test title',
-      body:  'Test body',
-      icon:  'warning',
-      style: 'danger'
+      title:    'Test title',
+      body:     'Test body',
+      icon:     'warning',
+      style:    'danger',
+      autohide: false
     }
 
     render(

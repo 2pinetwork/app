@@ -3,23 +3,23 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
+import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { fromWei, toWei } from '../helpers/wei'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 
 const Withdraw = props => {
   const dispatch                      = useDispatch()
-  const [withdraw, setWithdraw]       = useState('0')
+  const [withdraw, setWithdraw]       = useState('')
   const [buttonLabel, setButtonLabel] = useState('Withdraw')
   const [enabled, setEnabled]         = useState(true)
 
   const onChange = e => {
     const amount = toWei(new BigNumber(+e.target.value || 0), props.decimals)
-    const places = decimalPlaces(props.decimals)
 
     if (props.deposited.comparedTo(amount) >= 0) {
       setWithdraw(fromWei(amount, props.decimals))
     } else {
-      setWithdraw(fromWei(props.deposited, props.decimals).toFixed(places))
+      setMax()
     }
   }
 
@@ -27,30 +27,71 @@ const Withdraw = props => {
     const vaultContract = props.vaultContract()
     const amount        = toWeiFormatted(new BigNumber(withdraw), props.decimals)
 
-    setButtonLabel('Withdra...')
+    setButtonLabel('Withdraw...')
     setEnabled(false)
 
     vaultContract.methods.withdraw(amount).send({ from: props.address }).then(() => {
       setButtonLabel('Withdraw')
       setEnabled(true)
+      dispatch(toastDestroyed('Withdraw rejected'))
       dispatch(fetchVaultsDataAsync())
+      dispatch(
+        toastAdded({
+          title:   'Withdraw approved',
+          body:    'Your withdraw was successful',
+          icon:    'check-circle',
+          style:   'success',
+          autohide: true
+        })
+      )
+    }).catch(error => {
+      setButtonLabel('Withdraw')
+      setEnabled(true)
+      dispatch(
+        toastAdded({
+          title:    'Withdraw rejected',
+          body:     error.message,
+          icon:     'exclamation-triangle',
+          style:    'danger',
+          autohide: true
+        })
+      )
     })
+  }
+
+  const setMax = () => {
+    const max    = 4
+    const places = decimalPlaces(props.decimals, max)
+    const offset = new BigNumber(1).div(new BigNumber(10).pow(max))
+
+    setWithdraw(
+      fromWei(props.deposited, props.decimals).minus(offset).toFixed(places)
+    )
   }
 
   const depositedId = () => `deposited-${props.token}`
 
   return (
     <React.Fragment>
-      <div className="form-floating mb-3">
+      <label className="text-muted text-decoration-underline-dotted cursor-pointer mb-2"
+             htmlFor={depositedId()}
+             onClick={setMax}>
+        Deposited ({formatAmount(fromWei(props.deposited, props.decimals))} {props.symbol})
+      </label>
+
+      <div className="input-group mb-3">
         <input type="number"
                className="form-control"
                id={depositedId()}
                onKeyDown={e => onChange(e) && e.preventDefault()}
                onChange={onChange}
                value={withdraw} />
-        <label htmlFor={depositedId()}>
-          Deposited ({formatAmount(fromWei(props.deposited, props.decimals))} {props.symbol})
-        </label>
+        <button type="button"
+                className="btn btn-primary-dark shadow-none border-0"
+                disabled={props.deposited?.isZero()}
+                onClick={setMax}>
+          Max
+        </button>
       </div>
 
       <div className="d-grid gap-2 mb-3 mb-lg-0">

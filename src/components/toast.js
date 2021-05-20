@@ -12,7 +12,7 @@ const Toast = props => {
 
   useEffect(() => {
     const element = ref.current
-    const toast   = new BSToast(element, { autohide: false })
+    const toast   = new BSToast(element, { autohide: props.autohide })
 
     toast.show()
 
@@ -37,10 +37,11 @@ const Toast = props => {
 }
 
 Toast.propTypes = {
-  title: PropTypes.string.isRequired,
-  body:  PropTypes.string.isRequired,
-  icon:  PropTypes.string.isRequired,
-  style: PropTypes.string.isRequired
+  title:    PropTypes.string.isRequired,
+  body:     PropTypes.string.isRequired,
+  icon:     PropTypes.string.isRequired,
+  style:    PropTypes.string.isRequired,
+  autohide: PropTypes.bool.isRequired
 }
 
 export default Toast

@@ -19,6 +19,7 @@ describe('approve component render', () => {
     const props = {
       address:       '0x06012c8cf97bead5deae237070f9587f8e7a266d',
       balance:       new BigNumber(0),
+      decimals:      new BigNumber(0),
       symbol:        'DAI',
       token:         'dai',
       tokenContract: () => {},

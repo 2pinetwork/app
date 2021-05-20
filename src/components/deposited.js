@@ -2,14 +2,16 @@ import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { selectVaults } from '../features/vaultsSlice'
 import { formatAmount, toUsd } from '../helpers/format'
+import { fromWei } from '../helpers/wei'
 
 const Deposited = props => {
   const vaults    = useSelector(selectVaults)
   const deposited = vaults.reduce((acc, vault) => {
-    const { deposited, decimals, pricePerFullShare, usdPrice } = vault
-    const amount = toUsd(deposited, decimals, pricePerFullShare, usdPrice)
+    const { shares, decimals, pricePerFullShare, usdPrice } = vault
+    const deposited  = shares?.times(fromWei(pricePerFullShare, decimals))
+    const amount     = toUsd(deposited, decimals, pricePerFullShare, usdPrice)
 
-    return acc.plus(amount)
+    return amount?.isFinite() ? acc.plus(amount) : acc
   }, new BigNumber('0'))
 
   return (
