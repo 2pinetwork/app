@@ -16,14 +16,18 @@ const renderVaults = (vaults, address, web3) => {
     const {
       balance,
       decimals,
-      shares,
       pricePerFullShare,
-      usdPrice
+      shares,
+      tvl,
+      usdPrice,
+      vaultDecimals
     } = vaultData
 
-    const deposited    = shares?.times(fromWei(pricePerFullShare, decimals))
-    const balanceUsd   = toUsd(balance, decimals, pricePerFullShare, usdPrice)
-    const depositedUsd = toUsd(deposited, decimals, pricePerFullShare, usdPrice)
+    const staked       = shares && fromWei(shares, vaultDecimals)
+    const deposited    = staked?.times(pricePerFullShare)
+    const balanceUsd   = toUsd(balance, decimals, usdPrice)
+    const depositedUsd = toUsd(deposited, decimals, usdPrice)
+    const tvlUsd       = toUsd(tvl, decimals, usdPrice)
 
     return (
       <Vault key={vaultData.key}
@@ -36,10 +40,13 @@ const renderVaults = (vaults, address, web3) => {
              decimals={decimals}
              deposited={deposited}
              depositedUsd={depositedUsd}
+             pricePerFullShare={pricePerFullShare}
              symbol={vaultData.symbol}
              token={vaultData.token}
-             tvl={vaultData.tvl}
+             tvlUsd={tvlUsd}
+             usdPrice={usdPrice}
              uses={vaultData.uses}
+             vaultDecimals={vaultDecimals}
              web3={web3} />
     )
   })

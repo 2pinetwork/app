@@ -7,9 +7,17 @@ import { fromWei } from '../helpers/wei'
 const Deposited = props => {
   const vaults    = useSelector(selectVaults)
   const deposited = vaults.reduce((acc, vault) => {
-    const { shares, decimals, pricePerFullShare, usdPrice } = vault
-    const deposited  = shares?.times(fromWei(pricePerFullShare, decimals))
-    const amount     = toUsd(deposited, decimals, pricePerFullShare, usdPrice)
+    const {
+      shares,
+      decimals,
+      pricePerFullShare,
+      vaultDecimals,
+      usdPrice
+    } = vault
+
+    const staked    = shares && fromWei(shares, vaultDecimals)
+    const deposited = staked?.times(pricePerFullShare)
+    const amount    = toUsd(deposited, decimals, usdPrice)
 
     return amount?.isFinite() ? acc.plus(amount) : acc
   }, new BigNumber('0'))

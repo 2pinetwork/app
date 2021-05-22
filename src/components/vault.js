@@ -3,7 +3,7 @@ import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
 import VaultActions from './vaultActions'
 import { fromWei } from '../helpers/wei'
-import { formatAmount, fromWeiFormatted, toPercentage } from '../helpers/format'
+import { formatAmount, toPercentage } from '../helpers/format'
 
 const Vault = props => {
   const ref                     = React.createRef()
@@ -45,11 +45,13 @@ const Vault = props => {
                       balance={balance}
                       decimals={decimals}
                       deposited={deposited}
+                      pricePerFullShare={props.pricePerFullShare}
                       symbol={symbol}
                       token={props.token}
                       tokenContract={tokenContract(token, web3)}
                       vault={vault}
                       vaultContract={vaultContract(vault, web3)}
+                      vaultDecimals={props.vaultDecimals}
                       web3={web3} />
       )
     }
@@ -115,7 +117,7 @@ const Vault = props => {
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
                 <p className="small text-nowrap mb-0">
-                  ${props.tvl ? fromWeiFormatted(props.tvl, props.decimals) : '-'}
+                  {props.tvlUsd ? formatAmount(props.tvlUsd, '$') : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   <abbr title="Total assets">TA</abbr>
@@ -132,20 +134,23 @@ const Vault = props => {
 }
 
 Vault.propTypes = {
-  address:      PropTypes.string,
-  allowance:    PropTypes.object,
-  apy:          PropTypes.number,
-  balance:      PropTypes.object,
-  balanceUsd:   PropTypes.object,
-  color:        PropTypes.string.isRequired,
-  decimals:     PropTypes.object,
-  deposited:    PropTypes.object,
-  depositedUsd: PropTypes.object,
-  symbol:       PropTypes.string.isRequired,
-  token:        PropTypes.string.isRequired,
-  tvl:          PropTypes.object,
-  uses:         PropTypes.string.isRequired,
-  web3:         PropTypes.object
+  address:           PropTypes.string,
+  allowance:         PropTypes.object,
+  apy:               PropTypes.number,
+  balance:           PropTypes.object,
+  balanceUsd:        PropTypes.object,
+  color:             PropTypes.string.isRequired,
+  decimals:          PropTypes.object,
+  deposited:         PropTypes.object,
+  depositedUsd:      PropTypes.object,
+  pricePerFullShare: PropTypes.object,
+  symbol:            PropTypes.string.isRequired,
+  token:             PropTypes.string.isRequired,
+  tvlUsd:            PropTypes.object,
+  usdPrice:          PropTypes.number,
+  uses:              PropTypes.string.isRequired,
+  vaultDecimals:     PropTypes.object,
+  web3:              PropTypes.object
 }
 
 export default Vault

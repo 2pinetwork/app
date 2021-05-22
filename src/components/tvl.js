@@ -6,8 +6,8 @@ import { formatAmount, toUsd } from '../helpers/format'
 const Tvl = props => {
   const vaults = useSelector(selectVaults)
   const tvl    = vaults.reduce((acc, vault) => {
-    const { tvl, decimals, pricePerFullShare, usdPrice } = vault
-    const amount = toUsd(tvl, decimals, pricePerFullShare, usdPrice)
+    const { tvl, decimals, usdPrice } = vault
+    const amount = toUsd(tvl, decimals, usdPrice)
 
     return amount?.isFinite() ? acc.plus(amount) : acc
   }, new BigNumber('0'))

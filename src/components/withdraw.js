@@ -25,7 +25,9 @@ const Withdraw = props => {
 
   const handleClick = () => {
     const vaultContract = props.vaultContract()
-    const amount        = toWeiFormatted(new BigNumber(withdraw), props.decimals)
+    const withdrawInWei = toWei(new BigNumber(withdraw), props.decimals)
+    const shares        = withdrawInWei.div(props.pricePerFullShare)
+    const amount        = toWeiFormatted(shares, props.vaultDecimals)
 
     setButtonLabel('Withdraw...')
     setEnabled(false)
@@ -37,10 +39,10 @@ const Withdraw = props => {
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({
-          title:   'Withdraw approved',
-          body:    'Your withdraw was successful',
-          icon:    'check-circle',
-          style:   'success',
+          title:    'Withdraw approved',
+          body:     'Your withdraw was successful',
+          icon:     'check-circle',
+          style:    'success',
           autohide: true
         })
       )
@@ -112,7 +114,8 @@ Withdraw.propTypes = {
   deposited:     PropTypes.object.isRequired,
   symbol:        PropTypes.string.isRequired,
   token:         PropTypes.string.isRequired,
-  vaultContract: PropTypes.func.isRequired
+  vaultContract: PropTypes.func.isRequired,
+  vaultDecimals: PropTypes.object.isRequired
 }
 
 export default Withdraw

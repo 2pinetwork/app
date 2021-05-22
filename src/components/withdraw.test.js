@@ -22,7 +22,8 @@ describe('withdraw component render', () => {
       deposited:     new BigNumber(0),
       symbol:        'DAI',
       token:         'dai',
-      vaultContract: () => {}
+      vaultContract: () => {},
+      vaultDecimals: new BigNumber(18)
     }
 
     render(

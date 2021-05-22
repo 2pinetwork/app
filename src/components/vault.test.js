@@ -3,20 +3,23 @@ import Vault from './vault'
 
 test('renders vault', () => {
   const props = {
-    address:      undefined,
-    allowance:    undefined,
-    apy:          undefined,
-    balance:      undefined,
-    balanceUsd:   undefined,
-    color:        'info',
-    decimals:     undefined,
-    deposited:    undefined,
-    depositedUsd: undefined,
-    symbol:       'DAI',
-    token:        'dai',
-    tvl:          undefined,
-    uses:         'aave',
-    web3:         undefined
+    address:           undefined,
+    allowance:         undefined,
+    apy:               undefined,
+    balance:           undefined,
+    balanceUsd:        undefined,
+    color:             'info',
+    decimals:          undefined,
+    deposited:         undefined,
+    depositedUsd:      undefined,
+    pricePerFullShare: undefined,
+    symbol:            'DAI',
+    token:             'dai',
+    tvlUsd:            undefined,
+    usdPrice:          undefined,
+    uses:              'aave',
+    vaultDecimals:     undefined,
+    web3:              undefined
   }
 
   render(<Vault {...props}/>)

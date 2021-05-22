@@ -36,9 +36,8 @@ const getPrices = dispatch => {
 
 const call = (promises, keys, dispatch) => {
   Promise.all(promises).then(data => {
-    const vaults    = data.shift()
-    const prices    = data.pop()
     const extraData = []
+    const prices    = data.pop()
 
     helpers.chunk(data.flat(), keys.length).forEach((chunkedData, i) => {
       extraData[i] = {}
@@ -54,10 +53,12 @@ const call = (promises, keys, dispatch) => {
     })
 
     const vaultsData = vaults.map((vault, i) => {
+      const usdPrice = prices && prices[vault.priceId]['usd']
+
       return {
         ...vault,
         ...extraData[i],
-        usdPrice: prices && prices[vault.priceId]['usd']
+        usdPrice
       }
     })
 
@@ -88,6 +89,7 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     'shares',
     'pricePerFullShare',
     'tvl',
+    'vaultDecimals',
     'apy'
   ]
 
@@ -108,11 +110,12 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
       vaultContract.balanceOf(address),
       vaultContract.getPricePerFullShare(),
       vaultContract.balance(),
+      vaultContract.decimals(),
       poolContract.getReserveData(token.address)
     ]
   })
 
-  const promises = [vaults, ethcallProvider.all(calls), getPrices(dispatch)]
+  const promises = [ethcallProvider.all(calls), getPrices(dispatch)]
 
   call(promises, keys, dispatch)
 }

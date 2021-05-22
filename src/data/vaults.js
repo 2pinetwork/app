@@ -51,7 +51,7 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'USDT',
-    color:   'primary-dark'
+    color:   'info'
   }
 ]
 

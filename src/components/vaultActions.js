@@ -59,9 +59,11 @@ const VaultActions = props => {
             <Withdraw address={props.address}
                       decimals={props.decimals}
                       deposited={props.deposited}
+                      pricePerFullShare={props.pricePerFullShare}
                       symbol={props.symbol}
                       token={props.token}
-                      vaultContract={props.vaultContract} />
+                      vaultContract={props.vaultContract}
+                      vaultDecimals={props.vaultDecimals} />
           </div>
         </div>
       )
@@ -80,17 +82,19 @@ const VaultActions = props => {
 }
 
 VaultActions.propTypes = {
-  address:       PropTypes.string,
-  allowance:     PropTypes.object,
-  balance:       PropTypes.object,
-  decimals:      PropTypes.object,
-  deposited:     PropTypes.object,
-  symbol:        PropTypes.string.isRequired,
-  token:         PropTypes.string.isRequired,
-  tokenContract: PropTypes.func,
-  vault:         PropTypes.object,
-  vaultContract: PropTypes.func,
-  web3:          PropTypes.object
+  address:           PropTypes.string,
+  allowance:         PropTypes.object,
+  balance:           PropTypes.object,
+  decimals:          PropTypes.object,
+  deposited:         PropTypes.object,
+  pricePerFullShare: PropTypes.object,
+  symbol:            PropTypes.string.isRequired,
+  token:             PropTypes.string.isRequired,
+  tokenContract:     PropTypes.func,
+  vault:             PropTypes.object,
+  vaultContract:     PropTypes.func,
+  vaultDecimals:     PropTypes.object,
+  web3:              PropTypes.object
 }
 
 export default VaultActions

@@ -21,17 +21,19 @@ describe('vault actions component render', () => {
 
   test('renders vault actions', () => {
     const props = {
-      address:       undefined,
-      allowance:     undefined,
-      balance:       undefined,
-      decimals:      undefined,
-      deposited:     undefined,
-      symbol:        'DAI',
-      token:         'dai',
-      tokenContract: undefined,
-      vault:         undefined,
-      vaultContract: undefined,
-      web3:          undefined
+      address:           undefined,
+      allowance:         undefined,
+      balance:           undefined,
+      decimals:          undefined,
+      deposited:         undefined,
+      pricePerFullShare: undefined,
+      symbol:            'DAI',
+      token:             'dai',
+      tokenContract:     undefined,
+      vault:             undefined,
+      vaultContract:     undefined,
+      vaultDecimals:     undefined,
+      web3:              undefined
     }
 
     render(

@@ -40,13 +40,17 @@ const Toasts = props => {
     }
   }, [address, chainId, dispatch])
 
-  return (
-    <div aria-live="polite" aria-atomic="true" className="position-absolute bottom-0 start-0 end-0">
-      <div className="toast-container p-3">
-        {renderToasts(toasts)}
+  if (toasts.length) {
+    return (
+      <div aria-live="polite" aria-atomic="true" className="position-fixed bottom-0 start-0 end-0">
+        <div className="toast-container p-3">
+          {renderToasts(toasts)}
+        </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return null
+  }
 }
 
 export default Toasts

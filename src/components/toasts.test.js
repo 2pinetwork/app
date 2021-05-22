@@ -11,7 +11,14 @@ describe('toasts component render', () => {
   beforeEach(() => {
     const initialState = {
       wallet: {},
-      toasts: []
+      toasts: [
+        {
+          title: 'Test toast',
+          body:  'Test body',
+          icon:  'wallet',
+          style: 'success'
+        }
+      ]
     }
 
     store = mockStore(initialState)

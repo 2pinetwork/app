@@ -98,7 +98,7 @@ const Approve = props => {
       <div className="d-grid gap-2 mb-3 mb-lg-0">
         <button type="button"
                 className="btn btn-primary text-white fw-bold"
-                disabled={! (enabled && +deposit > 0)}
+                disabled={! enabled}
                 onClick={handleClick}>
           {buttonLabel}
         </button>
