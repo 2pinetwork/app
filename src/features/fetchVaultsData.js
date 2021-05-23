@@ -4,6 +4,7 @@ import { Contract, Provider, setMulticallAddress } from 'ethers-multicall'
 import vaults from '../data/vaults'
 import { vaultsLoaded } from './vaultsSlice'
 import { toastAdded, toastDestroyed } from './toastsSlice'
+import { getVaultApy } from '../helpers/apy'
 
 const helpers = {
   chunk (array, size) {
@@ -41,15 +42,36 @@ const call = (promises, keys, dispatch) => {
 
     helpers.chunk(data.flat(), keys.length).forEach((chunkedData, i) => {
       extraData[i] = {}
+      let dataProvider
+      let distributionManager = {}
 
       chunkedData.forEach((valueData, j) => {
-        if (keys[j] === 'apy') {
-          // TODO: Change for compound function
-          extraData[i][keys[j]] = Number(valueData.currentLiquidityRate) / 1e25
-        } else {
-          extraData[i][keys[j]] = new BigNumber(valueData.toString())
+        switch (keys[j]) {
+          case 'dataProvider':
+            dataProvider = valueData
+            break
+          case 'distributionSupply':
+            distributionManager['supply'] = valueData
+            break
+          case 'distributionBorrow':
+            distributionManager['borrow'] = valueData
+            break
+          default:
+            extraData[i][keys[j]] = new BigNumber(valueData.toString())
         }
       })
+
+      let vault = {
+        ...vaults[i],
+        ...extraData[i],
+      }
+
+      extraData[i]['apy'] = getVaultApy(
+        vault,
+        dataProvider,
+        distributionManager,
+        prices
+      )
     })
 
     const vaultsData = vaults.map((vault, i) => {
@@ -90,18 +112,21 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
     'pricePerFullShare',
     'tvl',
     'vaultDecimals',
-    'apy'
+    'dataProvider',
+    'distributionSupply',
+    'distributionBorrow'
   ]
 
   await ethcallProvider.init()
 
   const calls = vaults.flatMap(v => {
-    const vault         = require(`../abis/vaults/${v.token}`).default
-    const token         = require(`../abis/tokens/${v.token}`).default
-    const pool          = require(`../abis/pools/${v.pool}`).default
-    const tokenContract = new Contract(token.address, token.abi)
-    const vaultContract = new Contract(vault.address, vault.abi)
-    const poolContract  = new Contract(pool.address, pool.abi)
+    const vault                       = require(`../abis/vaults/${v.token}`).default
+    const token                       = require(`../abis/tokens/${v.token}`).default
+    const pool                        = require(`../abis/pools/${v.pool}`).default
+    const tokenContract               = new Contract(token.address, token.abi)
+    const vaultContract               = new Contract(vault.address, vault.abi)
+    const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)
+    const distributionManagerContract = new Contract(pool.distributionManager.address, pool.distributionManager.abi)
 
     return [
       tokenContract.decimals(),
@@ -111,7 +136,9 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
       vaultContract.getPricePerFullShare(),
       vaultContract.balance(),
       vaultContract.decimals(),
-      poolContract.getReserveData(token.address)
+      dataProviderContract.getReserveData(token.address),
+      distributionManagerContract.assets(vault.aToken.address),
+      distributionManagerContract.assets(vault.debtToken.address),
     ]
   })
 

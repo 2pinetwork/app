@@ -499,6 +499,14 @@ const abi     = [
   }
 ]
 
-const vault = { abi, address }
+const aToken = {
+  address: '0x7aE20397Ca327721F013BB9e140C707F82871b56',
+}
+
+const debtToken = {
+  address: '0x0F2656e068b77cdA65213Ef25705B728d5C73340'
+}
+
+const vault = { abi, address, aToken, debtToken }
 
 export default vault

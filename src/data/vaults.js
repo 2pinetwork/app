@@ -6,7 +6,8 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'DAI',
-    color:   'primary'
+    color:   'primary',
+    borrow:  { depth: 8, percentage: 0.73 }
   },
   {
     key:     'wmatic',
@@ -15,7 +16,8 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'MATIC',
-    color:   'primary-dark'
+    color:   'primary-dark',
+    borrow:  { depth: 8, percentage: 0.48 }
   },
   {
     key:     'btc',
@@ -24,7 +26,8 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'BTC',
-    color:   'info'
+    color:   'info',
+    borrow:  { depth: 8, percentage: 0.68 }
   },
   {
     key:     'eth',
@@ -33,7 +36,8 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'ETH',
-    color:   'primary'
+    color:   'primary',
+    borrow:  { depth: 8, percentage: 0.78 }
   },
   {
     key:     'usdc',
@@ -42,7 +46,8 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'USDC',
-    color:   'primary-dark'
+    color:   'primary-dark',
+    borrow:  { depth: 8, percentage: 0.78 }
   },
   {
     key:     'usdt',
@@ -51,7 +56,8 @@ const vaults = [
     uses:    'Aave',
     pool:    'aave',
     symbol:  'USDT',
-    color:   'info'
+    color:   'info',
+    borrow:  { depth: 0, percentage: 0 }
   }
 ]
 
