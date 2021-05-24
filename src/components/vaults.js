@@ -3,7 +3,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import Vault from './vault'
 import { fromWei } from '../helpers/wei'
 import { toUsd } from '../helpers/format'
-import { selectVaults, fetchVaultsDataAsync } from '../features/vaultsSlice'
+import {
+  resetVaults,
+  selectVaults,
+  fetchVaultsDataAsync
+} from '../features/vaultsSlice'
 import {
   selectAddress,
   selectChainId,
@@ -62,6 +66,8 @@ const Vaults = props => {
   useEffect(() => {
     if (address && supportedChains.includes(chainId)) {
       dispatch(fetchVaultsDataAsync())
+    } else {
+      dispatch(resetVaults())
     }
   }, [address, chainId, dispatch])
 
