@@ -32,7 +32,7 @@ describe('withdraw component render', () => {
       </Provider>
     )
 
-    const buttonElement = screen.getByText(/Withdraw/i)
+    const buttonElement = screen.getByText(/Withdraw all/i)
 
     expect(buttonElement).toBeInTheDocument()
   })

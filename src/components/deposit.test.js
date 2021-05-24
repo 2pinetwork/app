@@ -31,7 +31,7 @@ describe('deposit component render', () => {
       </Provider>
     )
 
-    const buttonElement = screen.getByText(/Deposit/i)
+    const buttonElement = screen.getByText(/Deposit all/i)
 
     expect(buttonElement).toBeInTheDocument()
   })

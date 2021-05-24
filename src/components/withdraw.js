@@ -8,32 +8,39 @@ import { fromWei, toWei } from '../helpers/wei'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 
 const Withdraw = props => {
-  const dispatch                      = useDispatch()
-  const [withdraw, setWithdraw]       = useState('')
-  const [buttonLabel, setButtonLabel] = useState('Withdraw')
-  const [enabled, setEnabled]         = useState(true)
+  const dispatch                                = useDispatch()
+  const [withdraw, setWithdraw]                 = useState('')
+  const [useAll, setUseAll]                     = useState(false)
+  const [withdrawLabel, setWithdrawLabel]       = useState('Withdraw')
+  const [withdrawAllLabel, setWithdrawAllLabel] = useState('Withdraw all')
+  const [enabled, setEnabled]                   = useState(true)
 
   const onChange = e => {
-    const amount = toWei(new BigNumber(+e.target.value || 0), props.decimals)
+    const value = e.target.value
 
-    if (props.deposited.comparedTo(amount) >= 0) {
-      setWithdraw(fromWei(amount, props.decimals))
+    setUseAll(false)
+    setWithdraw(value)
+
+    if (/^\d*\.?\d*$/.test(value)) {
+      const amount = toWei(new BigNumber(value), props.decimals)
+
+      setEnabled(props.deposited.comparedTo(amount) >= 0)
     } else {
-      setMax()
+      setEnabled(false)
     }
   }
 
-  const handleClick = () => {
+  const handleWithdrawClick = () => {
     const vaultContract = props.vaultContract()
     const withdrawInWei = toWei(new BigNumber(withdraw), props.decimals)
     const shares        = withdrawInWei.div(props.pricePerFullShare)
     const amount        = toWeiFormatted(shares, props.vaultDecimals)
 
-    setButtonLabel('Withdraw...')
+    setWithdrawLabel('Withdraw...')
     setEnabled(false)
 
     vaultContract.methods.withdraw(amount).send({ from: props.address }).then(() => {
-      setButtonLabel('Withdraw')
+      setWithdrawLabel('Withdraw')
       setEnabled(true)
       dispatch(toastDestroyed('Withdraw rejected'))
       dispatch(fetchVaultsDataAsync())
@@ -47,7 +54,7 @@ const Withdraw = props => {
         })
       )
     }).catch(error => {
-      setButtonLabel('Withdraw')
+      setWithdrawLabel('Withdraw')
       setEnabled(true)
       dispatch(
         toastAdded({
@@ -61,13 +68,49 @@ const Withdraw = props => {
     })
   }
 
-  const setMax = () => {
-    const max    = 4
-    const places = decimalPlaces(props.decimals, max)
-    const offset = new BigNumber(1).div(new BigNumber(10).pow(max))
+  const handleWithdrawAllClick = () => {
+    const vaultContract = props.vaultContract()
 
+    setMax()
+    setWithdrawAllLabel('Withdraw all...')
+    setEnabled(false)
+
+    vaultContract.methods.withdrawAll().send({ from: props.address }).then(() => {
+      setWithdrawAllLabel('Withdraw all')
+      setEnabled(true)
+      dispatch(toastDestroyed('Withdraw all rejected'))
+      dispatch(fetchVaultsDataAsync())
+      dispatch(
+        toastAdded({
+          title:    'Withdraw all approved',
+          body:     'Your withdraw was successful',
+          icon:     'check-circle',
+          style:    'success',
+          autohide: true
+        })
+      )
+    }).catch(error => {
+      setWithdrawAllLabel('Withdraw all')
+      setEnabled(true)
+      dispatch(
+        toastAdded({
+          title:    'Withdraw all rejected',
+          body:     error.message,
+          icon:     'exclamation-triangle',
+          style:    'danger',
+          autohide: true
+        })
+      )
+    })
+  }
+
+  const setMax = () => {
+    const places       = decimalPlaces(props.decimals)
+    const roundingMode = BigNumber.ROUND_DOWN
+
+    setUseAll(true)
     setWithdraw(
-      fromWei(props.deposited, props.decimals).minus(offset).toFixed(places)
+      fromWei(props.deposited, props.decimals).toFixed(places, roundingMode)
     )
   }
 
@@ -96,13 +139,27 @@ const Withdraw = props => {
         </button>
       </div>
 
-      <div className="d-grid gap-2 mb-3 mb-lg-0">
-        <button type="button"
-                className="btn btn-outline-primary bg-dark fw-bold"
-                disabled={! (enabled && +withdraw > 0)}
-                onClick={handleClick}>
-          {buttonLabel}
-        </button>
+      <div className="row">
+        <div className="col-lg-6">
+          <div className="d-grid gap-2 mb-3 mb-lg-0">
+            <button type="button"
+                    className="btn btn-outline-primary bg-dark fw-bold"
+                    disabled={! (enabled && +withdraw > 0)}
+                    onClick={useAll ? handleWithdrawAllClick : handleWithdrawClick}>
+              {withdrawLabel}
+            </button>
+          </div>
+        </div>
+        <div className="col-lg-6">
+          <div className="d-grid gap-2 mb-3 mb-lg-0">
+            <button type="button"
+                    className="btn btn-outline-primary bg-dark fw-bold"
+                    disabled={! (enabled && !props.deposited?.isZero())}
+                    onClick={handleWithdrawAllClick}>
+              {withdrawAllLabel}
+            </button>
+          </div>
+        </div>
       </div>
     </React.Fragment>
   )

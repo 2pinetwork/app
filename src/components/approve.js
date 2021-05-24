@@ -14,15 +14,16 @@ const Approve = props => {
   const [enabled, setEnabled]         = useState(true)
 
   const onChange = e => {
-    const amount = toWei(new BigNumber(+e.target.value || 0), props.decimals)
-    const places = decimalPlaces(props.decimals)
+    const value = e.target.value
 
-    if (props.balance.comparedTo(amount) > 0) {
-      setDeposit(fromWei(amount, props.decimals))
-    } else if (props.balance.comparedTo(amount) === 0) {
-      setDeposit(fromWei(amount, props.decimals).toFixed(places))
+    setDeposit(value)
+
+    if (/^\d*\.?\d*$/.test(value)) {
+      const amount = toWei(new BigNumber(value), props.decimals)
+
+      setEnabled(props.balance.comparedTo(amount) >= 0)
     } else {
-      setDeposit(fromWei(props.balance, props.decimals).toFixed(places))
+      setEnabled(false)
     }
   }
 

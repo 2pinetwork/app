@@ -8,47 +8,51 @@ import { fromWei, toWei } from '../helpers/wei'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 
 const Deposit = props => {
-  const dispatch                      = useDispatch()
-  const [deposit, setDeposit]         = useState('')
-  const [buttonLabel, setButtonLabel] = useState('Deposit')
-  const [enabled, setEnabled]         = useState(true)
+  const dispatch                              = useDispatch()
+  const [deposit, setDeposit]                 = useState('')
+  const [useAll, setUseAll]                   = useState(false)
+  const [depositLabel, setDepositLabel]       = useState('Deposit')
+  const [depositAllLabel, setDepositAllLabel] = useState('Deposit all')
+  const [enabled, setEnabled]                 = useState(true)
 
   const onChange = e => {
-    const amount = toWei(new BigNumber(+e.target.value || 0), props.decimals)
-    const places = decimalPlaces(props.decimals)
+    const value = e.target.value
 
-    if (props.balance.comparedTo(amount) > 0) {
-      setDeposit(fromWei(amount, props.decimals))
-    } else if (props.balance.comparedTo(amount) === 0) {
-      setDeposit(fromWei(amount, props.decimals).toFixed(places))
+    setUseAll(false)
+    setDeposit(value)
+
+    if (/^\d*\.?\d*$/.test(value)) {
+      const amount = toWei(new BigNumber(value), props.decimals)
+
+      setEnabled(props.balance.comparedTo(amount) >= 0)
     } else {
-      setMax()
+      setEnabled(false)
     }
   }
 
-  const handleClick = () => {
+  const handleDepositClick = () => {
     const vaultContract = props.vaultContract()
     const amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
 
-    setButtonLabel('Deposit...')
+    setDepositLabel('Deposit...')
     setEnabled(false)
 
     vaultContract.methods.deposit(amount).send({ from: props.address }).then(() => {
-      setButtonLabel('Deposit')
+      setDepositLabel('Deposit')
       setEnabled(true)
       dispatch(toastDestroyed('Deposit rejected'))
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({
-          title:   'Deposit approved',
-          body:    'Your deposit was successful',
-          icon:    'check-circle',
-          style:   'success',
+          title:    'Deposit approved',
+          body:     'Your deposit was successful',
+          icon:     'check-circle',
+          style:    'success',
           autohide: true
         })
       )
     }).catch(error => {
-      setButtonLabel('Deposit')
+      setDepositLabel('Deposit')
       setEnabled(true)
       dispatch(
         toastAdded({
@@ -62,13 +66,49 @@ const Deposit = props => {
     })
   }
 
-  const setMax = () => {
-    const max    = 7
-    const places = decimalPlaces(props.decimals, max)
-    const offset = new BigNumber(1).div(new BigNumber(10).pow(max))
+  const handleDepositAllClick = () => {
+    const vaultContract = props.vaultContract()
 
+    setMax()
+    setDepositAllLabel('Deposit all...')
+    setEnabled(false)
+
+    vaultContract.methods.depositAll().send({ from: props.address }).then(() => {
+      setDepositAllLabel('Deposit all')
+      setEnabled(true)
+      dispatch(toastDestroyed('Deposit all rejected'))
+      dispatch(fetchVaultsDataAsync())
+      dispatch(
+        toastAdded({
+          title:    'Deposit all approved',
+          body:     'Your deposit was successful',
+          icon:     'check-circle',
+          style:    'success',
+          autohide: true
+        })
+      )
+    }).catch(error => {
+      setDepositAllLabel('Deposit all')
+      setEnabled(true)
+      dispatch(
+        toastAdded({
+          title:    'Deposit all rejected',
+          body:     error.message,
+          icon:     'exclamation-triangle',
+          style:    'danger',
+          autohide: true
+        })
+      )
+    })
+  }
+
+  const setMax = () => {
+    const places       = decimalPlaces(props.decimals)
+    const roundingMode = BigNumber.ROUND_DOWN
+
+    setUseAll(true)
     setDeposit(
-      fromWei(props.balance, props.decimals).minus(offset).toFixed(places)
+      fromWei(props.balance, props.decimals).toFixed(places, roundingMode)
     )
   }
 
@@ -97,13 +137,27 @@ const Deposit = props => {
         </button>
       </div>
 
-      <div className="d-grid gap-2 mb-3 mb-lg-0">
-        <button type="button"
-                className="btn btn-primary text-white fw-bold"
-                disabled={! (enabled && +deposit > 0)}
-                onClick={handleClick}>
-          {buttonLabel}
-        </button>
+      <div className="row">
+        <div className="col-lg-6">
+          <div className="d-grid gap-2 mb-3 mb-lg-0">
+            <button type="button"
+                    className="btn btn-primary text-white fw-bold"
+                    disabled={! (enabled && +deposit > 0)}
+                    onClick={useAll ? handleDepositAllClick : handleDepositClick}>
+              {depositLabel}
+            </button>
+          </div>
+        </div>
+        <div className="col-lg-6">
+          <div className="d-grid gap-2 mb-3 mb-lg-0">
+            <button type="button"
+                    className="btn btn-primary text-white fw-bold"
+                    disabled={! (enabled && !props.balance.isZero())}
+                    onClick={handleDepositAllClick}>
+              {depositAllLabel}
+            </button>
+          </div>
+        </div>
       </div>
     </React.Fragment>
   )

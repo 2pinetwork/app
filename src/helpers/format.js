@@ -13,7 +13,7 @@ export const formatAmount = (amount, prefix) => {
   return `${prefix || ''}${number}${units[order]}`
 }
 
-export const decimalPlaces = (decimals, max = 7) => {
+export const decimalPlaces = (decimals, max = 8) => {
   return decimals.comparedTo(max) > 0 ? max : decimals.toNumber()
 }
 
