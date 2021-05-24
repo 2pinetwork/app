@@ -2,9 +2,9 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
+import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
-import { fromWei, toWei } from '../helpers/wei'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 
 const Deposit = props => {
@@ -38,6 +38,7 @@ const Deposit = props => {
     setEnabled(false)
 
     vaultContract.methods.deposit(amount).send({ from: props.address }).then(() => {
+      setDeposit('')
       setDepositLabel('Deposit')
       setEnabled(true)
       dispatch(toastDestroyed('Deposit rejected'))
@@ -131,7 +132,7 @@ const Deposit = props => {
                value={deposit} />
         <button type="button"
                 className="btn btn-link bg-input"
-                disabled={props.balance?.isZero()}
+                disabled={props.balance?.isZero() || useAll}
                 onClick={setMax}>
           Max
         </button>

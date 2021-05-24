@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
+import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
-import { fromWei, toWei } from '../helpers/wei'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 
 const Withdraw = props => {
@@ -40,6 +40,7 @@ const Withdraw = props => {
     setEnabled(false)
 
     vaultContract.methods.withdraw(amount).send({ from: props.address }).then(() => {
+      setWithdraw('')
       setWithdrawLabel('Withdraw')
       setEnabled(true)
       dispatch(toastDestroyed('Withdraw rejected'))
@@ -133,7 +134,7 @@ const Withdraw = props => {
                value={withdraw} />
         <button type="button"
                 className="btn btn-link bg-input"
-                disabled={props.deposited?.isZero()}
+                disabled={props.deposited?.isZero() || useAll}
                 onClick={setMax}>
           Max
         </button>
