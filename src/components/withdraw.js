@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
@@ -13,21 +13,25 @@ const Withdraw = props => {
   const [useAll, setUseAll]                     = useState(false)
   const [withdrawLabel, setWithdrawLabel]       = useState('Withdraw')
   const [withdrawAllLabel, setWithdrawAllLabel] = useState('Withdraw all')
-  const [enabled, setEnabled]                   = useState(true)
+  const [status, setStatus]                     = useState('blank')
+
+  useEffect(() => {
+    if (status !== 'withdraw') {
+      if (/^\d*\.?\d*$/.test(withdraw) && +withdraw) {
+        const amount = toWei(new BigNumber(withdraw), props.decimals)
+
+        setStatus(props.deposited.comparedTo(amount) >= 0 ? 'valid' : 'invalid')
+      } else {
+        setStatus('invalid')
+      }
+    }
+  }, [withdraw, status, props.deposited, props.decimals])
 
   const onChange = e => {
     const value = e.target.value
 
     setUseAll(false)
     setWithdraw(value)
-
-    if (/^\d*\.?\d*$/.test(value)) {
-      const amount = toWei(new BigNumber(value), props.decimals)
-
-      setEnabled(props.deposited.comparedTo(amount) >= 0)
-    } else {
-      setEnabled(false)
-    }
   }
 
   const handleWithdrawClick = () => {
@@ -37,12 +41,12 @@ const Withdraw = props => {
     const amount        = toWeiFormatted(shares, props.vaultDecimals)
 
     setWithdrawLabel('Withdraw...')
-    setEnabled(false)
+    setStatus('withdraw')
 
     vaultContract.methods.withdraw(amount).send({ from: props.address }).then(() => {
       setWithdraw('')
+      setStatus('blank')
       setWithdrawLabel('Withdraw')
-      setEnabled(true)
       dispatch(toastDestroyed('Withdraw rejected'))
       dispatch(fetchVaultsDataAsync())
       dispatch(
@@ -55,8 +59,8 @@ const Withdraw = props => {
         })
       )
     }).catch(error => {
+      setStatus('blank')
       setWithdrawLabel('Withdraw')
-      setEnabled(true)
       dispatch(
         toastAdded({
           title:    'Withdraw rejected',
@@ -74,11 +78,12 @@ const Withdraw = props => {
 
     setMax()
     setWithdrawAllLabel('Withdraw all...')
-    setEnabled(false)
+    setStatus('withdraw')
 
     vaultContract.methods.withdrawAll().send({ from: props.address }).then(() => {
+      setWithdraw('')
+      setStatus('withdraw')
       setWithdrawAllLabel('Withdraw all')
-      setEnabled(true)
       dispatch(toastDestroyed('Withdraw all rejected'))
       dispatch(fetchVaultsDataAsync())
       dispatch(
@@ -91,8 +96,8 @@ const Withdraw = props => {
         })
       )
     }).catch(error => {
+      setStatus('blank')
       setWithdrawAllLabel('Withdraw all')
-      setEnabled(true)
       dispatch(
         toastAdded({
           title:    'Withdraw all rejected',
@@ -145,7 +150,7 @@ const Withdraw = props => {
           <div className="d-grid gap-2 mb-3 mb-lg-0">
             <button type="button"
                     className="btn btn-outline-primary bg-dark fw-bold"
-                    disabled={! (enabled && +withdraw > 0)}
+                    disabled={status !== 'valid'}
                     onClick={useAll ? handleWithdrawAllClick : handleWithdrawClick}>
               {withdrawLabel}
             </button>
@@ -155,7 +160,7 @@ const Withdraw = props => {
           <div className="d-grid gap-2 mb-3 mb-lg-0">
             <button type="button"
                     className="btn btn-outline-primary bg-dark fw-bold"
-                    disabled={! (enabled && !props.deposited?.isZero())}
+                    disabled={status === 'withdraw' || props.deposited?.isZero()}
                     onClick={handleWithdrawAllClick}>
               {withdrawAllLabel}
             </button>

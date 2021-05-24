@@ -15,6 +15,9 @@ import {
   supportedChains
 } from '../features/walletSlice'
 
+
+const FETCH_INTERVAL = 30 * 1000
+
 const renderVaults = (vaults, address, web3) => {
   return vaults.map(vaultData => {
     const {
@@ -64,11 +67,18 @@ const Vaults = props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (address && supportedChains.includes(chainId)) {
-      dispatch(fetchVaultsDataAsync())
-    } else {
-      dispatch(resetVaults())
+    const fetchData = () => {
+      if (address && supportedChains.includes(chainId)) {
+        dispatch(fetchVaultsDataAsync())
+      } else {
+        dispatch(resetVaults())
+      }
     }
+    const interval = setInterval(fetchData, FETCH_INTERVAL)
+
+    fetchData()
+
+    return () => clearInterval(interval)
   }, [address, chainId, dispatch])
 
   return (

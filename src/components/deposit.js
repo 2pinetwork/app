@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
@@ -13,21 +13,25 @@ const Deposit = props => {
   const [useAll, setUseAll]                   = useState(false)
   const [depositLabel, setDepositLabel]       = useState('Deposit')
   const [depositAllLabel, setDepositAllLabel] = useState('Deposit all')
-  const [enabled, setEnabled]                 = useState(true)
+  const [status, setStatus]                   = useState('blank')
+
+  useEffect(() => {
+    if (status !== 'deposit') {
+      if (/^\d*\.?\d*$/.test(deposit) && +deposit) {
+        const amount = toWei(new BigNumber(deposit), props.decimals)
+
+        setStatus(props.balance.comparedTo(amount) >= 0 ? 'valid' : 'invalid')
+      } else {
+        setStatus('invalid')
+      }
+    }
+  }, [deposit, status, props.balance, props.decimals])
 
   const onChange = e => {
     const value = e.target.value
 
     setUseAll(false)
     setDeposit(value)
-
-    if (/^\d*\.?\d*$/.test(value)) {
-      const amount = toWei(new BigNumber(value), props.decimals)
-
-      setEnabled(props.balance.comparedTo(amount) >= 0)
-    } else {
-      setEnabled(false)
-    }
   }
 
   const handleDepositClick = () => {
@@ -35,12 +39,12 @@ const Deposit = props => {
     const amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
 
     setDepositLabel('Deposit...')
-    setEnabled(false)
+    setStatus('deposit')
 
     vaultContract.methods.deposit(amount).send({ from: props.address }).then(() => {
       setDeposit('')
+      setStatus('blank')
       setDepositLabel('Deposit')
-      setEnabled(true)
       dispatch(toastDestroyed('Deposit rejected'))
       dispatch(fetchVaultsDataAsync())
       dispatch(
@@ -54,7 +58,7 @@ const Deposit = props => {
       )
     }).catch(error => {
       setDepositLabel('Deposit')
-      setEnabled(true)
+      setStatus('blank')
       dispatch(
         toastAdded({
           title:    'Deposit rejected',
@@ -72,11 +76,12 @@ const Deposit = props => {
 
     setMax()
     setDepositAllLabel('Deposit all...')
-    setEnabled(false)
+    setStatus('deposit')
 
     vaultContract.methods.depositAll().send({ from: props.address }).then(() => {
+      setDeposit('')
+      setStatus('blank')
       setDepositAllLabel('Deposit all')
-      setEnabled(true)
       dispatch(toastDestroyed('Deposit all rejected'))
       dispatch(fetchVaultsDataAsync())
       dispatch(
@@ -90,7 +95,7 @@ const Deposit = props => {
       )
     }).catch(error => {
       setDepositAllLabel('Deposit all')
-      setEnabled(true)
+      setStatus('blank')
       dispatch(
         toastAdded({
           title:    'Deposit all rejected',
@@ -143,7 +148,7 @@ const Deposit = props => {
           <div className="d-grid gap-2 mb-3 mb-lg-0">
             <button type="button"
                     className="btn btn-primary text-white fw-bold"
-                    disabled={! (enabled && +deposit > 0)}
+                    disabled={status !== 'valid'}
                     onClick={useAll ? handleDepositAllClick : handleDepositClick}>
               {depositLabel}
             </button>
@@ -153,7 +158,7 @@ const Deposit = props => {
           <div className="d-grid gap-2 mb-3 mb-lg-0">
             <button type="button"
                     className="btn btn-primary text-white fw-bold"
-                    disabled={! (enabled && !props.balance.isZero())}
+                    disabled={status === 'deposit' || props.balance.isZero()}
                     onClick={handleDepositAllClick}>
               {depositAllLabel}
             </button>
