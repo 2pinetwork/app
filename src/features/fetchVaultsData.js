@@ -99,9 +99,11 @@ const call = (promises, keys, dispatch) => {
 }
 
 export async function fetchVaultsData (address, provider, web3, dispatch) {
-  // Mumbai address
+  // Polygon/Mumbai address
+  setMulticallAddress(137, '0xc4f1501f337079077842343Ce02665D8960150B0')
   setMulticallAddress(80001, '0x5a0439824F4c0275faa88F2a7C5037F9833E29f1')
 
+  const chainId         = parseInt(provider.chainId)
   const ethersProvider  = new ethers.providers.Web3Provider(provider)
   const ethcallProvider = new Provider(ethersProvider)
   const keys            = [
@@ -120,9 +122,9 @@ export async function fetchVaultsData (address, provider, web3, dispatch) {
   await ethcallProvider.init()
 
   const calls = vaults.flatMap(v => {
-    const vault                       = require(`../abis/vaults/${v.token}`).default
-    const token                       = require(`../abis/tokens/${v.token}`).default
-    const pool                        = require(`../abis/pools/${v.pool}`).default
+    const vault                       = require(`../abis/vaults/${v.token}.${chainId}`).default
+    const token                       = require(`../abis/tokens/${v.token}.${chainId}`).default
+    const pool                        = require(`../abis/pools/${v.pool}.${chainId}`).default
     const tokenContract               = new Contract(token.address, token.abi)
     const vaultContract               = new Contract(vault.address, vault.abi)
     const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)

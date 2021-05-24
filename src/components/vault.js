@@ -6,9 +6,10 @@ import { fromWei } from '../helpers/wei'
 import { formatAmount, toPercentage } from '../helpers/format'
 
 const Vault = props => {
+  const chainId                 = parseInt(props.web3?.currentProvider?.chainId || '0x89') // 137 by default
   const ref                     = React.createRef()
-  const token                   = require(`../abis/tokens/${props.token}`).default
-  const vault                   = require(`../abis/vaults/${props.token}`).default
+  const token                   = require(`../abis/tokens/${props.token}.${chainId}`).default
+  const vault                   = require(`../abis/vaults/${props.token}.${chainId}`).default
   const [expanded, setExpanded] = useState(false)
 
   const handleClick = () => {

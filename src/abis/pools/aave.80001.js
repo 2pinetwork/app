@@ -1459,6 +1459,6 @@ const distributionManager = {
   ]
 }
 
-const pool = { abi, address, dataProvider, distributionManager }
+const pool = { dataProvider, distributionManager }
 
 export default pool
