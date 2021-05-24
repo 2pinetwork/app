@@ -7,6 +7,11 @@ import {
   selectWeb3
 } from './walletSlice'
 
+const initialState = {
+  value:  vaults,
+  status: 'idle'
+}
+
 export const fetchVaultsDataAsync = createAsyncThunk(
   'vaults/fetchVaultsData',
   async (_, { dispatch, getState }) => {
@@ -22,12 +27,13 @@ export const fetchVaultsDataAsync = createAsyncThunk(
 export const vaultsSlice = createSlice({
   name: 'vaults',
 
-  initialState: {
-    value:  vaults,
-    status: 'idle'
-  },
+  initialState,
 
   reducers: {
+    resetVaults: state => {
+      state.status = initialState.status
+      state.value  = initialState.value
+    },
     vaultsLoaded: (state, action) => {
       state.status = 'loaded'
       state.value  = action.payload
@@ -52,6 +58,6 @@ export const vaultsSlice = createSlice({
 export const selectVaults = state => state.vaults.value
 export const selectStatus = state => state.vaults.status
 
-export const { vaultsLoaded } = vaultsSlice.actions
+export const { resetVaults, vaultsLoaded } = vaultsSlice.actions
 
 export default vaultsSlice.reducer

@@ -47,7 +47,7 @@ const VaultActions = props => {
   }
 
   const renderActions = () => {
-    if (status === 'loaded') {
+    if (['loaded', 'loading', 'succeded'].includes(status) && props.decimals) {
       return (
         <div className="row">
           <div className="col-lg-6">

@@ -38,7 +38,7 @@ export const walletSlice = createSlice({
       state.address  = action.payload.address
       state.chainId  = +action.payload.chainId
       state.provider = action.payload.provider
-      state.status   = 'idle'
+      state.status   = 'success'
       state.web3     = action.payload.web3
     },
     [connectAsync.rejected]: (state, action) => {

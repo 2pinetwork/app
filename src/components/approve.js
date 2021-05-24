@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
@@ -10,21 +10,29 @@ import { decimalPlaces, formatAmount } from '../helpers/format'
 const Approve = props => {
   const dispatch                      = useDispatch()
   const [deposit, setDeposit]         = useState('')
+  const [useAll, setUseAll]           = useState(false)
   const [buttonLabel, setButtonLabel] = useState('Approve')
-  const [enabled, setEnabled]         = useState(true)
+  const [status, setStatus]           = useState('blank')
+
+  useEffect(() => {
+    if (status !== 'approve') {
+      if (/^\d*\.?\d*$/.test(deposit) && +deposit) {
+        const amount = toWei(new BigNumber(deposit), props.decimals)
+
+        setStatus(props.balance.comparedTo(amount) >= 0 ? 'valid' : 'invalid')
+      } else if (deposit.length === 0) {
+        setStatus('blank')
+      } else {
+        setStatus('invalid')
+      }
+    }
+  }, [deposit, status, props.balance, props.decimals])
 
   const onChange = e => {
     const value = e.target.value
 
+    setUseAll(false)
     setDeposit(value)
-
-    if (/^\d*\.?\d*$/.test(value)) {
-      const amount = toWei(new BigNumber(value), props.decimals)
-
-      setEnabled(props.balance.comparedTo(amount) >= 0)
-    } else {
-      setEnabled(false)
-    }
   }
 
   const handleClick = () => {
@@ -34,25 +42,25 @@ const Approve = props => {
     const allowance     = toWei(new BigNumber('1e58'), props.decimals)
 
     setButtonLabel('Approve...')
-    setEnabled(false)
+    setStatus('approve')
 
     tokenContract.methods.approve(vaultAddress, allowance).send({ from: address }).then(() => {
+      setStatus('blank')
       setButtonLabel('Approve')
-      setEnabled(true)
       dispatch(toastDestroyed('Approve rejected'))
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({
-          title:   'Approval done',
-          body:    'Your approval was successful, you can now deposit',
-          icon:    'check-circle',
-          style:   'success',
+          title:    'Approval done',
+          body:     'Your approval was successful, you can now deposit',
+          icon:     'check-circle',
+          style:    'success',
           autohide: true
         })
       )
     }).catch(error => {
+      setStatus('blank')
       setButtonLabel('Approve')
-      setEnabled(true)
       dispatch(
         toastAdded({
           title:    'Approve rejected',
@@ -68,6 +76,7 @@ const Approve = props => {
   const setMax = () => {
     const places = decimalPlaces(props.decimals)
 
+    setUseAll(true)
     setDeposit(fromWei(props.balance, props.decimals).toFixed(places))
   }
 
@@ -90,7 +99,7 @@ const Approve = props => {
                value={deposit} />
         <button type="button"
                 className="btn btn-link bg-input"
-                disabled={props.balance?.isZero()}
+                disabled={props.balance?.isZero() || useAll}
                 onClick={setMax}>
           Max
         </button>
@@ -99,7 +108,7 @@ const Approve = props => {
       <div className="d-grid gap-2 mb-3 mb-lg-0">
         <button type="button"
                 className="btn btn-primary text-white fw-bold"
-                disabled={! enabled}
+                disabled={['invalid', 'approve'].includes(status)}
                 onClick={handleClick}>
           {buttonLabel}
         </button>

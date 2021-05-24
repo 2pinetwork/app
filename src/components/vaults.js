@@ -3,13 +3,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import Vault from './vault'
 import { fromWei } from '../helpers/wei'
 import { toUsd } from '../helpers/format'
-import { selectVaults, fetchVaultsDataAsync } from '../features/vaultsSlice'
+import {
+  resetVaults,
+  selectVaults,
+  fetchVaultsDataAsync
+} from '../features/vaultsSlice'
 import {
   selectAddress,
   selectChainId,
   selectWeb3,
   supportedChains
 } from '../features/walletSlice'
+
+
+const FETCH_INTERVAL = 30 * 1000
 
 const renderVaults = (vaults, address, web3) => {
   return vaults.map(vaultData => {
@@ -60,9 +67,18 @@ const Vaults = props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (address && supportedChains.includes(chainId)) {
-      dispatch(fetchVaultsDataAsync())
+    const fetchData = () => {
+      if (address && supportedChains.includes(chainId)) {
+        dispatch(fetchVaultsDataAsync())
+      } else {
+        dispatch(resetVaults())
+      }
     }
+    const interval = setInterval(fetchData, FETCH_INTERVAL)
+
+    fetchData()
+
+    return () => clearInterval(interval)
   }, [address, chainId, dispatch])
 
   return (
