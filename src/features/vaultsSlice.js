@@ -3,8 +3,10 @@ import { fetchVaultsData } from './fetchVaultsData'
 import vaults from '../data/vaults'
 import {
   selectAddress,
+  selectChainId,
   selectProvider,
-  selectWeb3
+  selectWeb3,
+  supportedChains
 } from './walletSlice'
 
 const initialState = {
@@ -17,10 +19,13 @@ export const fetchVaultsDataAsync = createAsyncThunk(
   async (_, { dispatch, getState }) => {
     const state    = getState()
     const address  = selectAddress(state)
+    const chainId  = selectChainId(state)
     const provider = selectProvider(state)
     const web3     = selectWeb3(state)
 
-    fetchVaultsData(address, provider, web3, dispatch)
+    if (supportedChains.includes(chainId)) {
+      fetchVaultsData(address, chainId, provider, web3, dispatch)
+    }
   }
 )
 

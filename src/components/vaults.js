@@ -18,7 +18,7 @@ import {
 
 const FETCH_INTERVAL = 30 * 1000
 
-const renderVaults = (vaults, address, web3) => {
+const renderVaults = (vaults, address, chainId, web3) => {
   return vaults.map(vaultData => {
     const {
       balance,
@@ -43,6 +43,7 @@ const renderVaults = (vaults, address, web3) => {
              apy={vaultData.apy}
              balance={balance}
              balanceUsd={balanceUsd}
+             chainId={chainId}
              color={vaultData.color}
              decimals={decimals}
              deposited={deposited}
@@ -88,7 +89,7 @@ const Vaults = props => {
       </h2>
 
       <div className="mt-3">
-        {renderVaults(vaults, address, web3)}
+        {renderVaults(vaults, address, chainId, web3)}
       </div>
     </div>
   )

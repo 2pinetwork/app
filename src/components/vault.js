@@ -4,12 +4,26 @@ import { CSSTransition } from 'react-transition-group'
 import VaultActions from './vaultActions'
 import { fromWei } from '../helpers/wei'
 import { formatAmount, toPercentage } from '../helpers/format'
+import { supportedChains } from '../features/walletSlice'
 
 const Vault = props => {
   const ref                     = React.createRef()
-  const token                   = require(`../abis/tokens/${props.token}`).default
-  const vault                   = require(`../abis/vaults/${props.token}`).default
   const [expanded, setExpanded] = useState(false)
+
+  const tokenAbi = () => {
+    if (supportedChains.includes(props.chainId)) {
+      return require(`../abis/tokens/${props.chainId}/${props.token}`).default
+    }
+  }
+
+  const vaultAbi = () => {
+    if (supportedChains.includes(props.chainId)) {
+      return require(`../abis/vaults/${props.chainId}/${props.token}`).default
+    }
+  }
+
+  const token = tokenAbi()
+  const vault = vaultAbi()
 
   const handleClick = () => {
     setExpanded(! expanded)
@@ -139,6 +153,7 @@ Vault.propTypes = {
   apy:               PropTypes.number,
   balance:           PropTypes.object,
   balanceUsd:        PropTypes.object,
+  chainId:           PropTypes.number,
   color:             PropTypes.string.isRequired,
   decimals:          PropTypes.object,
   deposited:         PropTypes.object,

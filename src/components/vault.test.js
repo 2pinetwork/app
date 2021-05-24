@@ -8,6 +8,7 @@ test('renders vault', () => {
     apy:               undefined,
     balance:           undefined,
     balanceUsd:        undefined,
+    chainId:           undefined,
     color:             'info',
     decimals:          undefined,
     deposited:         undefined,
