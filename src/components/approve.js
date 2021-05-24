@@ -31,7 +31,11 @@ const Approve = props => {
     const address       = props.address
     const vaultAddress  = props.vault.address
     const tokenContract = props.tokenContract()
-    const allowance     = props.web3.utils.toWei('8000000000', 'ether')
+    let allowance       = props.web3.utils.toWei('8000000000', 'ether')
+
+    if (props.balance.comparedTo(allowance) > 0) {
+      allowance = props.balance
+    }
 
     setButtonLabel('Approve...')
     setEnabled(false)
