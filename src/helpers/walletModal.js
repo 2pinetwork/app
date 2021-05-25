@@ -3,8 +3,8 @@ import Web3Modal from 'web3modal'
 import { WalletLink } from 'walletlink'
 import { addressChanged, chainChanged } from '../features/walletSlice'
 
-const chainId         = 80001 // mumbai
-const networkUrl      = 'https://rpc-mumbai.maticvigil.com/'
+const chainId         = 137 // Polygon Mainnet
+const networkUrl      = 'https://rpc-mainnet.maticvigil.com/'
 const providerOptions = {
   'custom-walletlink': {
     display: {

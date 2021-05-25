@@ -10,9 +10,7 @@ const compound = (r, n = 365, t = 1, c = 1) => {
 }
 
 const getVaultApy = (vault, dataProvider, distributionManager, prices) => {
-  // Mumbai price is 0.34
   prices = prices || {}
-  prices['matic-network'] = { usd: 0.347874307 }
 
   const { supplyBase, supplyMatic, borrowBase, borrowMatic } = getVaultData(vault, dataProvider, distributionManager, prices)
 

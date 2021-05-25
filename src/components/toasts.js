@@ -30,7 +30,7 @@ const Toasts = props => {
       dispatch(
         toastAdded({
           title: 'Wrong network',
-          body:  'Switch to Mumbai and try again',
+          body:  'Switch to Polygon Mainnet or Mumbai and try again',
           icon:  'exclamation-triangle',
           style: 'danger'
         })
