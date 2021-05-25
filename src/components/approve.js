@@ -39,7 +39,7 @@ const Approve = props => {
     const address       = props.address
     const vaultAddress  = props.vault.address
     const tokenContract = props.tokenContract()
-    const allowance     = toWei(new BigNumber('1e58'), props.decimals)
+    const allowance     = toWei(new BigNumber('1e58'), props.decimals).toFixed()
 
     setButtonLabel('Approve...')
     setStatus('approve')
