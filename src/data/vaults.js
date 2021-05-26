@@ -10,8 +10,8 @@ const vaults = [
     borrow:  { depth: 8, percentage: 0.73 }
   },
   {
-    key:     'wmatic',
-    token:   'wmatic',
+    key:     'matic',
+    token:   'matic',
     priceId: 'matic-network',
     uses:    'Aave',
     pool:    'aave',

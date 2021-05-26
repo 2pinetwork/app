@@ -1,13 +1,7 @@
-const address = '0x0f59010C9a06244C5836de0Ca0ba8B56650128dF'
+const address = '0xB2Da9B9f7A66653ed520810788dc9438120F5558'
 const abi     = [
   {
-    'inputs': [
-      {
-        'internalType': 'address',
-        'name': '_token',
-        'type': 'address'
-      }
-    ],
+    'inputs': [],
     'stateMutability': 'nonpayable',
     'type': 'constructor'
   },
@@ -250,23 +244,10 @@ const abi     = [
     'type': 'function'
   },
   {
-    'inputs': [
-      {
-        'internalType': 'uint256',
-        'name': '_amount',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'deposit',
-    'outputs': [],
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
     'inputs': [],
-    'name': 'depositAll',
+    'name': 'depositMATIC',
     'outputs': [],
-    'stateMutability': 'nonpayable',
+    'stateMutability': 'payable',
     'type': 'function'
   },
   {
@@ -387,19 +368,6 @@ const abi     = [
   },
   {
     'inputs': [],
-    'name': 'token',
-    'outputs': [
-      {
-        'internalType': 'contract IERC20',
-        'name': '',
-        'type': 'address'
-      }
-    ],
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'inputs': [],
     'name': 'totalSupply',
     'outputs': [
       {
@@ -495,6 +463,19 @@ const abi     = [
     'name': 'withdrawAll',
     'outputs': [],
     'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'wmatic',
+    'outputs': [
+      {
+        'internalType': 'contract IWMATIC',
+        'name': '',
+        'type': 'address'
+      }
+    ],
+    'stateMutability': 'view',
     'type': 'function'
   }
 ]

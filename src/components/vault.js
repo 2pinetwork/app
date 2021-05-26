@@ -31,7 +31,8 @@ const Vault = props => {
 
   const tokenContract = (token, web3) => {
     return () => {
-      return new web3.eth.Contract(token.abi, token.address)
+      if (token.abi)
+        return new web3.eth.Contract(token.abi, token.address)
     }
   }
 
