@@ -36,12 +36,21 @@ const Deposit = props => {
 
   const handleDepositClick = () => {
     const vaultContract = props.vaultContract()
-    const amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
+    let   amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
 
     setDepositLabel('Deposit...')
     setStatus('deposit')
 
-    vaultContract.methods.deposit(amount).send({ from: props.address }).then(() => {
+    let call
+
+    // Native Matic vault
+    if (vaultContract.methods.depositMATIC) {
+      call = vaultContract.methods.depositMATIC().send({ from: props.address, value: amount })
+    } else {
+      call = vaultContract.methods.deposit(amount).send({ from: props.address })
+    }
+
+    call.then(() => {
       setDeposit('')
       setStatus('blank')
       setDepositLabel('Deposit')
@@ -78,7 +87,22 @@ const Deposit = props => {
     setDepositAllLabel('Deposit all...')
     setStatus('deposit')
 
-    vaultContract.methods.depositAll().send({ from: props.address }).then(() => {
+    let call
+
+    if (vaultContract.methods.depositMATIC) {
+      let amount = maxMaticDepositAmount(props.balance)
+
+      if (!amount)
+        return
+
+      call = vaultContract.methods.depositMATIC().send({
+        from: props.address, value: amount.toFixed()
+      })
+    } else {
+      call = vaultContract.methods.depositAll().send({ from: props.address })
+    }
+
+    call.then(() => {
       setDeposit('')
       setStatus('blank')
       setDepositAllLabel('Deposit all')
@@ -119,6 +143,26 @@ const Deposit = props => {
   }
 
   const balanceId = () => `balance-${props.token}`
+
+  const maxMaticDepositAmount = amount => {
+    const reserve = new BigNumber(0.025e18)
+
+    if (amount.comparedTo(reserve) > 0)
+      return amount.minus(reserve)
+    else {
+      setDepositAllLabel('Deposit all')
+      setStatus('blank')
+      dispatch(
+        toastAdded({
+          title:    'Deposit all rejected',
+          body:     'Deposit should be greater than 0.025 MATIC',
+          icon:     'exclamation-triangle',
+          style:    'danger',
+          autohide: true
+        })
+      )
+    }
+  }
 
   return (
     <React.Fragment>

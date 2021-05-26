@@ -66,6 +66,11 @@ const call = (promises, keys, dispatch) => {
         ...extraData[i],
       }
 
+      // MATIC is the native tokenn so it doesn't need allowance
+      if (vault.token === 'matic') {
+        extraData[i]['allowance'] = new BigNumber(1e58.toString())
+      }
+
       extraData[i]['apy'] = getVaultApy(
         vault,
         dataProvider,
@@ -125,15 +130,29 @@ export async function fetchVaultsData (address, chainId, provider, web3, dispatc
     const vault                       = require(`../abis/vaults/${chainId}/${v.token}`).default
     const token                       = require(`../abis/tokens/${chainId}/${v.token}`).default
     const pool                        = require(`../abis/pools/${chainId}/${v.pool}`).default
-    const tokenContract               = new Contract(token.address, token.abi)
     const vaultContract               = new Contract(vault.address, vault.abi)
     const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)
     const distributionManagerContract = new Contract(pool.distributionManager.address, pool.distributionManager.abi)
 
+    let decimals, balance, allowance
+
+    if (token.abi) {
+      const tokenContract = new Contract(token.address, token.abi)
+
+      decimals  = tokenContract.decimals()
+      balance   = tokenContract.balanceOf(address)
+      allowance = tokenContract.allowance(address, vault.address)
+    } else {
+      // MATIC is native so it needs other functions
+      decimals  = vaultContract.decimals() // same decimals
+      balance   = ethcallProvider.getEthBalance(address)
+      allowance = ethcallProvider.getEthBalance(address) // fake allowance
+    }
+
     return [
-      tokenContract.decimals(),
-      tokenContract.balanceOf(address),
-      tokenContract.allowance(address, vault.address),
+      decimals,
+      balance,
+      allowance,
       vaultContract.balanceOf(address),
       vaultContract.getPricePerFullShare(),
       vaultContract.balance(),
