@@ -9,7 +9,7 @@
 
   "src/components/*.js": {
     "type": "component",
-    "dispatch": "yarn run test --silent=true --watchAll=false src/components/{}.test.js",
+    "dispatch": "yarn test --silent=true --watchAll=false src/components/{}.test.js",
     "alternate": "src/components/{}.test.js"
   },
 
@@ -37,13 +37,13 @@
 
   "src/components/*.test.js": {
     "type": "tcomponent",
-    "dispatch": "yarn run test --silent=true --watchAll=false src/components/{}.test.js",
+    "dispatch": "yarn test --silent=true --watchAll=false src/components/{}.test.js",
     "alternate": "src/components/{}.js"
   },
 
   "src/helpers/*.test.js": {
     "type": "thelpers",
-    "dispatch": "yarn run test --silent=true --watchAll=false src/components/{}.test.js",
+    "dispatch": "yarn test --silent=true --watchAll=false src/components/{}.test.js",
     "alternate": "src/components/{}.js"
   },
 

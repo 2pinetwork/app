@@ -52,7 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@sentry/cli": "^1.64.2",
+    "@sentry/cli": "^1.65.0",
     "redux-mock-store": "^1.5.4"
   }
 }
