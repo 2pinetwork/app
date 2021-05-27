@@ -97,7 +97,7 @@ const Vault = props => {
                   {props.balanceUsd ? formatAmount(props.balanceUsd, '$') : '-'}
                 </p>
                 <p className="small text-primary mb-0">
-                  {props.balance ? formatAmount(fromWei(props.balance, props.decimals)) : '-'}
+                  {props.balance ? formatAmount(fromWei(props.balance, props.decimals), '', 8) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Balance
@@ -108,14 +108,14 @@ const Vault = props => {
                   {props.depositedUsd ? formatAmount(props.depositedUsd, '$') : '-'}
                 </p>
                 <p className="small text-primary mb-0">
-                  {props.deposited ? formatAmount(fromWei(props.deposited, props.decimals)) : '-'}
+                  {props.deposited ? formatAmount(fromWei(props.deposited, props.decimals), '', 8) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Deposited
                 </p>
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
-                <p className="small text-nowrap mb-0">
+                <p className="lead text-nowrap mb-0">
                   {toPercentage(props.apy)}
                 </p>
                 <p className="small text-muted mb-0">
@@ -123,7 +123,7 @@ const Vault = props => {
                 </p>
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
-                <p className="small text-nowrap mb-0">
+                <p className="text-nowrap mb-0">
                   {toPercentage((props.apy || 0.0) / 365)}
                 </p>
                 <p className="small text-muted mb-0">

@@ -1,14 +1,14 @@
 import { toWei, fromWei } from './wei'
 
-export const formatAmount = (amount, prefix) => {
+export const formatAmount = (amount, prefix, decimals = 2) => {
   const order = Math.floor(Math.log10(amount) / 3)
 
   if (order < 0) {
-    return `${prefix || ''}${amount.toFixed(2)}`
+    return `${prefix || ''}${amount.toFixed(decimals)}`
   }
 
   const units  = ['', 'K', 'M', 'B', 'T', 'Q']
-  const number = (amount / 1000 ** order).toFixed(2)
+  const number = (amount / 1000 ** order).toFixed(decimals)
 
   return `${prefix || ''}${number}${units[order]}`
 }
