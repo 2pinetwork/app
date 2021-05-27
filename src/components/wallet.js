@@ -1,4 +1,3 @@
-import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   connectAsync,
@@ -34,20 +33,17 @@ const Wallet = props => {
   const dispatch  = useDispatch()
   const supported = isNaN(chainId) || supportedChains.includes(chainId)
   const border    = supported ? 'primary' : 'danger'
-  const className = `btn btn-outline-${border} btn-sm bg-dark text-primary fw-semi-bold`
 
   return (
-    <React.Fragment>
-      <button type="button"
-              className={className}
-              disabled={status === 'loading'}
-              onClick={() => { dispatch(connectAsync()) }}>
-        <span className="me-2">
-          <i className={walletIcon(address, supported)}></i>
-        </span>
-        {addressLabel(address, status)}
-      </button>
-    </React.Fragment>
+    <button type="button"
+            className={`btn btn-outline-${border} btn-sm bg-dark text-primary fw-semi-bold order-0 order-lg-1 mt-3 mt-lg-0`}
+            disabled={status === 'loading'}
+            onClick={() => { dispatch(connectAsync()) }}>
+      <span className="me-2">
+        <i className={walletIcon(address, supported)}></i>
+      </span>
+      {addressLabel(address, status)}
+    </button>
   )
 }
 
