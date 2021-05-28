@@ -13,7 +13,8 @@ describe('deposited component render', () => {
     const initialState = {
       vaults: {
         value: []
-      }
+      },
+      wallet: {}
     }
 
     store = mockStore(initialState)
