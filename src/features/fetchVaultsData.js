@@ -4,8 +4,8 @@ import vaults from '../data/vaults'
 import { vaultsLoaded } from './vaultsSlice'
 import { toastAdded, toastDestroyed } from './toastsSlice'
 import { getVaultApy } from '../helpers/apy'
-import { getPrices } from '../helpers/prices'
 import { getEthersProvider } from '../helpers/ethers'
+import { getPrices } from '../helpers/prices'
 
 const helpers = {
   chunk (array, size) {

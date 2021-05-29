@@ -11,7 +11,7 @@ const VaultActions = props => {
   const status = useSelector(selectStatus)
 
   const canDeposit = () => {
-    return props.allowance.comparedTo(props.balance) > 0
+    return props.allowance?.comparedTo(props.balance) > 0
   }
 
   const renderBalanceAction = () => {
