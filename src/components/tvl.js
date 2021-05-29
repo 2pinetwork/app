@@ -1,11 +1,9 @@
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { selectVaults } from '../features/vaultsSlice'
-import { selectAddress } from '../features/walletSlice'
 import { toUsd } from '../helpers/format'
 
 const Tvl = props => {
-  const address = useSelector(selectAddress)
   const vaults  = useSelector(selectVaults)
   const tvl     = vaults.reduce((acc, vault) => {
     const { tvl, decimals, usdPrice } = vault
@@ -18,7 +16,7 @@ const Tvl = props => {
     <div className="row mt-4">
       <div className="col-8 col-sm-9 col-lg-10 text-end border-end pe-3 border-2">
         <h3 className="h4 text-primary fw-bold mb-0">
-          ${address && tvl.isFinite() ? tvl.toFormat(0) : ' -'}
+          ${tvl.isZero() ? ' -' : tvl.toFormat(0)}
         </h3>
       </div>
       <div className="col-4 col-sm-3 col-lg-2">

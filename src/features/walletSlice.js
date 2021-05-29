@@ -15,7 +15,7 @@ export const walletSlice = createSlice({
 
   initialState: {
     address:  undefined,
-    chainId:  undefined,
+    chainId:  137,
     provider: undefined,
     status:   'idle',
     web3:     undefined

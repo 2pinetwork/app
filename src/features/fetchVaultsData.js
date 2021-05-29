@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js'
-import { ethers } from 'ethers'
 import { Contract, Provider, setMulticallAddress } from 'ethers-multicall'
 import vaults from '../data/vaults'
 import { vaultsLoaded } from './vaultsSlice'
 import { toastAdded, toastDestroyed } from './toastsSlice'
 import { getVaultApy } from '../helpers/apy'
+import { getPrices } from '../helpers/prices'
+import { getEthersProvider } from '../helpers/ethers'
 
 const helpers = {
   chunk (array, size) {
@@ -14,36 +15,16 @@ const helpers = {
   }
 }
 
-const getPrices = dispatch => {
-  const ids = vaults.map(vault => vault.priceId).join()
-
-  return fetch(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
-  ).then(response => {
-    dispatch(toastDestroyed('Prices loading error'))
-
-    return response.json()
-  }).catch(error => {
-    dispatch(
-      toastAdded({
-        title: 'Prices loading error',
-        body:  error.message,
-        icon:  'exclamation-triangle',
-        style: 'danger'
-      })
-    )
-  })
-}
-
 const call = (promises, keys, dispatch) => {
   Promise.all(promises).then(data => {
     const extraData = []
     const prices    = data.pop()
 
     helpers.chunk(data.flat(), keys.length).forEach((chunkedData, i) => {
-      extraData[i] = {}
       let dataProvider
       let distributionManager = {}
+
+      extraData[i] = {}
 
       chunkedData.forEach((valueData, j) => {
         switch (keys[j]) {
@@ -103,19 +84,9 @@ const call = (promises, keys, dispatch) => {
   })
 }
 
-export async function fetchVaultsData (address, chainId, provider, web3, dispatch) {
-  // Mumbai address
-  setMulticallAddress(80001, '0x5a0439824F4c0275faa88F2a7C5037F9833E29f1')
-  // Polygon address
-  setMulticallAddress(137, '0xc4f1501f337079077842343Ce02665D8960150B0')
-
-  const ethersProvider  = new ethers.providers.Web3Provider(provider)
-  const ethcallProvider = new Provider(ethersProvider)
-  const keys            = [
+const getKeys = address => {
+  const keys = [
     'decimals',
-    'balance',
-    'allowance',
-    'shares',
     'pricePerFullShare',
     'tvl',
     'vaultDecimals',
@@ -124,46 +95,78 @@ export async function fetchVaultsData (address, chainId, provider, web3, dispatc
     'distributionBorrow'
   ]
 
-  await ethcallProvider.init()
+  if (address) {
+    keys.push(
+      'balance',
+      'allowance',
+      'shares'
+    )
+  }
 
-  const calls = vaults.flatMap(v => {
-    const vault                       = require(`../abis/vaults/${chainId}/${v.token}`).default
-    const token                       = require(`../abis/tokens/${chainId}/${v.token}`).default
-    const pool                        = require(`../abis/pools/${chainId}/${v.pool}`).default
-    const vaultContract               = new Contract(vault.address, vault.abi)
-    const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)
-    const distributionManagerContract = new Contract(pool.distributionManager.address, pool.distributionManager.abi)
+  return keys
+}
 
-    let decimals, balance, allowance
+const getCalls = (address, chainId, ethcallProvider, v) => {
+  const vault                       = require(`../abis/vaults/${chainId}/${v.token}`).default
+  const token                       = require(`../abis/tokens/${chainId}/${v.token}`).default
+  const pool                        = require(`../abis/pools/${chainId}/${v.pool}`).default
+  const vaultContract               = new Contract(vault.address, vault.abi)
+  const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)
+  const distributionManagerContract = new Contract(pool.distributionManager.address, pool.distributionManager.abi)
 
-    if (token.abi) {
-      const tokenContract = new Contract(token.address, token.abi)
+  let decimals, balance, allowance
 
-      decimals  = tokenContract.decimals()
-      balance   = tokenContract.balanceOf(address)
-      allowance = tokenContract.allowance(address, vault.address)
-    } else {
-      // MATIC is native so it needs other functions
-      decimals  = vaultContract.decimals() // same decimals
-      balance   = ethcallProvider.getEthBalance(address)
-      allowance = ethcallProvider.getEthBalance(address) // fake allowance
-    }
+  if (token.abi) {
+    const tokenContract = new Contract(token.address, token.abi)
 
-    return [
-      decimals,
+    decimals  = tokenContract.decimals()
+    balance   = tokenContract.balanceOf(address)
+    allowance = tokenContract.allowance(address, vault.address)
+  } else {
+    // MATIC is native so it needs other functions
+    decimals  = vaultContract.decimals() // same decimals
+    balance   = ethcallProvider.getEthBalance(address)
+    allowance = ethcallProvider.getEthBalance(address) // fake allowance
+  }
+
+  const results = [
+    decimals,
+    vaultContract.getPricePerFullShare(),
+    vaultContract.balance(),
+    vaultContract.decimals(),
+    dataProviderContract.getReserveData(token.address),
+    distributionManagerContract.assets(vault.aToken.address),
+    distributionManagerContract.assets(vault.debtToken.address)
+  ]
+
+  if (address) {
+    results.push(
       balance,
       allowance,
-      vaultContract.balanceOf(address),
-      vaultContract.getPricePerFullShare(),
-      vaultContract.balance(),
-      vaultContract.decimals(),
-      dataProviderContract.getReserveData(token.address),
-      distributionManagerContract.assets(vault.aToken.address),
-      distributionManagerContract.assets(vault.debtToken.address),
-    ]
+      vaultContract.balanceOf(address)
+    )
+  }
+
+  return results
+}
+
+export async function fetchVaultsData (address, chainId, provider, web3, dispatch) {
+  // Mumbai address
+  setMulticallAddress(80001, '0x5a0439824F4c0275faa88F2a7C5037F9833E29f1')
+  // Polygon address
+  setMulticallAddress(137, '0xc4f1501f337079077842343Ce02665D8960150B0')
+
+  const ethersProvider  = getEthersProvider(provider, chainId)
+  const ethcallProvider = new Provider(ethersProvider)
+  const keys            = getKeys(address)
+
+  await ethcallProvider.init()
+
+  const calls = vaults.flatMap(vault => {
+    return getCalls(address, chainId, ethcallProvider, vault)
   })
 
-  const promises = [ethcallProvider.all(calls), getPrices(dispatch)]
+  const promises = [ethcallProvider.all(calls), getPrices(vaults, dispatch)]
 
   call(promises, keys, dispatch)
 }

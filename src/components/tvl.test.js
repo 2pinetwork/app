@@ -12,8 +12,7 @@ describe('TVL component render', () => {
     const initialState = {
       vaults: {
         value: []
-      },
-      wallet: {}
+      }
     }
 
     store = mockStore(initialState)

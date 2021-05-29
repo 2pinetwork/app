@@ -68,14 +68,15 @@ const Vaults = props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    const delay     = address ? FETCH_INTERVAL : FETCH_INTERVAL * 6
     const fetchData = () => {
-      if (address && supportedChains.includes(chainId)) {
+      if (supportedChains.includes(chainId)) {
         dispatch(fetchVaultsDataAsync())
       } else {
         dispatch(resetVaults())
       }
     }
-    const interval = setInterval(fetchData, FETCH_INTERVAL)
+    const interval = setInterval(fetchData, delay)
 
     fetchData()
 
