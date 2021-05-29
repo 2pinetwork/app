@@ -26,7 +26,7 @@ describe('vaults component render', () => {
       </Provider>
     )
 
-    const headerElement = screen.getByText(/Vaults/i)
+    const headerElement = screen.getByText(/Vaults$/i)
 
     expect(headerElement).toBeInTheDocument()
   })

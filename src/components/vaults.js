@@ -85,9 +85,15 @@ const Vaults = props => {
 
   return (
     <div className="mt-1 pt-3 pt-lg-0">
-      <h2 className="h2 fw-bold my-4">
-        Vaults
-      </h2>
+      <div className="d-flex my-4">
+        <h2 className="h2 fw-bold flex-grow-1 mb-0">
+          Vaults
+        </h2>
+
+        <p className="small text-muted text-right align-self-end mb-0 ms-4">
+          There is a 0.1% withdrawal fee on all vaults. 0.0% deposit fee.
+        </p>
+      </div>
 
       <div className="mt-3">
         {renderVaults(vaults, address, chainId, web3)}

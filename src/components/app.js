@@ -4,6 +4,7 @@ import Tvl from './tvl'
 import Deposited from './deposited'
 import Vaults from './vaults'
 import Toasts from './toasts'
+import Footer from './footer'
 
 const App = props => {
   return (
@@ -13,6 +14,7 @@ const App = props => {
       <Deposited />
       <Vaults />
       <Toasts />
+      <Footer />
     </div>
   )
 }
