@@ -11,7 +11,7 @@ const VaultActions = props => {
   const status = useSelector(selectStatus)
 
   const canDeposit = () => {
-    return props.allowance?.comparedTo(props.balance) > 0
+    return props.allowance.comparedTo(props.balance) > 0
   }
 
   const renderBalanceAction = () => {
@@ -47,7 +47,7 @@ const VaultActions = props => {
   }
 
   const renderActions = () => {
-    if (['loaded', 'loading', 'succeded'].includes(status) && props.decimals) {
+    if (['loaded', 'loading', 'succeded'].includes(status) && props.deposited) {
       return (
         <div className="row">
           <div className="col-lg-6">
