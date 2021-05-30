@@ -91,7 +91,7 @@ const Vaults = props => {
         </h2>
 
         <p className="small text-muted text-right align-self-end mb-0 ms-4">
-          There is a 0.1% withdrawal fee on all vaults. 0.0% deposit fee.
+          Withdrawal Fee: 0.1%. Deposit Fee: 0%.
         </p>
       </div>
 

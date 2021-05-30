@@ -4,7 +4,7 @@ const Footer = props => (
 
     <ul className="list-inline lead">
       <li className="list-inline-item">
-        <a href="https://twitter.com/2pi_finance" target="_blank" rel="noreferrer" title="Tweet us!">
+        <a href="https://twitter.com/2piFinance" target="_blank" rel="noreferrer" title="Tweet us!">
           <i className="bi-twitter"></i>
         </a>
       </li>
@@ -14,7 +14,7 @@ const Footer = props => (
         </a>
       </li>
       <li className="list-inline-item">
-        <a href="https://2pi_finance.medium.com" target="_blank" rel="noreferrer" title="Read us!">
+        <a href="https://2pifinance.medium.com" target="_blank" rel="noreferrer" title="Read us!">
           <i className="bi-file-text"></i>
         </a>
       </li>
