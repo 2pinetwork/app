@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import {
   connectAsync,
+  disconnectAsync,
   selectAddress,
   selectChainId,
   selectStatus,
@@ -38,7 +39,7 @@ const Wallet = props => {
     <button type="button"
             className={`btn btn-outline-${border} btn-sm bg-dark text-primary fw-semi-bold order-0 order-lg-1 mt-3 mt-lg-0`}
             disabled={status === 'loading'}
-            onClick={() => { dispatch(connectAsync()) }}>
+            onClick={() => { address ? dispatch(disconnectAsync()) : dispatch(connectAsync()) }}>
       <span className="me-2">
         <i className={walletIcon(address, supported)}></i>
       </span>

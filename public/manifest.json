@@ -1,7 +1,7 @@
 {
   "short_name": "2pi",
   "name": "2pi Finance",
-  "description": "2pi Finance, next-gen cross-chain yield farming platform",
+  "description": "2pi Finance, Yield Maximizer over Polygon Network",
   "icons": [
     {
       "src": "images/favicon.png",
@@ -21,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "fullscreen",
-  "theme_color": "#00b2ca",
+  "theme_color": "#0f80aa",
   "background_color": "#242424"
 }
