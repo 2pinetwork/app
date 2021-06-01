@@ -43,7 +43,7 @@ const Toasts = props => {
   if (toasts.length) {
     return (
       <div aria-live="polite" aria-atomic="true" className="position-fixed top-0 start-0 end-0">
-        <div className="toast-container p-3">
+        <div className="toast-container p-3 ms-0 ms-lg-4 mt-5 pt-5">
           {renderToasts(toasts)}
         </div>
       </div>
