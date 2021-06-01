@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import WalletModal from '../helpers/walletModal'
 
-export const supportedChains = [137, 80001]
+export const defaultChain    = 137
+export const supportedChains = [defaultChain, 80001]
 
 export const connectAsync = createAsyncThunk(
   'wallet/connectAsync',
@@ -30,7 +31,7 @@ export const walletSlice = createSlice({
 
   initialState: {
     address:  undefined,
-    chainId:  137,
+    chainId:  defaultChain,
     modal:    undefined,
     provider: undefined,
     status:   'idle',
@@ -68,7 +69,7 @@ export const walletSlice = createSlice({
     },
     [disconnectAsync.fulfilled]: (state, action) => {
       state.address  = undefined
-      state.chainId  = 137
+      state.chainId  = defaultChain
       state.provider = undefined
       state.status   = 'success'
       state.web3     = undefined

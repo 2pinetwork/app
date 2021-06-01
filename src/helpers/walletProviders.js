@@ -1,5 +1,6 @@
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { WalletLink } from 'walletlink'
+import { getRpcUrl } from '../data/networks'
 import { projectId as infuraId, rpc } from './infura'
 
 export const walletLink = {
@@ -11,7 +12,7 @@ export const walletLink = {
   options: {
     appName:    '2pi',
     chainId:    137, // Polygon Mainnet
-    networkUrl: 'https://rpc-mainnet.maticvigil.com/'
+    networkUrl: getRpcUrl(137)
   },
   package: WalletLink,
   connector: async (_, options) => {

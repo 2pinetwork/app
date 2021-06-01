@@ -1,7 +1,14 @@
 import Web3 from 'web3'
 import Web3Modal from 'web3modal'
-import { addressChanged, chainChanged } from '../features/walletSlice'
+import { networks } from '../data/networks'
 import { walletConnect, walletLink } from './walletProviders'
+import { toastAdded, toastDestroyed } from '../features/toastsSlice'
+import {
+  addressChanged,
+  chainChanged,
+  defaultChain,
+  supportedChains
+} from '../features/walletSlice'
 
 const providerOptions = {
   walletconnect:       walletConnect,
@@ -24,6 +31,36 @@ const subscribe = (provider, dispatch) => {
   })
 }
 
+const request = async (provider, walletChainId, dispatch) => {
+  const supported = supportedChains.includes(walletChainId)
+  const chainId   = supported ? walletChainId : defaultChain
+  const settings  = networks[chainId]
+  const chainName = settings?.chainName
+
+  if (settings && provider?.request) {
+    const toastTitle = `Network ${chainName} must be added to your wallet`
+
+    dispatch(toastDestroyed(toastTitle))
+
+    try {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [settings]
+      })
+    } catch (error) {
+      dispatch(
+        toastAdded({
+          title:    toastTitle,
+          body:     error.message,
+          icon:     'exclamation-triangle',
+          style:    'danger',
+          autohide: true
+        })
+      )
+    }
+  }
+}
+
 const WalletModal = {
   async connect (dispatch) {
     const modalOpts = { cacheProvider: true, theme: 'dark', providerOptions }
@@ -34,6 +71,8 @@ const WalletModal = {
     const chainId   = await web3.eth.getChainId()
 
     subscribe(provider, dispatch)
+
+    await request(provider, chainId, dispatch)
 
     return { address, chainId, modal, provider, web3 }
   }
