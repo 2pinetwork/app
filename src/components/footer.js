@@ -1,6 +1,6 @@
 const Footer = props => (
   <footer className="my-5 text-center pt-lg-4">
-    <h2 className="h6">Contact us</h2>
+    <h2 className="h6 mb-4">Contact us</h2>
 
     <ul className="list-inline lead">
       <li className="list-inline-item mx-2">
@@ -11,6 +11,11 @@ const Footer = props => (
       <li className="list-inline-item mx-2">
         <a href="https://github.com/2pifinance/" target="_blank" rel="noreferrer" title="Fork / inspect us!">
           <i className="bi-github"></i>
+        </a>
+      </li>
+      <li className="list-inline-item mx-2">
+        <a href="https://discord.com/invite/h8VG2XcwvT" target="_blank" rel="noreferrer" title="Talk with us!">
+          <i className="bi-discord"></i>
         </a>
       </li>
       <li className="list-inline-item mx-2">
