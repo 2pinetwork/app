@@ -76,7 +76,7 @@ const call = (promises, keys, dispatch) => {
     dispatch(
       toastAdded({
         title: 'Data loading error',
-        body:  error.message,
+        body:  "We can't reach out some resources, please refresh the page and try again",
         icon:  'exclamation-triangle',
         style: 'danger'
       })
