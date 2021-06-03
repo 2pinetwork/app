@@ -6,6 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
+import { transactionReceived, transactionSended } from '../helpers/transactions'
 
 const Deposit = props => {
   const dispatch                              = useDispatch()
@@ -45,12 +46,19 @@ const Deposit = props => {
 
     // Native Matic vault
     if (vaultContract.methods.depositMATIC) {
-      call = vaultContract.methods.depositMATIC().send({ from: props.address, value: amount })
+      call = vaultContract.methods.depositMATIC().send({
+        from:  props.address,
+        value: amount
+      })
     } else {
       call = vaultContract.methods.deposit(amount).send({ from: props.address })
     }
 
-    call.then(() => {
+    call.on('transactionHash', hash => {
+      transactionSended(hash, dispatch)
+    }).on('receipt', receipt => {
+      transactionReceived(receipt, dispatch)
+    }).then(() => {
       setDeposit('')
       setStatus('blank')
       setDepositLabel('Deposit')
@@ -102,7 +110,11 @@ const Deposit = props => {
       call = vaultContract.methods.depositAll().send({ from: props.address })
     }
 
-    call.then(() => {
+    call.on('transactionHash', hash => {
+      transactionSended(hash, dispatch)
+    }).on('receipt', receipt => {
+      transactionReceived(receipt, dispatch)
+    }).then(() => {
       setDeposit('')
       setStatus('blank')
       setDepositAllLabel('Deposit all')

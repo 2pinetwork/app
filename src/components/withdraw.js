@@ -6,6 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
+import { transactionReceived, transactionSended } from '../helpers/transactions'
 
 const Withdraw = props => {
   const dispatch                                = useDispatch()
@@ -43,7 +44,13 @@ const Withdraw = props => {
     setWithdrawLabel('Withdraw...')
     setStatus('withdraw')
 
-    vaultContract.methods.withdraw(amount).send({ from: props.address }).then(() => {
+    vaultContract.methods.withdraw(amount).send({
+      from: props.address
+    }).on('transactionHash', hash => {
+      transactionSended(hash, dispatch)
+    }).on('receipt', receipt => {
+      transactionReceived(receipt, dispatch)
+    }).then(() => {
       setWithdraw('')
       setStatus('blank')
       setWithdrawLabel('Withdraw')
@@ -80,7 +87,13 @@ const Withdraw = props => {
     setWithdrawAllLabel('Withdraw all...')
     setStatus('withdraw')
 
-    vaultContract.methods.withdrawAll().send({ from: props.address }).then(() => {
+    vaultContract.methods.withdrawAll().send({
+      from: props.address
+    }).on('transactionHash', hash => {
+      transactionSended(hash, dispatch)
+    }).on('receipt', receipt => {
+      transactionReceived(receipt, dispatch)
+    }).then(() => {
       setWithdraw('')
       setStatus('withdraw')
       setWithdrawAllLabel('Withdraw all')

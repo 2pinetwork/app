@@ -6,6 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount } from '../helpers/format'
+import { transactionReceived, transactionSended } from '../helpers/transactions'
 
 const Approve = props => {
   const dispatch                      = useDispatch()
@@ -44,7 +45,13 @@ const Approve = props => {
     setButtonLabel('Approve...')
     setStatus('approve')
 
-    tokenContract.methods.approve(vaultAddress, allowance).send({ from: address }).then(() => {
+    tokenContract.methods.approve(vaultAddress, allowance).send({
+      from: address
+    }).on('transactionHash', hash => {
+      transactionSended(hash, dispatch)
+    }).on('receipt', receipt => {
+      transactionReceived(receipt, dispatch)
+    }).then(() => {
       setStatus('blank')
       setButtonLabel('Approve')
       dispatch(toastDestroyed('Approve rejected'))
