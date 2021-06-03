@@ -1,7 +1,7 @@
 import { toWei, fromWei } from './wei'
 
 export const formatAmount = (amount, prefix, decimals = 2) => {
-  const order = Math.floor(Math.log10(amount) / 3)
+  const order = Math.floor(Math.log10(Math.abs(amount)) / 3)
 
   if (order < 0) {
     return `${prefix || ''}${amount.toFixed(decimals)}`
@@ -33,7 +33,7 @@ export const fromWeiFormatted = (amount, decimals) => {
 
 export const toPercentage = number => {
   number      = (number || 0.0) * 100.0
-  const fixed = (number > 0.0 && number < 10) ? 3 : 2
+  const fixed = (number > 0.0 && Math.abs(number) < 10) ? 3 : 2
 
-  return `${(number).toFixed(fixed)}%`
+  return `${formatAmount(number, '', fixed)}%`
 }
