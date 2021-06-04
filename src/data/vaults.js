@@ -2,6 +2,7 @@ const vaults = [
   {
     key:     'dai',
     token:   'dai',
+    earn:    'DAI',
     priceId: 'dai',
     uses:    'Aave',
     pool:    'aave',
@@ -12,6 +13,7 @@ const vaults = [
   {
     key:     'matic',
     token:   'matic',
+    earn:    'MATIC',
     priceId: 'matic-network',
     uses:    'Aave',
     pool:    'aave',
@@ -22,6 +24,7 @@ const vaults = [
   {
     key:     'btc',
     token:   'btc',
+    earn:    'BTC',
     priceId: 'bitcoin',
     uses:    'Aave',
     pool:    'aave',
@@ -32,6 +35,7 @@ const vaults = [
   {
     key:     'eth',
     token:   'eth',
+    earn:    'ETH',
     priceId: 'ethereum',
     uses:    'Aave',
     pool:    'aave',
@@ -42,6 +46,7 @@ const vaults = [
   {
     key:     'usdc',
     token:   'usdc',
+    earn:    'USDC',
     priceId: 'usd-coin',
     uses:    'Aave',
     pool:    'aave',
@@ -52,6 +57,7 @@ const vaults = [
   {
     key:     'usdt',
     token:   'usdt',
+    earn:    'USDT',
     priceId: 'tether',
     uses:    'Aave',
     pool:    'aave',

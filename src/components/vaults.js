@@ -23,6 +23,7 @@ const renderVaults = (vaults, address, chainId, web3) => {
     const {
       balance,
       decimals,
+      earn,
       pricePerFullShare,
       shares,
       tvl,
@@ -48,6 +49,7 @@ const renderVaults = (vaults, address, chainId, web3) => {
              decimals={decimals}
              deposited={deposited}
              depositedUsd={depositedUsd}
+             earn={earn}
              pricePerFullShare={pricePerFullShare}
              symbol={vaultData.symbol}
              token={vaultData.token}

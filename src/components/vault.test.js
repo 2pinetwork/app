@@ -13,6 +13,7 @@ test('renders vault', () => {
     decimals:          undefined,
     deposited:         undefined,
     depositedUsd:      undefined,
+    earn:              'xDAI',
     pricePerFullShare: undefined,
     symbol:            'DAI',
     token:             'dai',

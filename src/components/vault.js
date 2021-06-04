@@ -86,6 +86,12 @@ const Vault = props => {
                   {props.symbol}
                 </h3>
                 <p className="small text-muted mb-0">
+                  Earn:
+                  <span className="ms-2">
+                    {props.earn}
+                  </span>
+                </p>
+                <p className="small text-muted mb-0">
                   Uses:
                   <span className="ms-2">
                     {props.uses}
@@ -159,6 +165,7 @@ Vault.propTypes = {
   decimals:          PropTypes.object,
   deposited:         PropTypes.object,
   depositedUsd:      PropTypes.object,
+  earn:              PropTypes.string.isRequired,
   pricePerFullShare: PropTypes.object,
   symbol:            PropTypes.string.isRequired,
   token:             PropTypes.string.isRequired,
