@@ -42,7 +42,7 @@ const Toast = props => {
 
 Toast.propTypes = {
   title:    PropTypes.string.isRequired,
-  body:     PropTypes.string.isRequired,
+  body:     PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
   icon:     PropTypes.string.isRequired,
   style:    PropTypes.string.isRequired,
   autohide: PropTypes.bool.isRequired
