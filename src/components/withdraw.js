@@ -6,7 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
-import { transactionReceived, transactionSended } from '../helpers/transactions'
+import { transactionReceived, transactionSent } from '../helpers/transactions'
 
 const Withdraw = props => {
   const dispatch                                = useDispatch()
@@ -47,7 +47,7 @@ const Withdraw = props => {
     vaultContract.methods.withdraw(amount).send({
       from: props.address
     }).on('transactionHash', hash => {
-      transactionSended(hash, dispatch)
+      transactionSent(hash, dispatch)
     }).on('receipt', receipt => {
       transactionReceived(receipt, dispatch)
     }).then(() => {
@@ -90,7 +90,7 @@ const Withdraw = props => {
     vaultContract.methods.withdrawAll().send({
       from: props.address
     }).on('transactionHash', hash => {
-      transactionSended(hash, dispatch)
+      transactionSent(hash, dispatch)
     }).on('receipt', receipt => {
       transactionReceived(receipt, dispatch)
     }).then(() => {

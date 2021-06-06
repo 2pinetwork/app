@@ -6,7 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount } from '../helpers/format'
-import { transactionReceived, transactionSended } from '../helpers/transactions'
+import { transactionReceived, transactionSent } from '../helpers/transactions'
 
 const Approve = props => {
   const dispatch                      = useDispatch()
@@ -48,7 +48,7 @@ const Approve = props => {
     tokenContract.methods.approve(vaultAddress, allowance).send({
       from: address
     }).on('transactionHash', hash => {
-      transactionSended(hash, dispatch)
+      transactionSent(hash, dispatch)
     }).on('receipt', receipt => {
       transactionReceived(receipt, dispatch)
     }).then(() => {

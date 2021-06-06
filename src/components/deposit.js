@@ -6,7 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
-import { transactionReceived, transactionSended } from '../helpers/transactions'
+import { transactionReceived, transactionSent } from '../helpers/transactions'
 
 const Deposit = props => {
   const dispatch                              = useDispatch()
@@ -55,7 +55,7 @@ const Deposit = props => {
     }
 
     call.on('transactionHash', hash => {
-      transactionSended(hash, dispatch)
+      transactionSent(hash, dispatch)
     }).on('receipt', receipt => {
       transactionReceived(receipt, dispatch)
     }).then(() => {
@@ -111,7 +111,7 @@ const Deposit = props => {
     }
 
     call.on('transactionHash', hash => {
-      transactionSended(hash, dispatch)
+      transactionSent(hash, dispatch)
     }).on('receipt', receipt => {
       transactionReceived(receipt, dispatch)
     }).then(() => {

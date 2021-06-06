@@ -26,10 +26,10 @@ TransactionLink.propTypes = {
   text: PropTypes.string
 }
 
-export const transactionSended = (hash, dispatch) => {
+export const transactionSent = (hash, dispatch) => {
   dispatch(
     toastAdded({
-      title:    'Transaction sended',
+      title:    'Transaction sent',
       body:     <TransactionLink hash={hash} text={hash} />,
       icon:     'check-circle',
       style:    'success',
