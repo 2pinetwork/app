@@ -7,8 +7,8 @@ export const networks = {
       symbol:   'MATIC',
       decimals: 18,
     },
-    rpcUrls:           ['https://rpc-mainnet.maticvigil.com/'],
-    blockExplorerUrls: ['https://explorer.matic.network/']
+    rpcUrls:           ['https://rpc-mainnet.matic.network/'],
+    blockExplorerUrls: ['https://polygon-explorer-mainnet.chainstacklabs.com/']
   },
   80001: {
     chainId:        `0x${parseInt(80001).toString(16)}`,
@@ -19,7 +19,7 @@ export const networks = {
       decimals: 18,
     },
     rpcUrls:           ['https://rpc-mumbai.matic.today/'],
-    blockExplorerUrls: ['https://explorer-mumbai.maticvigil.com/']
+    blockExplorerUrls: ['https://polygon-explorer-mumbai.chainstacklabs.com/']
   }
 }
 
