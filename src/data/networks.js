@@ -7,8 +7,14 @@ export const networks = {
       symbol:   'MATIC',
       decimals: 18,
     },
-    rpcUrls:           ['https://rpc-mainnet.matic.network/'],
-    blockExplorerUrls: ['https://polygon-explorer-mainnet.chainstacklabs.com/']
+    rpcUrls: [
+      'https://rpc-mainnet.matic.network/',
+      'https://matic-mainnet.chainstacklabs.com'
+    ],
+    blockExplorerUrls: [
+      'https://polygon-explorer-mainnet.chainstacklabs.com/',
+      'https://explorer-mainnet.maticvigil.com'
+    ]
   },
   80001: {
     chainId:        `0x${parseInt(80001).toString(16)}`,
