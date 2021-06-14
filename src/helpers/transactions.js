@@ -37,17 +37,3 @@ export const transactionSent = (hash, dispatch) => {
     })
   )
 }
-
-export const transactionReceived = (receipt, dispatch) => {
-  const hash = receipt.transactionHash
-
-  dispatch(
-    toastAdded({
-      title:    'Transaction received',
-      body:     <TransactionLink hash={hash} text={hash} />,
-      icon:     'check-circle',
-      style:    'success',
-      autohide: true
-    })
-  )
-}

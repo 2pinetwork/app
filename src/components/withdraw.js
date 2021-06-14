@@ -6,7 +6,7 @@ import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
-import { transactionReceived, transactionSent } from '../helpers/transactions'
+import { transactionSent } from '../helpers/transactions'
 
 const Withdraw = props => {
   const dispatch                                = useDispatch()
@@ -31,6 +31,10 @@ const Withdraw = props => {
   const onChange = e => {
     const value = e.target.value
 
+    if (status === 'withdraw') {
+      setStatus('invalid')
+    }
+
     setUseAll(false)
     setWithdraw(value)
   }
@@ -48,8 +52,6 @@ const Withdraw = props => {
       from: props.address
     }).on('transactionHash', hash => {
       transactionSent(hash, dispatch)
-    }).on('receipt', receipt => {
-      transactionReceived(receipt, dispatch)
     }).then(() => {
       setWithdraw('')
       setStatus('blank')
@@ -91,8 +93,6 @@ const Withdraw = props => {
       from: props.address
     }).on('transactionHash', hash => {
       transactionSent(hash, dispatch)
-    }).on('receipt', receipt => {
-      transactionReceived(receipt, dispatch)
     }).then(() => {
       setWithdraw('')
       setStatus('withdraw')
