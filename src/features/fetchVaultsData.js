@@ -12,6 +12,16 @@ const helpers = {
     return Array.from({ length: Math.ceil(array.length / size) }, (v, i) =>
       array.slice(i * size, i * size + size)
     )
+  },
+
+  getVaultApy (vault, dataProvider, distributionManager, prices) {
+    let apy = getVaultApy(vault, dataProvider, distributionManager, prices)
+
+    if (apy <= 0) {
+      apy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
+    }
+
+    return apy
   }
 }
 
@@ -52,7 +62,7 @@ const call = (promises, keys, dispatch) => {
         extraData[i]['allowance'] = new BigNumber(1e58.toString())
       }
 
-      extraData[i]['apy'] = getVaultApy(
+      extraData[i]['apy'] = helpers.getVaultApy(
         vault,
         dataProvider,
         distributionManager,

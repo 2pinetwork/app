@@ -9,10 +9,16 @@ const compound = (r, n = 365, t = 1, c = 1) => {
   return (1 + (r * c) / n) ** (n * t) - 1
 }
 
-const getVaultApy = (vault, dataProvider, distributionManager, prices) => {
+const getVaultApy = (vault, dataProvider, distributionManager, prices, depth) => {
   prices = prices || {}
+  depth  = depth === undefined ? vault.borrow.depth : depth
 
-  const { supplyBase, supplyMatic, borrowBase, borrowMatic } = getVaultData(vault, dataProvider, distributionManager, prices)
+  const {
+    supplyBase,
+    supplyMatic,
+    borrowBase,
+    borrowMatic
+  } = getVaultData(vault, dataProvider, distributionManager, prices)
 
   const {
     leveragedSupplyBase,
@@ -24,7 +30,7 @@ const getVaultApy = (vault, dataProvider, distributionManager, prices) => {
     borrowBase,
     supplyMatic,
     borrowMatic,
-    vault.borrow.depth,
+    depth,
     vault.borrow.percentage
   )
 

@@ -30,7 +30,7 @@ const vaults = [
     pool:    'aave',
     symbol:  'BTC',
     color:   'info',
-    borrow:  { depth: 0, percentage: 0.68 }
+    borrow:  { depth: 8, percentage: 0.68 }
   },
   {
     key:     'eth',
