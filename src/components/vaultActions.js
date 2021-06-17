@@ -56,6 +56,7 @@ const VaultActions = props => {
 
           <div className="col-lg-6">
             <Withdraw address={props.address}
+                      apy={props.apy}
                       decimals={props.decimals}
                       deposited={props.deposited}
                       pricePerFullShare={props.pricePerFullShare}
@@ -83,6 +84,7 @@ const VaultActions = props => {
 VaultActions.propTypes = {
   address:           PropTypes.string,
   allowance:         PropTypes.object,
+  apy:               PropTypes.number,
   balance:           PropTypes.object,
   decimals:          PropTypes.object,
   deposited:         PropTypes.object,

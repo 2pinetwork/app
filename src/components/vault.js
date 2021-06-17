@@ -47,6 +47,7 @@ const Vault = props => {
       const {
         address,
         allowance,
+        apy,
         balance,
         decimals,
         deposited,
@@ -57,6 +58,7 @@ const Vault = props => {
       return (
         <VaultActions address={address}
                       allowance={allowance}
+                      apy={apy}
                       balance={balance}
                       decimals={decimals}
                       deposited={deposited}

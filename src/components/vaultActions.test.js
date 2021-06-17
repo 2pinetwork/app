@@ -23,6 +23,7 @@ describe('vault actions component render', () => {
     const props = {
       address:           undefined,
       allowance:         undefined,
+      apy:               10,
       balance:           undefined,
       decimals:          undefined,
       deposited:         undefined,

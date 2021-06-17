@@ -135,6 +135,60 @@ const Withdraw = props => {
 
   const depositedId = () => `deposited-${props.token}`
 
+  const actions = () => {
+    if (+props.apy > 0) {
+      return (
+        <React.Fragment>
+          <div className="input-group mb-3">
+            <input type="number"
+                  className="form-control"
+                  id={depositedId()}
+                  onKeyDown={e => onChange(e) && e.preventDefault()}
+                  onChange={onChange}
+                  value={withdraw} />
+            <button type="button"
+                    className="btn btn-link bg-input"
+                    disabled={props.deposited?.isZero() || useAll}
+                    onClick={setMax}>
+              Max
+            </button>
+          </div>
+
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="d-grid gap-2 mb-3 mb-lg-0">
+                <button type="button"
+                        className="btn btn-outline-primary bg-dark fw-bold"
+                        disabled={status !== 'valid'}
+                        onClick={useAll ? handleWithdrawAllClick : handleWithdrawClick}>
+                  {withdrawLabel}
+                </button>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <div className="d-grid gap-2 mb-3 mb-lg-0">
+                <button type="button"
+                        className="btn btn-outline-primary bg-dark fw-bold"
+                        disabled={status === 'withdraw' || props.deposited?.isZero()}
+                        onClick={handleWithdrawAllClick}>
+                  {withdrawAllLabel}
+                </button>
+              </div>
+            </div>
+          </div>
+        </React.Fragment>
+      )
+    } else {
+      return (
+        <div className="alert alert-info py-2 mb-0">
+          <p className="text-center small mb-0">
+            Withdrawals are temporarily disabled
+          </p>
+        </div>
+      )
+    }
+  }
+
   return (
     <React.Fragment>
       <label className="text-muted text-decoration-underline-dotted cursor-pointer mb-2"
@@ -143,49 +197,14 @@ const Withdraw = props => {
         Deposited ({formatAmount(fromWei(props.deposited, props.decimals), '', 8)} {props.symbol})
       </label>
 
-      <div className="input-group mb-3">
-        <input type="number"
-               className="form-control"
-               id={depositedId()}
-               onKeyDown={e => onChange(e) && e.preventDefault()}
-               onChange={onChange}
-               value={withdraw} />
-        <button type="button"
-                className="btn btn-link bg-input"
-                disabled={props.deposited?.isZero() || useAll}
-                onClick={setMax}>
-          Max
-        </button>
-      </div>
-
-      <div className="row">
-        <div className="col-lg-6">
-          <div className="d-grid gap-2 mb-3 mb-lg-0">
-            <button type="button"
-                    className="btn btn-outline-primary bg-dark fw-bold"
-                    disabled={status !== 'valid'}
-                    onClick={useAll ? handleWithdrawAllClick : handleWithdrawClick}>
-              {withdrawLabel}
-            </button>
-          </div>
-        </div>
-        <div className="col-lg-6">
-          <div className="d-grid gap-2 mb-3 mb-lg-0">
-            <button type="button"
-                    className="btn btn-outline-primary bg-dark fw-bold"
-                    disabled={status === 'withdraw' || props.deposited?.isZero()}
-                    onClick={handleWithdrawAllClick}>
-              {withdrawAllLabel}
-            </button>
-          </div>
-        </div>
-      </div>
+      {actions()}
     </React.Fragment>
   )
 }
 
 Withdraw.propTypes = {
   address:       PropTypes.string.isRequired,
+  apy:           PropTypes.number.isRequired,
   decimals:      PropTypes.object.isRequired,
   deposited:     PropTypes.object.isRequired,
   symbol:        PropTypes.string.isRequired,

@@ -18,6 +18,7 @@ describe('withdraw component render', () => {
   test('renders withdraw', () => {
     const props = {
       address:       '0x06012c8cf97bead5deae237070f9587f8e7a266d',
+      apy:           10,
       decimals:      new BigNumber(18),
       deposited:     new BigNumber(0),
       symbol:        'DAI',
