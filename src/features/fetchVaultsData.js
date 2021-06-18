@@ -15,13 +15,10 @@ const helpers = {
   },
 
   getVaultApy (vault, dataProvider, distributionManager, prices) {
-    let apy = getVaultApy(vault, dataProvider, distributionManager, prices)
+    const apy    = getVaultApy(vault, dataProvider, distributionManager, prices)
+    const altApy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
 
-    if (apy <= 0) {
-      apy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
-    }
-
-    return apy
+    return apy > altApy ? apy : altApy
   }
 }
 
