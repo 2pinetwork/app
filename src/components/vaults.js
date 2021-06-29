@@ -19,7 +19,7 @@ import {
 const FETCH_INTERVAL = 30 * 1000
 
 const renderVaults = (vaults, address, chainId, web3) => {
-  return vaults.map(vaultData => {
+  return (vaults[chainId] || []).map(vaultData => {
     const {
       balance,
       decimals,

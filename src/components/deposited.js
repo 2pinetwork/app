@@ -1,14 +1,15 @@
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { selectVaults } from '../features/vaultsSlice'
-import { selectAddress } from '../features/walletSlice'
+import { selectAddress, selectChainId } from '../features/walletSlice'
 import { formatAmount, toUsd } from '../helpers/format'
 import { fromWei } from '../helpers/wei'
 
 const Deposited = props => {
   const address   = useSelector(selectAddress)
+  const chainId   = useSelector(selectChainId)
   const vaults    = useSelector(selectVaults)
-  const deposited = vaults.reduce((acc, vault) => {
+  const deposited = (vaults[chainId] || []).reduce((acc, vault) => {
     const {
       shares,
       decimals,

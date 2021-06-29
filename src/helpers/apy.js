@@ -74,7 +74,7 @@ const getMaticPerYear = (vault, distributionManager, prices) => {
   const supplyMaticRate = new BigNumber(distributionManager.supply.emissionPerSecond.toString())
   const borrowMaticRate = new BigNumber(distributionManager.borrow.emissionPerSecond.toString())
 
-  const maticPrice = prices['matic-network'].usd
+  const maticPrice = prices['matic-network']?.usd || '0'
   const supplyMaticInUsd = supplyMaticRate.times(SECONDS_PER_YEAR).times(maticPrice).div(COMMON_DECIMALS)
   const borrowMaticInUsd = borrowMaticRate.times(SECONDS_PER_YEAR).times(maticPrice).div(COMMON_DECIMALS)
 

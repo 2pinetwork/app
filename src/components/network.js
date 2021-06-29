@@ -4,6 +4,7 @@ import { selectChainId, supportedChains } from '../features/walletSlice'
 const networkName = chainId => {
   const names = {
     137:   'Polygon',
+    1337:  'Local',
     80001: 'Polygon test'
   }
 
@@ -13,6 +14,7 @@ const networkName = chainId => {
 const networkLogo = chainId => {
   const logos = {
     137:   'polygon.svg',
+    1337:  'localhost.svg',
     80001: 'polygon.svg'
   }
 

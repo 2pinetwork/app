@@ -1,11 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { useSelector } from 'react-redux'
 import { selectVaults } from '../features/vaultsSlice'
+import { selectChainId } from '../features/walletSlice'
 import { toUsd } from '../helpers/format'
 
 const Tvl = props => {
+  const chainId = useSelector(selectChainId)
   const vaults  = useSelector(selectVaults)
-  const tvl     = vaults.reduce((acc, vault) => {
+  const tvl     = (vaults[chainId] || []).reduce((acc, vault) => {
     const { tvl, decimals, usdPrice } = vault
     const amount = toUsd(tvl, decimals, usdPrice)
 

@@ -70,6 +70,7 @@ const WalletModal = {
     const [address] = await web3.eth.getAccounts()
     const chainId   = await web3.eth.getChainId()
 
+    dispatch(chainChanged({ chainId }))
     subscribe(provider, dispatch)
 
     await request(provider, chainId, dispatch)

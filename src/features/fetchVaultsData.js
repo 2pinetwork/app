@@ -22,7 +22,7 @@ const helpers = {
   }
 }
 
-const call = (promises, keys, dispatch) => {
+const call = (promises, keys, chainId, dispatch) => {
   Promise.all(promises).then(data => {
     const extraData = []
     const prices    = data.pop()
@@ -50,7 +50,7 @@ const call = (promises, keys, dispatch) => {
       })
 
       let vault = {
-        ...vaults[i],
+        ...vaults[chainId][i],
         ...extraData[i],
       }
 
@@ -67,7 +67,7 @@ const call = (promises, keys, dispatch) => {
       )
     })
 
-    const vaultsData = vaults.map((vault, i) => {
+    const vaultsData = vaults[chainId].map((vault, i) => {
       const usdPrice = prices && prices[vault.priceId]['usd']
 
       return {
@@ -77,7 +77,12 @@ const call = (promises, keys, dispatch) => {
       }
     })
 
-    dispatch(vaultsLoaded(vaultsData))
+    dispatch(
+      vaultsLoaded({
+        ...vaults,
+        [chainId]: vaultsData
+      })
+    )
     dispatch(toastDestroyed('Data loading error'))
   }).catch(error => {
     dispatch(
@@ -162,6 +167,8 @@ export async function fetchVaultsData (address, chainId, provider, web3, dispatc
   setMulticallAddress(80001, '0x5a0439824F4c0275faa88F2a7C5037F9833E29f1')
   // Polygon address
   setMulticallAddress(137, '0xc4f1501f337079077842343Ce02665D8960150B0')
+  // Localhost address
+  setMulticallAddress(1337, process.env.REACT_APP_LOCAL_MULTICALL_ADDR)
 
   const ethersProvider  = getEthersProvider(provider, chainId)
   const ethcallProvider = new Provider(ethersProvider)
@@ -169,11 +176,14 @@ export async function fetchVaultsData (address, chainId, provider, web3, dispatc
 
   await ethcallProvider.init()
 
-  const calls = vaults.flatMap(vault => {
+  const calls = vaults[chainId].flatMap(vault => {
     return getCalls(address, chainId, ethcallProvider, vault)
   })
 
-  const promises = [ethcallProvider.all(calls), getPrices(vaults, dispatch)]
+  const promises = [
+    ethcallProvider.all(calls),
+    getPrices(vaults[chainId], dispatch)
+  ]
 
-  call(promises, keys, dispatch)
+  call(promises, keys, chainId, dispatch)
 }

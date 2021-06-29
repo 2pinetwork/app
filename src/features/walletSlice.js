@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import WalletModal from '../helpers/walletModal'
 
 export const defaultChain    = 137
-export const supportedChains = [defaultChain, 80001]
+export const supportedChains = [defaultChain, 1337, 80001]
 
 export const connectAsync = createAsyncThunk(
   'wallet/connectAsync',
