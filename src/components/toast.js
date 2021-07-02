@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { Toast as BSToast } from 'bootstrap'
 import { toastDestroyed } from '../features/toastsSlice'
 
 const Toast = props => {
@@ -9,6 +8,7 @@ const Toast = props => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    const BSToast = require('bootstrap').Toast
     const element = ref.current
     const toast   = new BSToast(element, { autohide: props.autohide })
 

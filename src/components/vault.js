@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import PropTypes from 'prop-types'
 import React, { useState }from 'react'
 import { CSSTransition } from 'react-transition-group'
@@ -80,8 +81,8 @@ const Vault = props => {
         <div className={`card border border-${props.color} border-2 bg-dark`}>
           <div className="card-body ms-2">
             <div className="row align-items-center cursor-pointer" onClick={handleClick}>
-              <div className="col-3 col-md-2 col-lg-2">
-                <img src={`/images/tokens/${props.token}.svg`} alt={props.token} height="48" width="48" />
+              <div className="col-3 col-md-2 col-lg-2 pt-1">
+                <Image src={`/images/tokens/${props.token}.svg`} alt={props.token} height="48" width="48" />
               </div>
               <div className="col-9 col-md-10 col-lg-3">
                 <h3 className="h4 mb-1">

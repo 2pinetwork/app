@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useSelector } from 'react-redux'
 import { selectChainId, supportedChains } from '../features/walletSlice'
 
@@ -30,7 +31,7 @@ const Network = props => {
     <div className="d-flex mt-5 mt-lg-0">
       <div className={`card border-${style}`}>
         <div className="d-flex align-items-center card-body py-2">
-          <img src={`/images/networks/${networkLogo(chainId)}`} alt={network} width="32" height="32" />
+          <Image src={`/images/networks/${networkLogo(chainId)}`} alt={network} width="32" height="32" />
           <span className="ms-3">
             {network}
           </span>

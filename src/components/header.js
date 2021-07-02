@@ -1,12 +1,17 @@
+import Image from 'next/image'
+import Link from 'next/link'
 import Wallet from './wallet'
-import logo from '../assets/images/logo.svg'
 
 const Header = props => (
   <nav className="navbar navbar-expand-lg navbar-dark bg-transparent mt-4">
     <div className="container">
-      <a className="navbar-brand me-auto" href="/">
-        <img src={logo} alt="2pi Finance" width="149" height="24" />
-      </a>
+      <Link href="/">
+        <a className="navbar-brand me-auto pt-lg-2">
+          <div className="mt-1 pt-1">
+            <Image src="/images/logo.svg" alt="2pi Finance" width="149" height="24" />
+          </div>
+        </a>
+      </Link>
 
       <button className="navbar-toggler"
               type="button"
@@ -23,9 +28,11 @@ const Header = props => (
 
         <ul className="navbar-nav me-auto mb-2 mb-lg-0 mt-lg-2 ms-lg-4 order-1 order-lg-0">
           <li className="nav-item">
-            <a className="nav-link" href="https://docs.2pi.finance/how-to-guide" target="_blank" rel="noreferrer">
-              How-to guide
-            </a>
+            <Link href="https://docs.2pi.finance/how-to-guide">
+              <a className="nav-link" target="_blank" rel="noreferrer">
+                How-to guide
+              </a>
+            </Link>
           </li>
         </ul>
       </div>

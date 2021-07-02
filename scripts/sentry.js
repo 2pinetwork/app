@@ -11,8 +11,8 @@ const createRelease = async () => {
 
   try {
     const options = {
-      include:   ['build/static/js'],
-      urlPrefix: '~/static/js',
+      include:   ['out/_next/static/chunks'],
+      urlPrefix: '~/_next/static/chunks',
       rewrite:   false
     }
 
