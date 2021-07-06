@@ -4,7 +4,7 @@ const vaults = [
     token:   'btc',
     earn:    'BTC',
     priceId: 'bitcoin',
-    uses:    'Curve (ren)',
+    uses:    'Curve',
     pool:    'curve',
     symbol:  'BTC',
     color:   'info',
