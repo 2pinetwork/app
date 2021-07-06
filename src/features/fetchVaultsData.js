@@ -160,9 +160,9 @@ const getCalls = (address, chainId, ethcallProvider, v) => {
   } else {
     // fake to keep order
     results.push(
-      ethcallProvider.getEthBalance(address),
-      ethcallProvider.getEthBalance(address),
-      ethcallProvider.getEthBalance(address)
+      ethcallProvider.getEthBalance(address || token.address),
+      ethcallProvider.getEthBalance(address || token.address),
+      ethcallProvider.getEthBalance(address || token.address)
     )
   }
 
