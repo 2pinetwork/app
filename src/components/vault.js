@@ -18,7 +18,7 @@ const Vault = props => {
 
   const vaultAbi = () => {
     if (supportedChains.includes(props.chainId)) {
-      return require(`../abis/vaults/${props.chainId}/${props.token}`).default
+      return require(`../abis/vaults/${props.chainId}/${props.pool}-${props.token}`).default
     }
   }
 
