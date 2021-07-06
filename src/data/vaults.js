@@ -1,5 +1,16 @@
 const vaults = [
   {
+    key:     'btc-curve',
+    token:   'btc',
+    earn:    'BTC',
+    priceId: 'bitcoin',
+    uses:    'Curve (ren)',
+    pool:    'curve',
+    symbol:  'BTC',
+    color:   'info',
+    borrow:  {}
+  },
+  {
     key:     'dai',
     token:   'dai',
     earn:    'DAI',

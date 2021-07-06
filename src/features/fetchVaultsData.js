@@ -15,8 +15,15 @@ const helpers = {
   },
 
   getVaultApy (vault, dataProvider, distributionManager, prices) {
-    const apy    = getVaultApy(vault, dataProvider, distributionManager, prices)
-    const altApy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
+  let apy
+  let altApy = 0
+
+    if (vault.pool === 'curve') {
+      apy = 0.1324 // To be really calculated
+    } else {
+      apy    = getVaultApy(vault, dataProvider, distributionManager, prices)
+      altApy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
+    }
 
     return apy > altApy ? apy : altApy
   }
@@ -114,12 +121,9 @@ const getKeys = address => {
 }
 
 const getCalls = (address, chainId, ethcallProvider, v) => {
-  const vault                       = require(`../abis/vaults/${chainId}/${v.token}`).default
-  const token                       = require(`../abis/tokens/${chainId}/${v.token}`).default
-  const pool                        = require(`../abis/pools/${chainId}/${v.pool}`).default
-  const vaultContract               = new Contract(vault.address, vault.abi)
-  const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)
-  const distributionManagerContract = new Contract(pool.distributionManager.address, pool.distributionManager.abi)
+  const vault         = require(`../abis/vaults/${chainId}/${v.pool}-${v.token}`).default
+  const token         = require(`../abis/tokens/${chainId}/${v.token}`).default
+  const vaultContract = new Contract(vault.address, vault.abi)
 
   let decimals, balance, allowance
 
@@ -141,10 +145,26 @@ const getCalls = (address, chainId, ethcallProvider, v) => {
     vaultContract.getPricePerFullShare(),
     vaultContract.balance(),
     vaultContract.decimals(),
-    dataProviderContract.getReserveData(token.address),
-    distributionManagerContract.assets(vault.aToken.address),
-    distributionManagerContract.assets(vault.debtToken.address)
   ]
+
+  if (v.pool === 'aave') {
+    const pool                        = require(`../abis/pools/${chainId}/${v.pool}`).default
+    const dataProviderContract        = new Contract(pool.dataProvider.address, pool.dataProvider.abi)
+    const distributionManagerContract = new Contract(pool.distributionManager.address, pool.distributionManager.abi)
+
+    results.push(
+      dataProviderContract.getReserveData(token.address),
+      distributionManagerContract.assets(vault.aToken.address),
+      distributionManagerContract.assets(vault.debtToken.address)
+    )
+  } else {
+    // fake to keep order
+    results.push(
+      ethcallProvider.getEthBalance(address),
+      ethcallProvider.getEthBalance(address),
+      ethcallProvider.getEthBalance(address)
+    )
+  }
 
   if (address) {
     results.push(
