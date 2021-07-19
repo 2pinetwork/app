@@ -2,7 +2,7 @@ import Wallet from './wallet'
 import logo from '../assets/images/logo.svg'
 
 const Header = props => (
-  <nav className="navbar navbar-expand-lg navbar-dark bg-transparent mt-4">
+  <nav className="navbar navbar-expand-lg navbar-dark bg-transparent mt-1">
     <div className="container">
       <a className="navbar-brand me-auto" href="/">
         <img src={logo} alt="2pi Finance" width="149" height="24" />

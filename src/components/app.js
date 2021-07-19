@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from './header'
+import Experimental from './experimental'
 import Tvl from './tvl'
 import Deposited from './deposited'
 import Network from './network'
@@ -10,6 +11,7 @@ import Footer from './footer'
 const App = props => {
   return (
     <div className="container">
+      <Experimental />
       <Header />
       <Tvl />
       <Deposited />
