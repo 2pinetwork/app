@@ -19,7 +19,11 @@ import {
 const FETCH_INTERVAL = 30 * 1000
 
 const renderVaults = (vaults, address, chainId, web3) => {
-  return vaults.map(vaultData => {
+  const filteredVaults = vaults.filter(
+    vault => vault.pool === 'aave' || chainId !== 80001
+  )
+
+  return filteredVaults.map(vaultData => {
     const {
       balance,
       decimals,

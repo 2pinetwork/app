@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { Contract, Provider, setMulticallAddress } from 'ethers-multicall'
+import { Contract, Provider } from 'ethers-multicall'
 import vaults from '../data/vaults'
 import { vaultsLoaded } from './vaultsSlice'
 import { toastAdded, toastDestroyed } from './toastsSlice'
@@ -29,7 +29,11 @@ const helpers = {
   }
 }
 
-const call = (promises, keys, dispatch) => {
+const call = (promises, keys, chainId, dispatch) => {
+  const filteredVaults  = vaults.filter(
+    vault => vault.pool === 'aave' || chainId !== 80001
+  )
+
   Promise.all(promises).then(data => {
     const extraData = []
     const prices    = data.pop()
@@ -57,7 +61,7 @@ const call = (promises, keys, dispatch) => {
       })
 
       let vault = {
-        ...vaults[i],
+        ...filteredVaults[i],
         ...extraData[i],
       }
 
@@ -74,7 +78,7 @@ const call = (promises, keys, dispatch) => {
       )
     })
 
-    const vaultsData = vaults.map((vault, i) => {
+    const vaultsData = filteredVaults.map((vault, i) => {
       const usdPrice = prices && prices[vault.priceId]['usd']
 
       return {
@@ -178,22 +182,20 @@ const getCalls = (address, chainId, ethcallProvider, v) => {
 }
 
 export async function fetchVaultsData (address, chainId, provider, web3, dispatch) {
-  // Mumbai address
-  setMulticallAddress(80001, '0x5a0439824F4c0275faa88F2a7C5037F9833E29f1')
-  // Polygon address
-  setMulticallAddress(137, '0xc4f1501f337079077842343Ce02665D8960150B0')
-
   const ethersProvider  = getEthersProvider(provider, chainId)
   const ethcallProvider = new Provider(ethersProvider)
   const keys            = getKeys(address)
+  const filteredVaults  = vaults.filter(
+    vault => vault.pool === 'aave' || chainId !== 80001
+  )
 
   await ethcallProvider.init()
 
-  const calls = vaults.flatMap(vault => {
+  const calls = filteredVaults.flatMap(vault => {
     return getCalls(address, chainId, ethcallProvider, vault)
   })
 
-  const promises = [ethcallProvider.all(calls), getPrices(vaults, dispatch)]
+  const promises = [ethcallProvider.all(calls), getPrices(filteredVaults, dispatch)]
 
-  call(promises, keys, dispatch)
+  call(promises, keys, chainId, dispatch)
 }
