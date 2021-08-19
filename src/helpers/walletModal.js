@@ -7,6 +7,7 @@ import {
   addressChanged,
   chainChanged,
   defaultChain,
+  disconnectAsync,
   supportedChains
 } from '../features/walletSlice'
 
@@ -16,22 +17,45 @@ const providerOptions = {
 }
 
 const subscribe = (provider, dispatch) => {
-  provider.on('accountsChanged', _accounts => {
-    if (provider.selectedAddress) {
-      const address = provider.selectedAddress
+  if (provider.on) {
+    provider.on('close', () => {
+      dispatch(disconnectAsync())
+    })
 
-      dispatch(addressChanged({ address }))
-    } else {
-      dispatch(addressChanged({ address: undefined }))
-    }
-  })
+    provider.on('disconnect', async () => {
+      dispatch(disconnectAsync())
+    })
 
-  provider.on('chainChanged', chainId => {
-    dispatch(chainChanged({ chainId }))
+    provider.on('accountsChanged', _accounts => {
+      if (provider.selectedAddress) {
+        const address = provider.selectedAddress
+
+        dispatch(addressChanged({ address }))
+      } else {
+        dispatch(addressChanged({ address: undefined }))
+      }
+    })
+
+    provider.on('chainChanged', chainId => {
+      dispatch(chainChanged({ chainId }))
+    })
+  }
+}
+
+const extend = web3 => {
+  web3.eth.extend({
+    methods: [
+      {
+        name:            'chainId',
+        call:            'eth_chainId',
+        outputFormatter: web3.utils.hexToNumber
+      }
+    ]
   })
 }
 
-const request = async (provider, walletChainId, dispatch) => {
+const request = async (walletChainId, dispatch) => {
+  const provider  = window.ethereum
   const supported = supportedChains.includes(walletChainId)
   const chainId   = supported ? walletChainId : defaultChain
   const settings  = networks[chainId]
@@ -42,12 +66,10 @@ const request = async (provider, walletChainId, dispatch) => {
 
     dispatch(toastDestroyed(toastTitle))
 
-    try {
-      await provider.request({
-        method: 'wallet_addEthereumChain',
-        params: [settings]
-      })
-    } catch (error) {
+    await provider.request({
+      method: 'wallet_addEthereumChain',
+      params: [settings]
+    }).catch(error => {
       dispatch(
         toastAdded({
           title:    toastTitle,
@@ -57,7 +79,7 @@ const request = async (provider, walletChainId, dispatch) => {
           autohide: true
         })
       )
-    }
+    })
   }
 }
 
@@ -71,8 +93,9 @@ const WalletModal = {
     const chainId   = await web3.eth.getChainId()
 
     subscribe(provider, dispatch)
+    extend(web3)
 
-    await request(provider, chainId, dispatch)
+    await request(chainId, dispatch)
 
     return { address, chainId, modal, provider, web3 }
   }

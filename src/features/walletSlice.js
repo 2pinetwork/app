@@ -22,7 +22,9 @@ export const disconnectAsync = createAsyncThunk(
       await provider.close()
     }
 
-    await modal.clearCachedProvider()
+    if (modal?.clearCachedProvider) {
+      await modal.clearCachedProvider()
+    }
   }
 )
 
