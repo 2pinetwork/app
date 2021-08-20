@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import Web3Modal from 'web3modal'
+import { SafeAppWeb3Modal } from '@gnosis.pm/safe-apps-web3modal'
 import { networks } from '../data/networks'
 import { walletConnect, walletLink } from './walletProviders'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
@@ -66,28 +66,32 @@ const request = async (walletChainId, dispatch) => {
 
     dispatch(toastDestroyed(toastTitle))
 
-    await provider.request({
-      method: 'wallet_addEthereumChain',
-      params: [settings]
-    }).catch(error => {
-      dispatch(
-        toastAdded({
-          title:    toastTitle,
-          body:     error.message,
-          icon:     'exclamation-triangle',
-          style:    'danger',
-          autohide: true
-        })
-      )
-    })
+    try {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [settings]
+      })
+    } catch (error) {
+      if (typeof error === 'object' && typeof error.message === 'string') {
+        dispatch(
+          toastAdded({
+            title:    toastTitle,
+            body:     error.message,
+            icon:     'exclamation-triangle',
+            style:    'danger',
+            autohide: true
+          })
+        )
+      }
+    }
   }
 }
 
 const WalletModal = {
   async connect (dispatch) {
     const modalOpts = { cacheProvider: true, theme: 'dark', providerOptions }
-    const modal     = new Web3Modal(modalOpts)
-    const provider  = await modal.connect()
+    const modal     = new SafeAppWeb3Modal(modalOpts)
+    const provider  = await modal.requestProvider()
     const web3      = new Web3(provider)
     const [address] = await web3.eth.getAccounts()
     const chainId   = await web3.eth.getChainId()
@@ -95,7 +99,8 @@ const WalletModal = {
     subscribe(provider, dispatch)
     extend(web3)
 
-    await request(chainId, dispatch)
+    // No await since on some clients provider.request _hangs_ with no error
+    request(chainId, dispatch)
 
     return { address, chainId, modal, provider, web3 }
   }
