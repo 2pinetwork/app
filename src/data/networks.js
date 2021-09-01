@@ -8,6 +8,7 @@ export const networks = {
       decimals: 18,
     },
     rpcUrls: [
+      'https://polygon-rpc.com/',
       'https://rpc-mainnet.matic.network/',
       'https://matic-mainnet.chainstacklabs.com'
     ],
