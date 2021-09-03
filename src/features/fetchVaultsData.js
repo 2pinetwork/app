@@ -19,7 +19,7 @@ const helpers = {
     let altApy = 0
 
     if (vault.pool === 'curve') {
-      apy = 0.0704 // To be really calculated
+      apy = 0.0857 // To be really calculated
     } else {
       apy    = getVaultApy(vault, dataProvider, distributionManager, prices)
       altApy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
