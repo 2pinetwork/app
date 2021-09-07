@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
-import { fetchVaultsDataAsync } from '../features/vaultsSlice'
+import { fetchVaultsDataAsync, newVaultFetch } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount } from '../helpers/format'
 import { transactionSent } from '../helpers/transactions'
@@ -53,6 +53,7 @@ const Approve = props => {
       setStatus('blank')
       setButtonLabel('Approve')
       dispatch(toastDestroyed('Approve rejected'))
+      dispatch(newVaultFetch())
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({

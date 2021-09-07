@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
-import { fetchVaultsDataAsync } from '../features/vaultsSlice'
+import { fetchVaultsDataAsync, newVaultFetch } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 import { transactionSent } from '../helpers/transactions'
@@ -65,6 +65,7 @@ const Deposit = props => {
       setStatus('blank')
       setDepositLabel('Deposit')
       dispatch(toastDestroyed('Deposit rejected'))
+      dispatch(newVaultFetch())
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({
@@ -119,6 +120,7 @@ const Deposit = props => {
       setStatus('blank')
       setDepositAllLabel('Deposit all')
       dispatch(toastDestroyed('Deposit all rejected'))
+      dispatch(newVaultFetch())
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({

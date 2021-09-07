@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
-import { fetchVaultsDataAsync } from '../features/vaultsSlice'
+import { fetchVaultsDataAsync, newVaultFetch } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 import { transactionSent } from '../helpers/transactions'
@@ -57,6 +57,7 @@ const Withdraw = props => {
       setStatus('blank')
       setWithdrawLabel('Withdraw')
       dispatch(toastDestroyed('Withdraw rejected'))
+      dispatch(newVaultFetch())
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({
@@ -98,6 +99,7 @@ const Withdraw = props => {
       setStatus('withdraw')
       setWithdrawAllLabel('Withdraw all')
       dispatch(toastDestroyed('Withdraw all rejected'))
+      dispatch(newVaultFetch())
       dispatch(fetchVaultsDataAsync())
       dispatch(
         toastAdded({
@@ -141,11 +143,11 @@ const Withdraw = props => {
         <React.Fragment>
           <div className="input-group mb-3">
             <input type="number"
-                  className="form-control"
-                  id={depositedId()}
-                  onKeyDown={e => onChange(e) && e.preventDefault()}
-                  onChange={onChange}
-                  value={withdraw} />
+                   className="form-control"
+                   id={depositedId()}
+                   onKeyDown={e => onChange(e) && e.preventDefault()}
+                   onChange={onChange}
+                   value={withdraw} />
             <button type="button"
                     className="btn btn-link bg-input"
                     disabled={props.deposited?.isZero() || useAll}

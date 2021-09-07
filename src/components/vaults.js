@@ -4,9 +4,10 @@ import Vault from './vault'
 import { fromWei } from '../helpers/wei'
 import { toUsd } from '../helpers/format'
 import {
+  newVaultFetch,
+  fetchVaultsDataAsync,
   resetVaults,
-  selectVaults,
-  fetchVaultsDataAsync
+  selectVaults
 } from '../features/vaultsSlice'
 import {
   selectAddress,
@@ -78,6 +79,7 @@ const Vaults = props => {
     const delay     = address ? FETCH_INTERVAL : FETCH_INTERVAL * 6
     const fetchData = () => {
       if (supportedChains.includes(chainId)) {
+        dispatch(newVaultFetch())
         dispatch(fetchVaultsDataAsync())
       } else {
         dispatch(resetVaults())

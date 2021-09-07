@@ -29,7 +29,7 @@ const helpers = {
   }
 }
 
-const call = (promises, keys, chainId, dispatch) => {
+const call = (promises, keys, chainId, dispatch, order) => {
   const filteredVaults  = vaults.filter(
     vault => vault.pool === 'aave' || chainId !== 80001
   )
@@ -88,7 +88,7 @@ const call = (promises, keys, chainId, dispatch) => {
       }
     })
 
-    dispatch(vaultsLoaded(vaultsData))
+    dispatch(vaultsLoaded({order: order, vaults: vaultsData}))
     dispatch(toastDestroyed('Data loading error'))
   }).catch(error => {
     dispatch(
@@ -181,7 +181,7 @@ const getCalls = (address, chainId, ethcallProvider, v) => {
   return results
 }
 
-export async function fetchVaultsData (address, chainId, provider, web3, dispatch) {
+export async function fetchVaultsData (address, chainId, provider, web3, dispatch, order) {
   const ethersProvider  = getEthersProvider(provider, chainId)
   const ethcallProvider = new Provider(ethersProvider)
   const keys            = getKeys(address)
@@ -197,5 +197,5 @@ export async function fetchVaultsData (address, chainId, provider, web3, dispatc
 
   const promises = [ethcallProvider.all(calls), getPrices(filteredVaults, dispatch)]
 
-  call(promises, keys, chainId, dispatch)
+  call(promises, keys, chainId, dispatch, order)
 }
