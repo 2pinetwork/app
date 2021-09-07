@@ -50,8 +50,6 @@ export const vaultsSlice = createSlice({
       if (action.payload.order === state.order) {
         state.status = 'loaded'
         state.value  = action.payload.vaults
-      } else {
-        state.status = 'failed'
       }
     }
   },
