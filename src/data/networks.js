@@ -13,6 +13,7 @@ export const networks = {
       'https://matic-mainnet.chainstacklabs.com'
     ],
     blockExplorerUrls: [
+      'https://polygonscan.com/',
       'https://polygon-explorer-mainnet.chainstacklabs.com/',
       'https://explorer-mainnet.maticvigil.com'
     ]
@@ -26,7 +27,7 @@ export const networks = {
       decimals: 18,
     },
     rpcUrls:           ['https://rpc-mumbai.matic.today/'],
-    blockExplorerUrls: ['https://polygon-explorer-mumbai.chainstacklabs.com/']
+    blockExplorerUrls: ['https://mumbai.polygonscan.com/']
   }
 }
 
