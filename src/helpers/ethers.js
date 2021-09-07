@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { getDefaultProvider } from './infura'
+import { getDefaultProvider } from './provider'
 
 export const getEthersProvider = (provider, chainId) => {
   if (provider) {

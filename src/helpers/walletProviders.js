@@ -34,8 +34,8 @@ export const walletConnect = {
     network: 'matic',
     rpc: {
       // 1 is needed at least for Trust Wallet
-      1:     'https://rpc-mainnet.maticvigil.com/',
-      137:   'https://rpc-mainnet.maticvigil.com/',
+      1:     'https://polygon-rpc.com/',
+      137:   'https://polygon-rpc.com/',
       80001: 'https://rpc-mumbai.matic.today/'
     },
     infuraId
