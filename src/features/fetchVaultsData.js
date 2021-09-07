@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { Contract, Provider } from 'ethers-multicall'
 import vaults from '../data/vaults'
-import { vaultsLoaded } from './vaultsSlice'
+import { vaultsLoaded, vaultsFetchError } from './vaultsSlice'
 import { toastAdded, toastDestroyed } from './toastsSlice'
 import { getVaultApy } from '../helpers/apy'
 import { getEthersProvider } from '../helpers/ethers'
@@ -29,7 +29,7 @@ const helpers = {
   }
 }
 
-const call = (promises, keys, chainId, dispatch, order) => {
+const call = (promises, keys, chainId, dispatch, order, errors) => {
   const filteredVaults  = vaults.filter(
     vault => vault.pool === 'aave' || chainId !== 80001
   )
@@ -91,14 +91,19 @@ const call = (promises, keys, chainId, dispatch, order) => {
     dispatch(vaultsLoaded({order: order, vaults: vaultsData}))
     dispatch(toastDestroyed('Data loading error'))
   }).catch(error => {
-    dispatch(
-      toastAdded({
-        title: 'Data loading error',
-        body:  "We can't reach out some resources, please refresh the page and try again",
-        icon:  'exclamation-triangle',
-        style: 'danger'
-      })
-    )
+    dispatch(vaultsFetchError())
+
+    // Do not complain on first fetch error since they are so frequent
+    if (errors > 2) {
+      dispatch(
+        toastAdded({
+          title: 'Data loading error',
+          body:  "We can't reach out some resources, please refresh the page and try again",
+          icon:  'exclamation-triangle',
+          style: 'danger'
+        })
+      )
+    }
   })
 }
 
@@ -181,7 +186,15 @@ const getCalls = (address, chainId, ethcallProvider, v) => {
   return results
 }
 
-export async function fetchVaultsData (address, chainId, provider, web3, dispatch, order) {
+export async function fetchVaultsData (
+  address,
+  chainId,
+  provider,
+  web3,
+  dispatch,
+  order,
+  errors
+) {
   const ethersProvider  = getEthersProvider(provider, chainId)
   const ethcallProvider = new Provider(ethersProvider)
   const keys            = getKeys(address)
@@ -197,5 +210,5 @@ export async function fetchVaultsData (address, chainId, provider, web3, dispatc
 
   const promises = [ethcallProvider.all(calls), getPrices(filteredVaults, dispatch)]
 
-  call(promises, keys, chainId, dispatch, order)
+  call(promises, keys, chainId, dispatch, order, errors)
 }

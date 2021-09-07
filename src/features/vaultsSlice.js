@@ -10,12 +10,14 @@ import {
 } from './walletSlice'
 
 const initialState = {
+  errors: 0,
   order:  0,
   status: 'idle',
   value:  vaults
 }
 
-const selectOrder = state => state.vaults.order
+const selectOrder  = state => state.vaults.order
+const selectErrors = state => state.vaults.errors
 
 export const fetchVaultsDataAsync = createAsyncThunk(
   'vaults/fetchVaultsData',
@@ -23,12 +25,13 @@ export const fetchVaultsDataAsync = createAsyncThunk(
     const state    = getState()
     const address  = selectAddress(state)
     const chainId  = selectChainId(state)
+    const errors   = selectErrors(state)
     const order    = selectOrder(state)
     const provider = selectProvider(state)
     const web3     = selectWeb3(state)
 
     if (supportedChains.includes(chainId)) {
-      fetchVaultsData(address, chainId, provider, web3, dispatch, order)
+      fetchVaultsData(address, chainId, provider, web3, dispatch, order, errors)
     }
   }
 )
@@ -50,8 +53,12 @@ export const vaultsSlice = createSlice({
       if (action.payload.order === state.order) {
         state.status = 'loaded'
         state.value  = action.payload.vaults
+        state.errors = 0
       }
-    }
+    },
+    vaultsFetchError: (state, action) => {
+       state.errors++
+     }
   },
 
   extraReducers: {
@@ -72,6 +79,11 @@ export const vaultsSlice = createSlice({
 export const selectStatus = state => state.vaults.status
 export const selectVaults = state => state.vaults.value
 
-export const { newVaultFetch, resetVaults, vaultsLoaded } = vaultsSlice.actions
+export const {
+  resetVaults,
+  newVaultFetch,
+  vaultsLoaded,
+  vaultsFetchError
+} = vaultsSlice.actions
 
 export default vaultsSlice.reducer
