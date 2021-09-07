@@ -6,9 +6,11 @@ import { formatAmount, toUsd } from '../helpers/format'
 import { fromWei } from '../helpers/wei'
 
 const Deposited = props => {
-  const address   = useSelector(selectAddress)
-  const vaults    = useSelector(selectVaults)
-  const deposited = vaults.reduce((acc, vault) => {
+  const address    = useSelector(selectAddress)
+  const vaults     = useSelector(selectVaults)
+  const dataLoaded = vaults.every(vault => vault.shares)
+  const total      = dataLoaded ? new BigNumber(0) : new BigNumber()
+  const deposited  = vaults.reduce((acc, vault) => {
     const {
       shares,
       decimals,
@@ -22,7 +24,7 @@ const Deposited = props => {
     const amount    = toUsd(deposited, decimals, usdPrice)
 
     return amount?.isFinite() ? acc.plus(amount) : acc
-  }, new BigNumber('0'))
+  }, total)
 
   return (
     <div className="row">
