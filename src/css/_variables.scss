@@ -1,3 +1,12 @@
+// Borders
+
+$border-radius: .5rem !default;
+$border-radius-sm: .4rem !default;
+
+// Buttons
+
+$btn-disabled-opacity: .50;
+
 // Color system
 
 $body-bg:    #242424;
@@ -34,21 +43,11 @@ $theme-colors: (
   "primary-dark": $primary-dark
 );
 
-// Borders
-
-$border-radius: .5rem !default;
-$border-radius-sm: .4rem !default;
-
-// Buttons
-
-$btn-disabled-opacity: .50;
-
-// Margins
-
-$enable-negative-margins: true;
-
-
 // Fonts
 
 $font-family-sans-serif: "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $web-font-path: 'data:text/css;base64,';
+
+// Margins
+
+$enable-negative-margins: true;
