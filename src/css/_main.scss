@@ -1,7 +1,7 @@
 @import "bootstrap/scss/variables";
 
 body {
-  background-image: url(../assets/images/background.svg);
+  background-image: url(../assets/images/background.jpg);
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -16,6 +16,11 @@ input[type=number]::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.bg-blur {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(8px);
 }
 
 .bg-input {

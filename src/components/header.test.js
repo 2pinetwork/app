@@ -23,7 +23,7 @@ describe('header component render', () => {
       </Provider>
     )
 
-    const linkElement = screen.getByAltText(/2pi/i)
+    const linkElement = screen.getByText(/How-to guide/i)
 
     expect(linkElement).toBeInTheDocument()
   })
