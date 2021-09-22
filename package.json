@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gnosis.pm/safe-apps-web3modal": "^2.0.0",
+    "@gnosis.pm/safe-apps-web3modal": "^3.0.0",
     "@popperjs/core": "^2.10.1",
     "@reduxjs/toolkit": "^1.6.1",
-    "@sentry/react": "^6.12.0",
-    "@sentry/tracing": "^6.12.0",
+    "@sentry/react": "^6.13.2",
+    "@sentry/tracing": "^6.13.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.0",
     "@testing-library/user-event": "^13.2.1",
@@ -23,10 +23,10 @@
     "react-redux": "^7.2.5",
     "react-scripts": "4.0.3",
     "react-transition-group": "^4.4.2",
-    "sass": "^1.39.0",
+    "sass": "^1.42.1",
     "walletlink": "^2.1.11",
     "web-vitals": "^2.1.0",
-    "web3": "^1.5.2",
+    "web3": "^1.5.3",
     "web3modal": "^1.9.4"
   },
   "scripts": {
