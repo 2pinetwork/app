@@ -9,7 +9,7 @@ const Footer = props => (
         </a>
       </li>
       <li className="list-inline-item mx-2">
-        <a href="https://github.com/2pifinance/" target="_blank" rel="noreferrer" title="Fork / inspect us!">
+        <a href="https://github.com/2pinetwork/" target="_blank" rel="noreferrer" title="Fork / inspect us!">
           <i className="bi-github"></i>
         </a>
       </li>
@@ -24,7 +24,7 @@ const Footer = props => (
         </a>
       </li>
       <li className="list-inline-item mx-2">
-        <a href="mailto:hello@2pi.finance" title="Email us!">
+        <a href="mailto:hello@2pi.network" title="Email us!">
           <i className="bi-envelope"></i>
         </a>
       </li>

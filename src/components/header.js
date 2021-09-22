@@ -26,7 +26,7 @@ const Header = props => (
 
         <ul className="navbar-nav me-auto mb-2 mb-lg-0 mt-lg-2 ms-lg-4 order-1 order-lg-0">
           <li className="nav-item">
-            <a className="nav-link" href="https://docs.2pi.finance/how-to-guide" target="_blank" rel="noreferrer">
+            <a className="nav-link" href="https://docs.2pi.network/how-to-guide" target="_blank" rel="noreferrer">
               How-to guide
             </a>
           </li>
