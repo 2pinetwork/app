@@ -4,7 +4,7 @@ const Footer = props => (
 
     <ul className="list-inline lead">
       <li className="list-inline-item mx-2">
-        <a href="https://twitter.com/2piFinance" target="_blank" rel="noreferrer" title="Tweet us!">
+        <a href="https://twitter.com/2piNetwork" target="_blank" rel="noreferrer" title="Tweet us!">
           <i className="bi-twitter"></i>
         </a>
       </li>
