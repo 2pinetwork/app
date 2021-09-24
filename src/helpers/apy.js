@@ -1,5 +1,6 @@
 const BigNumber = require('bignumber.js')
 
+const APYS_API_URL     = process.env.REACT_APP_APYS_API_URL
 const SECONDS_PER_YEAR = 31536000
 const BASE_HPY         = 8760
 const RAY_DECIMALS     = '1e27'
@@ -10,6 +11,14 @@ const PERFORMANCE_FEE  = 0.035
 // Takes the rate and the amount of compoundings per year.
 const toCompoundRate = (r, n = 365) => {
   return (1 + r / n) ** n - 1
+}
+
+const fetchApys = () => {
+  const cacheInvalidator = Math.trunc(Date.now() / (1000 * 60))
+  const apiUrl           = `${APYS_API_URL}?_=${cacheInvalidator}`
+  const options          = { headers: { 'Content-Type': 'application/json' } }
+
+  return fetch(apiUrl, options).then(response => response.json())
 }
 
 const getVaultApy = (vault, dataProvider, distributionManager, prices, depth) => {
@@ -126,4 +135,4 @@ const getLeveragedApys = (
   }
 }
 
-module.exports = { getVaultApy }
+module.exports = { fetchApys, getVaultApy }
