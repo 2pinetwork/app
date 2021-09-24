@@ -3,30 +3,21 @@ import { Contract, Provider } from 'ethers-multicall'
 import vaults from '../data/vaults'
 import { vaultsLoaded, vaultsFetchError } from './vaultsSlice'
 import { toastAdded, toastDestroyed } from './toastsSlice'
-import { getVaultApy } from '../helpers/apy'
+import { fetchApys, getVaultApy } from '../helpers/apy'
 import { getEthersProvider } from '../helpers/ethers'
 import { getPrices } from '../helpers/prices'
 
-const helpers = {
-  chunk (array, size) {
-    return Array.from({ length: Math.ceil(array.length / size) }, (v, i) =>
-      array.slice(i * size, i * size + size)
-    )
-  },
+const chunk = (array, size) => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (v, i) =>
+    array.slice(i * size, i * size + size)
+  )
+}
 
-  getVaultApy (vault, dataProvider, distributionManager, prices) {
-    let apy
-    let altApy = 0
-
-    if (vault.pool === 'curve') {
-      apy = 0.05127 // To be really calculated
-    } else {
-      apy    = getVaultApy(vault, dataProvider, distributionManager, prices)
-      altApy = getVaultApy(vault, dataProvider, distributionManager, prices, 0)
-    }
-
-    return apy > altApy ? apy : altApy
-  }
+const getMaxVaultApy = (vault, dataProvider, distributionManager, prices) => {
+  return Math.max(
+    getVaultApy(vault, dataProvider, distributionManager, prices),
+    getVaultApy(vault, dataProvider, distributionManager, prices, 0)
+  )
 }
 
 const call = (promises, keys, chainId, dispatch, order, errors) => {
@@ -34,11 +25,11 @@ const call = (promises, keys, chainId, dispatch, order, errors) => {
     vault => vault.pool === 'aave' || chainId !== 80001
   )
 
-  Promise.all(promises).then(data => {
+  Promise.all(promises).then(results => {
+    const [ apys, data, prices ] = results
     const extraData = []
-    const prices    = data.pop()
 
-    helpers.chunk(data.flat(), keys.length).forEach((chunkedData, i) => {
+    chunk(data, keys.length).forEach((chunkedData, i) => {
       let dataProvider
       let distributionManager = {}
 
@@ -70,12 +61,13 @@ const call = (promises, keys, chainId, dispatch, order, errors) => {
         extraData[i]['allowance'] = new BigNumber(1e58.toString())
       }
 
-      extraData[i]['apy'] = helpers.getVaultApy(
-        vault,
-        dataProvider,
-        distributionManager,
-        prices
-      )
+     if (vault.token === '2Pi') {
+        extraData[i]['apy'] = 0.1
+      } else if (vault.pool === 'curve') {
+        extraData[i]['apy'] = (apys['curve-poly-ren'] || {}).totalApy
+      } else {
+        extraData[i]['apy'] = getMaxVaultApy(vault, dataProvider, distributionManager, prices)
+      }
     })
 
     const vaultsData = filteredVaults.map((vault, i) => {
@@ -208,7 +200,11 @@ export async function fetchVaultsData (
     return getCalls(address, chainId, ethcallProvider, vault)
   })
 
-  const promises = [ethcallProvider.all(calls), getPrices(filteredVaults, dispatch)]
+  const promises = [
+    fetchApys(),
+    ethcallProvider.all(calls),
+    getPrices(filteredVaults, dispatch)
+  ]
 
   call(promises, keys, chainId, dispatch, order, errors)
 }
