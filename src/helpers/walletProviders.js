@@ -10,7 +10,7 @@ export const walletLink = {
     description: 'Scan with WalletLink to connect',
   },
   options: {
-    appName:    '2pi',
+    appName:    '2PI',
     chainId:    137, // Polygon Mainnet
     networkUrl: getRpcUrl(137)
   },

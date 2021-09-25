@@ -5,10 +5,10 @@ const Header = props => (
   <nav className="navbar navbar-expand-lg navbar-dark bg-transparent mt-1">
     <div className="container">
       <a className="navbar-brand me-auto mt-n2 ms-n4 d-none d-lg-inline" href="/">
-        <img src={logo} alt="2pi" width="136" height="108" />
+        <img src={logo} alt="2PI" width="136" height="108" />
       </a>
       <a className="navbar-brand me-auto ms-n3 d-lg-none" href="/">
-        <img src={logo} alt="2pi" width="95" height="76" />
+        <img src={logo} alt="2PI" width="95" height="76" />
       </a>
 
       <button className="navbar-toggler"
