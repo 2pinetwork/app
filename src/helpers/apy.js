@@ -64,7 +64,7 @@ const getVaultData = (vault, dataProvider, distributionManager, prices) => {
   const supplyBase = liquidityRate.div(RAY_DECIMALS)
   const borrowBase = variableBorrowRate.div(RAY_DECIMALS)
 
-  const tokenPrice =  prices[vault.priceId].usd
+  const tokenPrice       = prices[vault.priceId].usd
   const totalBorrowInUsd = totalVariableDebt.times(tokenPrice).div(tokenDecimals)
   const totalSupplyInUsd = availableLiquidity
     .plus(totalStableDebt)
@@ -105,9 +105,9 @@ const getLeveragedApys = (
   borrowPercent = new BigNumber(borrowPercent)
 
   // Always the supply will be the original supply percentage
-  let leveragedSupplyBase = new BigNumber(supplyBase.toString())
+  let leveragedSupplyBase  = new BigNumber(supplyBase.toString())
   let leveragedSupplyMatic = new BigNumber(supplyMatic.toString())
-  let leveragedBorrowBase = new BigNumber(0)
+  let leveragedBorrowBase  = new BigNumber(0)
   let leveragedBorrowMatic = new BigNumber(0)
 
   for (let i = 1; i <= depth; i++) {
