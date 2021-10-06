@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync, newVaultFetch } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
+import { suggestedGasPrice } from '../helpers/gas'
 import { decimalPlaces, formatAmount } from '../helpers/format'
 import { transactionSent } from '../helpers/transactions'
 
@@ -36,7 +37,8 @@ const Approve = props => {
     setDeposit(value)
   }
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const gasPrice      = await suggestedGasPrice()
     const address       = props.address
     const vaultAddress  = props.vault.address
     const tokenContract = props.tokenContract()
@@ -46,7 +48,8 @@ const Approve = props => {
     setStatus('approve')
 
     tokenContract.methods.approve(vaultAddress, allowance).send({
-      from: address
+      from:     address,
+      gasPrice: gasPrice
     }).on('transactionHash', hash => {
       transactionSent(hash, dispatch)
     }).then(() => {

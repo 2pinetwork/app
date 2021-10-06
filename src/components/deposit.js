@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync, newVaultFetch } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
+import { suggestedGasPrice } from '../helpers/gas'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 import { transactionSent } from '../helpers/transactions'
 
@@ -39,7 +40,8 @@ const Deposit = props => {
     setDeposit(value)
   }
 
-  const handleDepositClick = () => {
+  const handleDepositClick = async () => {
+    const gasPrice      = await suggestedGasPrice()
     const vaultContract = props.vaultContract()
     let   amount        = toWeiFormatted(new BigNumber(deposit), props.decimals)
 
@@ -51,11 +53,15 @@ const Deposit = props => {
     // Native Matic vault
     if (vaultContract.methods.depositMATIC) {
       call = vaultContract.methods.depositMATIC().send({
-        from:  props.address,
-        value: amount
+        from:     props.address,
+        value:    amount,
+        gasPrice: gasPrice
       })
     } else {
-      call = vaultContract.methods.deposit(amount).send({ from: props.address })
+      call = vaultContract.methods.deposit(amount).send({
+        from:     props.address,
+        gasPrice: gasPrice
+      })
     }
 
     call.on('transactionHash', hash => {
@@ -91,7 +97,8 @@ const Deposit = props => {
     })
   }
 
-  const handleDepositAllClick = () => {
+  const handleDepositAllClick = async () => {
+    const gasPrice      = await suggestedGasPrice()
     const vaultContract = props.vaultContract()
 
     setMax()
@@ -107,10 +114,15 @@ const Deposit = props => {
         return
 
       call = vaultContract.methods.depositMATIC().send({
-        from: props.address, value: amount.toFixed()
+        from:     props.address,
+        value:    amount.toFixed(),
+        gasPrice: gasPrice
       })
     } else {
-      call = vaultContract.methods.depositAll().send({ from: props.address })
+      call = vaultContract.methods.depositAll().send({
+        from:     props.address,
+        gasPrice: gasPrice
+      })
     }
 
     call.on('transactionHash', hash => {

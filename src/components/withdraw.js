@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import { fromWei, toWei } from '../helpers/wei'
 import { fetchVaultsDataAsync, newVaultFetch } from '../features/vaultsSlice'
 import { toastAdded, toastDestroyed } from '../features/toastsSlice'
+import { suggestedGasPrice } from '../helpers/gas'
 import { decimalPlaces, formatAmount, toWeiFormatted } from '../helpers/format'
 import { transactionSent } from '../helpers/transactions'
 
@@ -39,7 +40,8 @@ const Withdraw = props => {
     setWithdraw(value)
   }
 
-  const handleWithdrawClick = () => {
+  const handleWithdrawClick = async () => {
+    const gasPrice      = await suggestedGasPrice()
     const vaultContract = props.vaultContract()
     const withdrawInWei = toWei(new BigNumber(withdraw), props.decimals)
     const shares        = withdrawInWei.div(props.pricePerFullShare)
@@ -49,7 +51,8 @@ const Withdraw = props => {
     setStatus('withdraw')
 
     vaultContract.methods.withdraw(amount).send({
-      from: props.address
+      from:     props.address,
+      gasPrice: gasPrice
     }).on('transactionHash', hash => {
       transactionSent(hash, dispatch)
     }).then(() => {
@@ -83,7 +86,8 @@ const Withdraw = props => {
     })
   }
 
-  const handleWithdrawAllClick = () => {
+  const handleWithdrawAllClick = async () => {
+    const gasPrice      = await suggestedGasPrice()
     const vaultContract = props.vaultContract()
 
     setMax()
@@ -91,7 +95,8 @@ const Withdraw = props => {
     setStatus('withdraw')
 
     vaultContract.methods.withdrawAll().send({
-      from: props.address
+      from:     props.address,
+      gasPrice: gasPrice
     }).on('transactionHash', hash => {
       transactionSent(hash, dispatch)
     }).then(() => {

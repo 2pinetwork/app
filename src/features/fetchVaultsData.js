@@ -83,6 +83,8 @@ const call = (promises, keys, chainId, dispatch, order, errors) => {
     dispatch(vaultsLoaded({order: order, vaults: vaultsData}))
     dispatch(toastDestroyed('Data loading error'))
   }).catch(error => {
+    console.error(error)
+
     dispatch(vaultsFetchError())
 
     // Do not complain on first fetch error since they are so frequent
