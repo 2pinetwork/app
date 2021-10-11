@@ -10,6 +10,10 @@ const Vault = props => {
   const ref                     = React.createRef()
   const [expanded, setExpanded] = useState(false)
 
+  // Daily yield rate.
+  // (1 + apy) === (1 + daily) ^ 365
+  const daily = (1 + (props.apy || 0)) ** (1 / 365) - 1
+
   const tokenAbi = () => {
     if (supportedChains.includes(props.chainId)) {
       return require(`../abis/tokens/${props.chainId}/${props.token}`).default
@@ -132,7 +136,7 @@ const Vault = props => {
               </div>
               <div className="col-4 col-lg-1 text-lg-center mt-3 mt-lg-0">
                 <p className="text-nowrap mb-0">
-                  {toPercentage((props.apy || 0.0) / 365)}
+                  {toPercentage(daily)}
                 </p>
                 <p className="small text-muted mb-0">
                   Daily
