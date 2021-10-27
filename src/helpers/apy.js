@@ -13,18 +13,28 @@ const toCompoundRate = (r, n = 365) => {
   return (1 + r / n) ** n - 1
 }
 
-const fetchApys = () => {
+const fetchApys = async () => {
   const cacheInvalidator = Math.trunc(Date.now() / (1000 * 60))
   const apiUrl           = `${APYS_API_URL}?_=${cacheInvalidator}`
   const options          = { headers: { 'Content-Type': 'application/json' } }
 
-  return fetch(apiUrl, options).then(response => {
+  const response = await fetch(apiUrl, options).then(response => {
     if (! response.ok) {
       throw new TypeError(response.status)
     }
 
     return response.json()
+  }).catch(error => {
+    console.error(error)
+
+    return {
+      'curve-poly-ren': {
+        totalApy: 0.0513
+      }
+    }
   })
+
+  return Promise.resolve(response)
 }
 
 const getVaultApy = (vault, dataProvider, distributionManager, prices, depth) => {
