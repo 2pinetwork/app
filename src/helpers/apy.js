@@ -13,12 +13,12 @@ const toCompoundRate = (r, n = 365) => {
   return (1 + r / n) ** n - 1
 }
 
-const fetchApys = async () => {
+const fetchApys = () => {
   const cacheInvalidator = Math.trunc(Date.now() / (1000 * 60))
   const apiUrl           = `${APYS_API_URL}?_=${cacheInvalidator}`
   const options          = { headers: { 'Content-Type': 'application/json' } }
 
-  const response = await fetch(apiUrl, options).then(response => {
+  const response = fetch(apiUrl, options).then(response => {
     if (! response.ok) {
       throw new TypeError(response.status)
     }
