@@ -19,7 +19,7 @@ const Footer = props => (
         </a>
       </li>
       <li className="list-inline-item mx-2">
-        <a href="https://2pifinance.medium.com" target="_blank" rel="noreferrer" title="Read us!">
+        <a href="https://2pinetwork.medium.com" target="_blank" rel="noreferrer" title="Read us!">
           <i className="bi-medium"></i>
         </a>
       </li>
