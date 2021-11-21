@@ -120,26 +120,28 @@ const getLeveragedApys = (
 ) => {
   borrowPercent = new BigNumber(borrowPercent)
 
-  // Always the supply will be the original supply percentage
-  let leveragedSupplyBase  = new BigNumber(supplyBase.toString())
-  let leveragedSupplyMatic = new BigNumber(supplyMatic.toString())
+  let leveragedSupplyBase  = new BigNumber(0)
   let leveragedBorrowBase  = new BigNumber(0)
+  let leveragedSupplyMatic = new BigNumber(0)
   let leveragedBorrowMatic = new BigNumber(0)
 
-  for (let i = 1; i <= depth; i++) {
-    let borrowPercentExp = borrowPercent.exponentiatedBy(i)
-
+  for (let i = 0; i <= depth; i++) {
     leveragedSupplyBase = leveragedSupplyBase.plus(
-      supplyBase.times(borrowPercentExp)
+      supplyBase.times(borrowPercent.exponentiatedBy(i))
     )
+
     leveragedSupplyMatic = leveragedSupplyMatic.plus(
-      supplyMatic.times(borrowPercentExp)
+      supplyMatic.times(borrowPercent.exponentiatedBy(i))
     )
+  }
+
+  for (let i = 1; i <= depth; i++) {
     leveragedBorrowBase = leveragedBorrowBase.plus(
-      borrowBase.times(borrowPercentExp)
+      borrowBase.times(borrowPercent.exponentiatedBy(i))
     )
+
     leveragedBorrowMatic = leveragedBorrowMatic.plus(
-      borrowMatic.times(borrowPercentExp)
+      borrowMatic.times(borrowPercent.exponentiatedBy(i))
     )
   }
 
