@@ -28,6 +28,11 @@ const Footer = props => (
           <i className="bi-envelope"></i>
         </a>
       </li>
+      <li className="list-inline-item mx-2">
+        <a href="https://github.com/2pinetwork/security/blob/master/bug-bounty.md" title="Report issues!">
+          <i className="bi-bug"></i>
+        </a>
+      </li>
     </ul>
   </footer>
 )
