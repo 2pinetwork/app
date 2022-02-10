@@ -201,7 +201,7 @@ const Withdraw = props => {
       <label className="text-muted text-decoration-underline-dotted cursor-pointer mb-2"
              htmlFor={depositedId()}
              onClick={setMax}>
-        Deposited ({formatAmount(fromWei(props.deposited, props.decimals), '', 8)} {props.symbol})
+        Deposited ({formatAmount(fromWei(props.deposited, props.decimals), '', 4)} {props.symbol})
       </label>
 
       {actions()}

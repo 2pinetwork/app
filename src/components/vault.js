@@ -109,7 +109,7 @@ const Vault = props => {
                   {props.balanceUsd ? formatAmount(props.balanceUsd, '$') : '-'}
                 </p>
                 <p className="small text-primary mb-0">
-                  {props.balance ? formatAmount(fromWei(props.balance, props.decimals), '', 8) : '-'}
+                  {props.balance ? formatAmount(fromWei(props.balance, props.decimals), '', 4) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Balance
@@ -120,7 +120,7 @@ const Vault = props => {
                   {props.depositedUsd ? formatAmount(props.depositedUsd, '$') : '-'}
                 </p>
                 <p className="small text-primary mb-0">
-                  {props.deposited ? formatAmount(fromWei(props.deposited, props.decimals), '', 8) : '-'}
+                  {props.deposited ? formatAmount(fromWei(props.deposited, props.decimals), '', 4) : '-'}
                 </p>
                 <p className="small text-muted mb-0">
                   Deposited

@@ -96,7 +96,7 @@ const Approve = props => {
       <label className="text-muted text-decoration-underline-dotted cursor-pointer mb-2"
              htmlFor={balanceId()}
              onClick={setMax}>
-        Balance ({formatAmount(fromWei(props.balance, props.decimals), '', 8)} {props.symbol})
+        Balance ({formatAmount(fromWei(props.balance, props.decimals), '', 4)} {props.symbol})
       </label>
 
       <div className="input-group mb-3">
