@@ -5,7 +5,7 @@ describe('experimental component render', () => {
   test('renders experimental message', () => {
     render(<Experimental />)
 
-    const alertElement = screen.getByText(/This application is experimental/i)
+    const alertElement = screen.getByText(/This application has been deprecated/i)
 
     expect(alertElement).toBeInTheDocument()
   })

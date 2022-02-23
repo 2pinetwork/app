@@ -218,7 +218,7 @@ const Deposit = props => {
           <div className="d-grid gap-2 mb-3 mb-lg-0">
             <button type="button"
                     className="btn btn-primary text-white fw-bold"
-                    disabled={status !== 'valid'}
+                    disabled={true}
                     onClick={useAll ? handleDepositAllClick : handleDepositClick}>
               {depositLabel}
             </button>
@@ -228,7 +228,7 @@ const Deposit = props => {
           <div className="d-grid gap-2 mb-3 mb-lg-0">
             <button type="button"
                     className="btn btn-primary text-white fw-bold"
-                    disabled={status === 'deposit' || props.balance.isZero()}
+                    disabled={true}
                     onClick={handleDepositAllClick}>
               {depositAllLabel}
             </button>
